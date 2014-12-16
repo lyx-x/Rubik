@@ -1,7 +1,28 @@
+package Cube;
 import java.io.*;
+import javax.swing.*;
 import java.util.*;
 
 public class Cube {
+	
+	/*
+	 * Disposition du cube : le chiffre est le numero de la face par definition !
+	 * 
+	 *        0 0 0
+	 *        0 0 0
+	 *        0 0 0
+	 *  1 1 1 2 2 2 3 3 3 4 4 4
+	 *  1 1 1 2 2 2 3 3 3 4 4 4
+	 *  1 1 1 2 2 2 3 3 3 4 4 4
+	 *        5 5 5
+	 *        5 5 5
+	 *        5 5 5
+	 * 
+	 *        up
+	 *  left  front  right  back   
+	 *        down       
+	 * 
+	 */
 
 	int[][][] color = new int[6][3][3];
 
@@ -80,6 +101,13 @@ public class Cube {
 		}
 	}
 	
-	
+	public void Show(){
+		int width = 60;
+		Plan dessin = new Plan(this, width);
+		JFrame frame=new JFrame("Rubik's cube");
+		frame.setSize(width * 14 + 20, width * 11 + 40);
+		frame.setVisible(true);
+		frame.add(dessin);
+	}
 
 }
