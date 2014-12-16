@@ -27,6 +27,21 @@ public class Cube {
 	int[][][] color = new int[6][3][3];
 	
 	/*
+	 * Listes des faces adjacentes à une face donnée dans le sens trigonométrique
+	 * {4,1,1} pour 0 représente face 4, rang 1
+	 * {0,1,0} pour 1 représente face 0, colonne 1
+	 */
+	
+	int[][][] adjacent = {
+			{{4}, {1}, {2}, {3}},
+			{{4}, {5}, {2}, {0}},
+			{{5}, {3}, {0}, {1}},
+			{{0}, {2}, {5}, {4}},
+			{{3}, {5}, {1}, {0}},
+			{{2}, {1}, {0}, {3}}
+	};
+	
+	/*
 	 * Lire les coleurs par le console
 	 */
 
@@ -92,7 +107,7 @@ public class Cube {
 	 * Imprimer le cube dans le console face après face
 	 */
 
-	public void Print(){
+	public void print(){
 		if (this.color == null)
 		{
 			return;
@@ -117,13 +132,37 @@ public class Cube {
 	 * Dessiner le cube 2D dans une nouvelle fenêtre
 	 */
 	
-	public void Show2D(){
+	public void show2D(){
 		int width = 60;
 		Plan dessin = new Plan(this, width);
 		JFrame frame=new JFrame("Rubik's cube");
 		frame.setSize(width * 14 + 20, width * 11 + 40);
 		frame.setVisible(true);
 		frame.add(dessin);
+	}
+	
+	/*
+	 * 
+	 */
+	
+	public void set(int face, int no, int sens, int[] color){
+		
+	}
+	
+	/*
+	 * Tourner une face de 90 degree dans le sens trigonométrique
+	 */
+	
+	public void tourner(int face){
+		int a[][] = new int[3][3];
+		for (int rang = 0 ; rang < 3 ; rang++)
+		{
+			for (int colonne = 0 ; colonne < 3 ; colonne++)
+			{
+				a[rang][colonne] = color[face][colonne][rang];
+			}
+		}
+		//TODO
 	}
 
 }
