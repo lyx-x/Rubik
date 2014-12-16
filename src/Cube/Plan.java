@@ -2,16 +2,20 @@ package Cube;
 import java.awt.*;
 import javax.swing.*;
 
+/*
+ * Cette classe permet de dessiner le cube 2D
+ */
+
 public class Plan extends JPanel {
 	
 	int[][][] color = new int[6][3][3];
 	int width = 40;
-	int arcWidth = 4;
-	Color border = Color.BLACK;
+	int arcWidth = 4;  //rectangle arondi
+	Color border = Color.BLACK;  //la couleur du bord du rectangle
 	Color[] colors = {Color.WHITE, Color.GREEN, Color.RED, Color.BLUE, Color.ORANGE, Color.YELLOW};
-	int[] X = new int[6];
+	int[] X = new int[6];  //les coordonnées du début de chaque face
 	int[] Y = new int[6];
-	int winWidth = 560; 
+	int winWidth = 560;   //les dimensions de la fenêtre en fonction de la taille de chaque case
 	int winHeight = 440;
 	
 	public Plan(Cube c)
@@ -87,6 +91,10 @@ public class Plan extends JPanel {
 			}
 		}
 	}
+	
+	/*
+	 * Dessiner chaque case puis sa bordure
+	 */
 	
 	public void paintCase(Graphics g, int color, int rang, int colonne, int x, int y){
 		g.setColor(colors[color]);

@@ -6,7 +6,7 @@ import java.util.*;
 public class Cube {
 	
 	/*
-	 * Disposition du cube : le chiffre est le numero de la face par definition !
+	 * Disposition du cube : les chiffres représentent le numéro de la face ici ! (et pas la coleur pour l'instant)
 	 * 
 	 *        0 0 0
 	 *        0 0 0
@@ -25,6 +25,10 @@ public class Cube {
 	 */
 
 	int[][][] color = new int[6][3][3];
+	
+	/*
+	 * Lire les coleurs par le console
+	 */
 
 	public Cube(){
 		Scanner read = new Scanner(System.in);
@@ -46,6 +50,10 @@ public class Cube {
 		System.out.println();
 	}
 
+	/*
+	 * Lire le cube à partir d'un fichier
+	 */
+	
 	public Cube(String path)
 	{
 		try{
@@ -79,6 +87,10 @@ public class Cube {
 			System.out.println(e.getMessage());
 		}
 	}
+	
+	/*
+	 * Imprimer le cube dans le console face après face
+	 */
 
 	public void Print(){
 		if (this.color == null)
@@ -101,7 +113,11 @@ public class Cube {
 		}
 	}
 	
-	public void Show(){
+	/*
+	 * Dessiner le cube 2D dans une nouvelle fenêtre
+	 */
+	
+	public void Show2D(){
 		int width = 60;
 		Plan dessin = new Plan(this, width);
 		JFrame frame=new JFrame("Rubik's cube");
