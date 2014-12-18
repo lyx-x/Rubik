@@ -42,7 +42,7 @@ public class Cube {
 	};
 	
 	/*
-	 * Lire les coleurs par le console
+	 * Lire les couleurs par la console
 	 */
 
 	public Cube(){
@@ -74,7 +74,8 @@ public class Cube {
 		try{
 			FileReader file = new FileReader(path);
 			BufferedReader read = new BufferedReader(file);
-			try{
+			try
+			{
 				while (read.ready()) 
 				{
 					for (int face = 0 ; face < 6 ; face++)
@@ -163,6 +164,7 @@ public class Cube {
 			}
 		}
 		//TODO
+		
 	}
 
 }
