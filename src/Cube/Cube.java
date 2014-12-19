@@ -133,19 +133,19 @@ public class Cube {
 	 * Le booléan sens vérifie si on doit changer l'ordre d'affectation
 	 */
 	
-	public int[] set(int face, int no, boolean rang, boolean sens, int[] source){
+	public int[] set(int face, int no, boolean rang, boolean changeSens, int[] source){
 		int[] ancien = new int[3];
 		for (int i = 0 ; i < 3 ; i++)
 		{
-			int From = sens ? 2 - i : i;
-			if (rang = true)
+			int From = changeSens ? 2 - i : i;
+			if (rang)
 			{
-				ancien[0] = color[face][no][i];
+				ancien[i] = color[face][no][i];
 				color[face][no][i] = source[From];
 			}
 			else
 			{
-				ancien[0] = color[face][no][i];
+				ancien[i] = color[face][no][i];
 				color[face][i][no] = source[From];
 			}
 		}
@@ -186,17 +186,46 @@ public class Cube {
 		tournerFace(face);
 		switch (face){
 		case 1:
-			
+			int[] tmp1 = {color[0][0][0], color[0][1][0], color[0][2][0]};
+			tmp1 = set(4, 2, false, true, tmp1);
+			tmp1 = set(5, 0, false, true, tmp1);
+			tmp1 = set(2, 0, false, false, tmp1);
+			tmp1 = set(0, 0, false, false, tmp1);
 			break;
 		case 2:
+			int[] tmp2 = {color[0][2][0], color[0][2][1], color[0][2][2]};
+			tmp2 = set(1, 2, false, true, tmp2);
+			tmp2 = set(5, 0, true, false, tmp2);
+			tmp2 = set(3, 0, false, true, tmp2);
+			tmp2 = set(0, 2, true, false, tmp2);
 			break;
 		case 3:
+			int[] tmp3 = {color[2][0][2], color[2][1][2], color[2][2][2]};
+			tmp3 = set(5, 2, false, false, tmp3);
+			tmp3 = set(4, 0, false, true, tmp3);
+			tmp3 = set(0, 2, false, true, tmp3);
+			tmp3 = set(2, 2, false, false, tmp3);
 			break;
 		case 4:
+			int[] tmp4 = {color[3][0][2], color[3][1][2], color[3][2][2]};
+			tmp4 = set(5, 2, true, true, tmp4);
+			tmp4 = set(1, 0, false, false, tmp4);
+			tmp4 = set(0, 0, true, true, tmp4);
+			tmp4 = set(3, 2, false, false, tmp4);
 			break;
 		case 5:
+			int[] tmp5 = {color[2][2][0], color[2][2][1], color[2][2][2]};
+			tmp5 = set(1, 2, true, false, tmp5);
+			tmp5 = set(4, 2, true, false, tmp5);
+			tmp5 = set(3, 2, true, false, tmp5);
+			tmp5 = set(2, 2, true, false, tmp5);
 			break;
-		case 6:
+		case 0:
+			int[] tmp0 = {color[2][0][0], color[2][0][1], color[2][0][2]};
+			tmp0 = set(3, 0, true, false, tmp0);
+			tmp0 = set(4, 0, true, false, tmp0);
+			tmp0 = set(1, 0, true, false, tmp0);
+			tmp0 = set(2, 0, true, false, tmp0);
 			break;
 		}
 	}
