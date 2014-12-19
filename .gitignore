@@ -4,6 +4,3 @@ bin/
 
 # ignore all target directories
 target/
-
-# ignore all files ending with ~
-*~ 
