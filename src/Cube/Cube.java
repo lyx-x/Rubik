@@ -27,21 +27,6 @@ public class Cube {
 	int[][][] color = new int[6][3][3];
 	
 	/*
-	 * Listes des faces adjacentes à une face donnée dans le sens trigonométrique
-	 * {4,1,1} pour 0 représente face 4, rang 1
-	 * {0,1,0} pour 1 représente face 0, colonne 1
-	 */
-	
-	int[][][] adjacent = {
-			{{4}, {1}, {2}, {3}},
-			{{4}, {5}, {2}, {0}},
-			{{5}, {3}, {0}, {1}},
-			{{0}, {2}, {5}, {4}},
-			{{3}, {5}, {1}, {0}},
-			{{2}, {1}, {0}, {3}}
-	};
-	
-	/*
 	 * Lire les couleurs par la console
 	 */
 
@@ -143,28 +128,77 @@ public class Cube {
 	}
 	
 	/*
-	 * 
+	 * Modifier les couleurs d'une colonne (rang = false) ou d'un rang (rang = true), avec le numéro de la colonne ou de rang
+	 * On retourne les anciennes valeurs pour le prochain étape (toujours de 0 à 2)
+	 * Le booléan sens vérifie si on doit changer l'ordre d'affectation
 	 */
 	
-	public void set(int face, int no, int sens, int[] color){
-		
+	public int[] set(int face, int no, boolean rang, boolean sens, int[] source){
+		int[] ancien = new int[3];
+		for (int i = 0 ; i < 3 ; i++)
+		{
+			int From = sens ? 2 - i : i;
+			if (rang = true)
+			{
+				ancien[0] = color[face][no][i];
+				color[face][no][i] = source[From];
+			}
+			else
+			{
+				ancien[0] = color[face][no][i];
+				color[face][i][no] = source[From];
+			}
+		}
+		return ancien;
+	}
+	
+	/*
+	 * Modifier seulement les couleurs de la face quand on tourne
+	 */
+	
+	public void tournerFace(int face){
+		int tmp = color[face][0][0];
+		color[face][0][0] = color[face][0][1];
+		color[face][0][1] = color[face][0][2];
+		color[face][0][2] = color[face][1][2];
+		color[face][1][2] = color[face][2][2];
+		color[face][2][2] = color[face][2][1];
+		color[face][2][1] = color[face][2][0];
+		color[face][2][0] = color[face][1][0];
+		color[face][1][0] = tmp;
 	}
 	
 	/*
 	 * Tourner une face de 90 degree dans le sens trigonométrique
+	 * Rappel :
+	 *        0 0 0
+	 *        0 0 0
+	 *        0 0 0
+	 *  1 1 1 2 2 2 3 3 3 4 4 4
+	 *  1 1 1 2 2 2 3 3 3 4 4 4
+	 *  1 1 1 2 2 2 3 3 3 4 4 4
+	 *        5 5 5
+	 *        5 5 5
+	 *        5 5 5
 	 */
 	
 	public void tourner(int face){
-		int a[][] = new int[3][3];
-		for (int rang = 0 ; rang < 3 ; rang++)
-		{
-			for (int colonne = 0 ; colonne < 3 ; colonne++)
-			{
-				a[rang][colonne] = color[face][colonne][rang];
-			}
+		tournerFace(face);
+		switch (face){
+		case 1:
+			
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
 		}
-		//TODO
-		
 	}
 
 }
