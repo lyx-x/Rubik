@@ -2,11 +2,17 @@ package Chemin;
 import Cube.*;
 import java.util.*;
 
+/*
+ * Cette classe permet de trouver un chemin entre deux dispositions
+ */
+
 public class Chemin {
 	
 	LinkedList<Action> chemin;
-	Cube original;
-	Cube source;
+	Cube original;  //Disposition initiale
+	Cube source;  //Disposition finale
+	boolean found = false;  //Voir si une solution existe
+	int etape = 2;  //Limiter le nombre d'étapes
 	
 	public Chemin()
 	{
@@ -18,37 +24,58 @@ public class Chemin {
 		chemin = new LinkedList<Action>();
 		this.original = t;
 		this.source = s;
-		if (original.same(source))
-		{
-			//return;
-		}
-		Find(1);
+	}
+	
+	public void setEtape(int e)
+	{
+		etape = e;
 	}
 	
 	public void print()
 	{
 		System.out.println();
+		if (!found)
+		{
+			System.out.format("Pas de solutions en %d étapes\n", etape);
+			return;
+		}
+		System.out.format("Solution en %d étapes trouvée : \n", chemin.size());
+		int count = 0;
 		for (Action a : chemin)
 		{
+			count++;
+			System.out.format("Etape %d : ", count);
 			a.print();
 		}
-		System.out.format("Terminé en %d étapes !\n", chemin.size());
 	}
 	
-	public void Find(int l)
+	public void RunFind()
+	{
+		if (original.same(source))
+		{
+			found = true;
+			return;
+		}
+		Find(etape);
+	}
+	
+	/*
+	 * Une méthode privée permettant de parcourir l'arbre en largeur afin d'atteidre le but
+	 */
+	
+	void Find(int l)
 	{
 		LinkedList<LinkedList<Action>> queue = new LinkedList<LinkedList<Action>>();
 		queue.addLast(new LinkedList<Action>());
 		while(!queue.isEmpty())
 		{
-			LinkedList<Action> current = queue.peek();
+			LinkedList<Action> current = queue.peek();  //On recommence toujours de la disposition initiale
 			Cube test = new Cube(original);
-			test.print();
 			for (Action a : current)
 			{
 				a.Run(test);
 			}
-			if (current.size() > l - 1)
+			if (current.size() > l - 1)  //Limiter le nombre d'étape
 			{
 				break;
 			}
@@ -56,21 +83,18 @@ public class Chemin {
 			{
 				for (int tour = 0 ; tour < 3 ; tour++)
 				{
-					test.print();
 					Action a = new Action(face, tour);
 					a.Run(test);
-					a.print();
-					test.print();
 					if (test.same(source))
 					{
-						a.print();
 						chemin = current;
 						chemin.add(a);
+						found = true;
 						return;
 					}
-					else
+					else  //Ajouter les nouvelles dispositions intermédiares dans la queue
 					{
-						LinkedList<Action> tmp = new LinkedList<Action>();
+						LinkedList<Action> tmp = new LinkedList<Action>();  //Toujours copier-coller pour créer une nouvelle suite
 						for (Action i : current)
 						{
 							tmp.add(i);
@@ -78,7 +102,7 @@ public class Chemin {
 						tmp.add(a);
 						queue.addLast(tmp);
 					}
-					a.Rollback(test);
+					a.Rollback(test);  //Afin de tester les autres chemins, il faut revenir en arrière
 				}
 			}
 			queue.pop();

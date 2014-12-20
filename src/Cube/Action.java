@@ -20,6 +20,10 @@ public class Action {
 		c.tourner(face, tour);
 	}
 	
+	/*
+	 * Revenir en arrière consiste à finir un tour de 360 degrés
+	 */
+	
 	public void Rollback(Cube c)
 	{
 		c.tourner(face, 2 - tour);

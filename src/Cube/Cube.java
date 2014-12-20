@@ -25,6 +25,7 @@ public class Cube {
 	 */
 
 	int[][][] color = new int[6][3][3];
+	static int width = 60;
 	
 	public Cube(Cube c)
 	{
@@ -50,7 +51,7 @@ public class Cube {
 		int tmp = 0;
 		for (int face = 0 ; face < 6 ; face++)
 		{
-			System.out.format("Face %d : ", face + 1);
+			System.out.format("Face %d : ", face);
 			for (int rang = 0 ; rang < 3 ; rang++)
 			{
 				for (int colonne = 0 ; colonne < 3 ; colonne++)
@@ -114,7 +115,7 @@ public class Cube {
 		}
 		for (int face = 0 ; face < 6 ; face++)
 		{
-			System.out.format("Face %d : \n", face + 1);
+			System.out.format("Face %d : \n", face);
 			for (int rang = 0 ; rang < 3 ; rang++)
 			{
 				for (int colonne = 0 ; colonne < 3 ; colonne++)
@@ -129,11 +130,19 @@ public class Cube {
 	}
 	
 	/*
+	 * Modifier la taille d'affichage
+	 */
+	
+	public void setWidth(int w)
+	{
+		width = w;
+	}
+	
+	/*
 	 * Dessiner le cube 2D dans une nouvelle fenêtre
 	 */
 	
 	public void show2D(){
-		int width = 60;
 		Plan dessin = new Plan(this, width);
 		JFrame frame=new JFrame("Rubik's cube");
 		frame.setSize(width * 14 + 20, width * 11 + 40);
@@ -170,15 +179,16 @@ public class Cube {
 	 * Modifier seulement les couleurs de la face quand on tourne
 	 */
 	
-	public void tournerFace(int face){
+	void tournerFace(int face){
 		int tmp = color[face][0][0];
-		color[face][0][0] = color[face][0][1];
-		color[face][0][1] = color[face][0][2];
-		color[face][0][2] = color[face][1][2];
-		color[face][1][2] = color[face][2][2];
-		color[face][2][2] = color[face][2][1];
-		color[face][2][1] = color[face][2][0];
-		color[face][2][0] = color[face][1][0];
+		color[face][0][0] = color[face][0][2];
+		color[face][0][2] = color[face][2][2];
+		color[face][2][2] = color[face][2][0];
+		color[face][2][0] = tmp;
+		tmp = color[face][0][1];
+		color[face][0][1] = color[face][1][2];
+		color[face][1][2] = color[face][2][1];
+		color[face][2][1] = color[face][1][0];
 		color[face][1][0] = tmp;
 	}
 	
@@ -196,7 +206,7 @@ public class Cube {
 	 *        5 5 5
 	 */
 	
-	public void tourner(int face){
+	void tourner(int face){
 		tournerFace(face);
 		switch (face){
 		case 1:
@@ -244,12 +254,20 @@ public class Cube {
 		}
 	}
 	
+	/*
+	 * Voici la méthode publique qu'on peut utiliser pour tourner le cube, attention tour = 0 veut dire une tour
+	 */
+	
 	public void tourner(int face, int tour){
 		for (int i = -1 ; i < tour ; i++)
 		{
 			tourner(face);
 		}
 	}
+	
+	/*
+	 * Tester l'équivalence des deux cubes
+	 */
 	
 	public boolean same(Cube c){
 		for (int face = 0 ; face < 6 ; face++)
