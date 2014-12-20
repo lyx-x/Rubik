@@ -26,6 +26,20 @@ public class Cube {
 
 	int[][][] color = new int[6][3][3];
 	
+	public Cube(Cube c)
+	{
+		for (int face = 0 ; face < 6 ; face++)
+		{
+			for (int rang = 0 ; rang < 3 ; rang++)
+			{
+				for (int colonne = 0 ; colonne < 3 ; colonne++)
+				{
+					this.color[face][rang][colonne] = c.color[face][rang][colonne];
+				}
+			}
+		}
+	}
+	
 	/*
 	 * Lire les couleurs par la console
 	 */
@@ -145,7 +159,7 @@ public class Cube {
 			}
 			else
 			{
-				ancien[i] = color[face][no][i];
+				ancien[i] = color[face][i][no];
 				color[face][i][no] = source[From];
 			}
 		}
@@ -228,6 +242,30 @@ public class Cube {
 			tmp0 = set(2, 0, true, false, tmp0);
 			break;
 		}
+	}
+	
+	public void tourner(int face, int tour){
+		for (int i = -1 ; i < tour ; i++)
+		{
+			tourner(face);
+		}
+	}
+	
+	public boolean same(Cube c){
+		for (int face = 0 ; face < 6 ; face++)
+		{
+			for (int rang = 0 ; rang < 3 ; rang++)
+			{
+				for (int colonne = 0 ; colonne < 3 ; colonne++)
+				{
+					if (color[face][rang][colonne] != c.color[face][rang][colonne])
+					{
+						return false;
+					}
+				}
+			}
+		}
+		return true;
 	}
 
 }
