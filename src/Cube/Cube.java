@@ -25,21 +25,21 @@ public class Cube {
 	 */
 
 	int[][][] color = new int[6][3][3];
+	static int width = 60;
 	
-	/*
-	 * Listes des faces adjacentes à une face donnée dans le sens trigonométrique
-	 * {4,1,1} pour 0 représente face 4, rang 1
-	 * {0,1,0} pour 1 représente face 0, colonne 1
-	 */
-	
-	int[][][] adjacent = {
-			{{4}, {1}, {2}, {3}},
-			{{4}, {5}, {2}, {0}},
-			{{5}, {3}, {0}, {1}},
-			{{0}, {2}, {5}, {4}},
-			{{3}, {5}, {1}, {0}},
-			{{2}, {1}, {0}, {3}}
-	};
+	public Cube(Cube c)
+	{
+		for (int face = 0 ; face < 6 ; face++)
+		{
+			for (int rang = 0 ; rang < 3 ; rang++)
+			{
+				for (int colonne = 0 ; colonne < 3 ; colonne++)
+				{
+					this.color[face][rang][colonne] = c.color[face][rang][colonne];
+				}
+			}
+		}
+	}
 	
 	/*
 	 * Lire les couleurs par la console
@@ -51,7 +51,7 @@ public class Cube {
 		int tmp = 0;
 		for (int face = 0 ; face < 6 ; face++)
 		{
-			System.out.format("Face %d : ", face + 1);
+			System.out.format("Face %d : ", face);
 			for (int rang = 0 ; rang < 3 ; rang++)
 			{
 				for (int colonne = 0 ; colonne < 3 ; colonne++)
@@ -115,7 +115,7 @@ public class Cube {
 		}
 		for (int face = 0 ; face < 6 ; face++)
 		{
-			System.out.format("Face %d : \n", face + 1);
+			System.out.format("Face %d : \n", face);
 			for (int rang = 0 ; rang < 3 ; rang++)
 			{
 				for (int colonne = 0 ; colonne < 3 ; colonne++)
@@ -130,11 +130,19 @@ public class Cube {
 	}
 	
 	/*
+	 * Modifier la taille d'affichage
+	 */
+	
+	public void setWidth(int w)
+	{
+		width = w;
+	}
+	
+	/*
 	 * Dessiner le cube 2D dans une nouvelle fenêtre
 	 */
 	
 	public void show2D(){
-		int width = 60;
 		Plan dessin = new Plan(this, width);
 		JFrame frame=new JFrame("Rubik's cube");
 		frame.setSize(width * 14 + 20, width * 11 + 40);
@@ -143,28 +151,139 @@ public class Cube {
 	}
 	
 	/*
-	 * 
+	 * Modifier les couleurs d'une colonne (rang = false) ou d'un rang (rang = true), avec le numéro de la colonne ou de rang
+	 * On retourne les anciennes valeurs pour le prochain étape (toujours de 0 à 2)
+	 * Le booléan sens vérifie si on doit changer l'ordre d'affectation
 	 */
 	
-	public void set(int face, int no, int sens, int[] color){
-		
+	public int[] set(int face, int no, boolean rang, boolean changeSens, int[] source){
+		int[] ancien = new int[3];
+		for (int i = 0 ; i < 3 ; i++)
+		{
+			int From = changeSens ? 2 - i : i;
+			if (rang)
+			{
+				ancien[i] = color[face][no][i];
+				color[face][no][i] = source[From];
+			}
+			else
+			{
+				ancien[i] = color[face][i][no];
+				color[face][i][no] = source[From];
+			}
+		}
+		return ancien;
+	}
+	
+	/*
+	 * Modifier seulement les couleurs de la face quand on tourne
+	 */
+	
+	void tournerFace(int face){
+		int tmp = color[face][0][0];
+		color[face][0][0] = color[face][0][2];
+		color[face][0][2] = color[face][2][2];
+		color[face][2][2] = color[face][2][0];
+		color[face][2][0] = tmp;
+		tmp = color[face][0][1];
+		color[face][0][1] = color[face][1][2];
+		color[face][1][2] = color[face][2][1];
+		color[face][2][1] = color[face][1][0];
+		color[face][1][0] = tmp;
 	}
 	
 	/*
 	 * Tourner une face de 90 degree dans le sens trigonométrique
+	 * Rappel :
+	 *        0 0 0
+	 *        0 0 0
+	 *        0 0 0
+	 *  1 1 1 2 2 2 3 3 3 4 4 4
+	 *  1 1 1 2 2 2 3 3 3 4 4 4
+	 *  1 1 1 2 2 2 3 3 3 4 4 4
+	 *        5 5 5
+	 *        5 5 5
+	 *        5 5 5
 	 */
 	
-	public void tourner(int face){
-		int a[][] = new int[3][3];
-		for (int rang = 0 ; rang < 3 ; rang++)
+	void tourner(int face){
+		tournerFace(face);
+		switch (face){
+		case 1:
+			int[] tmp1 = {color[0][0][0], color[0][1][0], color[0][2][0]};
+			tmp1 = set(4, 2, false, true, tmp1);
+			tmp1 = set(5, 0, false, true, tmp1);
+			tmp1 = set(2, 0, false, false, tmp1);
+			tmp1 = set(0, 0, false, false, tmp1);
+			break;
+		case 2:
+			int[] tmp2 = {color[0][2][0], color[0][2][1], color[0][2][2]};
+			tmp2 = set(1, 2, false, true, tmp2);
+			tmp2 = set(5, 0, true, false, tmp2);
+			tmp2 = set(3, 0, false, true, tmp2);
+			tmp2 = set(0, 2, true, false, tmp2);
+			break;
+		case 3:
+			int[] tmp3 = {color[2][0][2], color[2][1][2], color[2][2][2]};
+			tmp3 = set(5, 2, false, false, tmp3);
+			tmp3 = set(4, 0, false, true, tmp3);
+			tmp3 = set(0, 2, false, true, tmp3);
+			tmp3 = set(2, 2, false, false, tmp3);
+			break;
+		case 4:
+			int[] tmp4 = {color[3][0][2], color[3][1][2], color[3][2][2]};
+			tmp4 = set(5, 2, true, true, tmp4);
+			tmp4 = set(1, 0, false, false, tmp4);
+			tmp4 = set(0, 0, true, true, tmp4);
+			tmp4 = set(3, 2, false, false, tmp4);
+			break;
+		case 5:
+			int[] tmp5 = {color[2][2][0], color[2][2][1], color[2][2][2]};
+			tmp5 = set(1, 2, true, false, tmp5);
+			tmp5 = set(4, 2, true, false, tmp5);
+			tmp5 = set(3, 2, true, false, tmp5);
+			tmp5 = set(2, 2, true, false, tmp5);
+			break;
+		case 0:
+			int[] tmp0 = {color[2][0][0], color[2][0][1], color[2][0][2]};
+			tmp0 = set(3, 0, true, false, tmp0);
+			tmp0 = set(4, 0, true, false, tmp0);
+			tmp0 = set(1, 0, true, false, tmp0);
+			tmp0 = set(2, 0, true, false, tmp0);
+			break;
+		}
+	}
+	
+	/*
+	 * Voici la méthode publique qu'on peut utiliser pour tourner le cube, attention tour = 0 veut dire une tour
+	 */
+	
+	public void tourner(int face, int tour){
+		for (int i = -1 ; i < tour ; i++)
 		{
-			for (int colonne = 0 ; colonne < 3 ; colonne++)
+			tourner(face);
+		}
+	}
+	
+	/*
+	 * Tester l'équivalence des deux cubes
+	 */
+	
+	public boolean same(Cube c){
+		for (int face = 0 ; face < 6 ; face++)
+		{
+			for (int rang = 0 ; rang < 3 ; rang++)
 			{
-				a[rang][colonne] = color[face][colonne][rang];
+				for (int colonne = 0 ; colonne < 3 ; colonne++)
+				{
+					if (color[face][rang][colonne] != c.color[face][rang][colonne])
+					{
+						return false;
+					}
+				}
 			}
 		}
-		//TODO
-		
+		return true;
 	}
 
 }
