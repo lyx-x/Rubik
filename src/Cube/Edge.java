@@ -49,17 +49,19 @@ public class Edge {
 	
 	public Edge(int i, Cube c)
 	{
-		fCoord = realPosition[i][0];
-		sCoord = realPosition[i][1];
-		First = c.color[fCoord[0]][fCoord[1]][fCoord[2]];
-		Second = c.color[sCoord[0]][sCoord[1]][sCoord[2]];
+		this.fCoord = realPosition[i][0];
+		this.sCoord = realPosition[i][1];
+		this.First = c.color[fCoord[0]][fCoord[1]][fCoord[2]];
+		this.Second = c.color[sCoord[0]][sCoord[1]][sCoord[2]];
 		this.index = Index();  //i représente le numéro de la case occupée par la pièce et index est le numéro de la pièce elle-même, une pièce peut bien-sûr occuper une fausse case
 	}
 	
-	public Edge(int f, int s)
+	public Edge(int i, int f, int s)
 	{
 		this.First = f;
 		this.Second = s;
+		this.fCoord = realPosition[i][0];
+		this.sCoord = realPosition[i][1];
 		this.index = Index();
 	}
 	
@@ -254,16 +256,34 @@ public class Edge {
 		Cube black = new Cube(Cube.black);
 		Cube test = new Cube(Cube.black);  //Le reste du cube est noir
 		makeTest(test);
-		Cube t = new Cube(test);
+		//Cube t = new Cube(test);
 		makeBlack(black);
 		Chemin ans = new Chemin(test, black);
-		int r = ans.runFindEdge();
+		int r = ans.runFindEdge(true);
+		/*
 		if (!ans.found())  //Pour le test
 		{
 			t.show2D("Test");
 			black.show2D("Black : real position");
 			ans.print();
 		}
+		*/
 		return r;
+	}
+	
+	/*
+	 * Voir si la pièce se trouve à la bonne position
+	 */
+	
+	public boolean correctPosition()
+	{
+		if (First != fCoord[0]) return false;
+		if (Second != sCoord[0]) return false;
+		return true;
+	}
+	
+	public void print()
+	{
+		System.out.format("Edge #%d: Color %d, Position %d %d %d ; Color %d, Position %d %d %d\n", index, First, fCoord[0], fCoord[1], fCoord[2], Second, sCoord[0], sCoord[1], sCoord[2]);
 	}
 }

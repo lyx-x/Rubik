@@ -13,10 +13,12 @@ public class Chemin {
 	Cube source;  //Disposition finale
 	boolean found = false;  //Voir si une solution existe
 	int etape = 2;  //Limiter le nombre d'étapes
+	int size = -1;
 	
 	public Chemin()
 	{
 		chemin = new LinkedList<Action>();
+		size = -1;
 	}
 	
 	public Chemin(Cube t, Cube s)
@@ -24,6 +26,7 @@ public class Chemin {
 		chemin = new LinkedList<Action>();
 		this.original = t;
 		this.source = s;
+		size = -1;
 	}
 	
 	public void setEtape(int e)
@@ -37,7 +40,7 @@ public class Chemin {
 	
 	public int size()
 	{
-		return chemin.size();
+		return size;
 	}
 	
 	/*
@@ -87,7 +90,6 @@ public class Chemin {
 			}
 			if (stepLimite && current.size() > limite - 1)  //Limiter le nombre d'étape
 			{
-				System.out.println(limite);
 				break;
 			}
 			for (int face = 0 ; face < 6 ; face++)
@@ -104,6 +106,7 @@ public class Chemin {
 						chemin = current;
 						chemin.add(a);
 						found = true;
+						size = chemin.size();
 						return;
 					}
 					else  //Ajouter les nouvelles dispositions intermédiares dans la queue
@@ -127,36 +130,17 @@ public class Chemin {
 	{
 		if (original.same(source))
 		{
+			found = true;
 			return;
 		}
-		runFindSimple(etape);
-	}
-	
-	void runFindSimple(int l)
-	{
-		findSimple(l, true, false, false);
+		findSimple(etape, true, false, false);
 	}
 	
 	/*
 	 * Deux méthodes pour tester le calcul de la distance entre les deux dispositions d'une pièce, sommet ou arête
 	 */
 	
-	public int runFindCoin()
-	{
-		if (original.same(source))
-		{
-			found = true;
-			
-			return 0;
-		}
-		else
-		{
-			findSimple(0, false, true, false);
-			return chemin.size();
-		}
-	}
-	
-	public int runFindEdge()
+	public int runFindCoin(boolean limite)
 	{
 		if (original.same(source))
 		{
@@ -165,9 +149,86 @@ public class Chemin {
 		}
 		else
 		{
-			findSimple(0, false, false, true);
-			return chemin.size();
+			findSimple(2, limite, true, false);
+			return size;
 		}
 	}
 	
+	public int runFindEdge(boolean limite)
+	{
+		if (original.same(source))
+		{
+			found = true;
+			return 0;
+		}
+		else
+		{
+			findSimple(3, limite, false, true);
+			return size;
+		}
+	}
+	
+	void findAStar()
+	{
+		PriorityQueue<Disposition> queue = new PriorityQueue<Disposition>(10, new DispositionComparator());
+		queue.add(new Disposition());
+		while(!queue.isEmpty())
+		{
+			Disposition current = queue.peek();  //On recommence toujours de la disposition initiale
+			Cube test = new Cube(original);
+			int currentFace = -1;
+			System.out.println(current.distance);
+			for (Action a : current.actions)
+			{
+				a.Run(test);
+				currentFace = a.Face();  //Enregistrer la face qu'on vient de tourner pour ne pas la tourner deux fois de suite
+			}
+			for (int face = 0 ; face < 6 ; face++)
+			{
+				if (currentFace == face) continue;
+				for (int tour = 0 ; tour < 3 ; tour++)
+				{
+					Action a = new Action(face, tour);
+					a.Run(test);
+					int dist = test.distance();
+					//System.out.println(dist);
+					if (test.same(source))
+					{
+						chemin = current.actions;
+						chemin.add(a);
+						found = true;
+						return;
+					}
+					else  //Ajouter les nouvelles dispositions intermédiares dans la queue
+					{
+						if (dist > current.distance)
+						{
+							a.Rollback(test);
+							continue;
+						}
+						LinkedList<Action> tmp = new LinkedList<Action>();  //Toujours copier-coller pour créer une nouvelle suite
+						for (Action i : current.actions)
+						{
+							tmp.add(i);
+						}
+						tmp.add(a);
+						Disposition d = new Disposition(tmp, dist);
+						queue.add(d);
+					}
+					a.Rollback(test);  //Afin de tester les autres chemins, il faut revenir en arrière
+				}
+			}
+			queue.remove();
+		}
+	}
+	
+	public void runFindAStar()
+	{
+		if (original.same(source))
+		{
+			found = true;
+			return;
+		}
+		findAStar();
+	}
 }

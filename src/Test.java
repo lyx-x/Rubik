@@ -1,3 +1,4 @@
+import Config.Path;
 import Cube.*;
 import Chemin.*;
 
@@ -5,8 +6,12 @@ public class Test {
 	
 	public static void main(String[] args){
 		init();
-		testSimple(5);
-		//debugCoinEdge(40);
+		//testSimple(5);
+		debugCoinEdge(20);
+		//testAStar(10);
+		//testInit();
+		//testDistance();
+		//debugCoinEdge();
 	}
 	
 	/*
@@ -29,6 +34,7 @@ public class Test {
 	static void init()
 	{
 		Cube.setWidth(40);
+		Path init = new Path();
 	}
 	
 	/*
@@ -41,6 +47,7 @@ public class Test {
 			System.out.format("\n//======== Test %d =======\n", i + 1);
 			Cube test = new Cube(Cube.src);
 			melanger(test, i, true);
+			System.out.format("\nDistance minimale : %d\n",test.distance());
 			Cube dest = new Cube(test);  //Sauvegarder la disposition pour l'affichage
 			dest.show2D();
 			long startTime = System.currentTimeMillis();
@@ -81,6 +88,46 @@ public class Test {
 			System.out.println(tmp);
 		}
 		System.out.format("Max steps : %d\n", max);  //Estimer le nombre d'étape maximal
+	}
+	
+	static void debugCoinEdge(){
+		Coin c = new Coin(7, 2, 3, 5);
+		int tmp = c.recoverSteps();
+		System.out.println(tmp);
+	}
+	
+	static void testAStar(int etape){
+		for (int i = 0 ; i <= etape ; i++)
+		{
+			System.out.format("\n//======== Test %d =======\n", i + 1);
+			Cube test = new Cube(Cube.src);
+			melanger(test, i, true);
+			System.out.format("\nDistance minimale : %d\n",test.distance());
+			Cube dest = new Cube(test);  //Sauvegarder la disposition pour l'affichage
+			dest.show2D();
+			long startTime = System.currentTimeMillis();
+			Chemin ans = new Chemin(test, Cube.src);
+			ans.setEtape(i);  //Définir le nombre d'étape maximal pour faire la BFS
+			ans.runFindAStar();  //Trouver le chemin
+			long endTime = System.currentTimeMillis();
+			long duration = endTime - startTime;
+			ans.print();
+			System.out.printf("\nElapsed time: %d milliseconds\n", duration);
+		}	
+	}
+	
+	static void testInit()
+	{
+		Path.print();
+	}
+	
+	static void testDistance()
+	{
+		Cube test = new Cube(Cube.src);
+		melanger(test, 1, true);
+		System.out.format("\nDistance minimale : %d\n",test.distance());
+		test.show2D();
+		test.printDistance();
 	}
 
 }

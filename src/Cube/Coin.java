@@ -29,21 +29,24 @@ public class Coin {
 	
 	public Coin(int i, Cube c)
 	{
-		fCoord = realPosition[i][0];
-		sCoord = realPosition[i][1];
-		tCoord = realPosition[i][2];
-		First = c.color[fCoord[0]][fCoord[1]][fCoord[2]];
-		Second = c.color[sCoord[0]][sCoord[1]][sCoord[2]];
-		Third = c.color[tCoord[0]][tCoord[1]][tCoord[2]];
+		this.fCoord = realPosition[i][0];
+		this.sCoord = realPosition[i][1];
+		this.tCoord = realPosition[i][2];
+		this.First = c.color[fCoord[0]][fCoord[1]][fCoord[2]];
+		this.Second = c.color[sCoord[0]][sCoord[1]][sCoord[2]];
+		this.Third = c.color[tCoord[0]][tCoord[1]][tCoord[2]];
 		this.index = Index();
 	}
 	
-	public Coin(int f, int s, int t)
+	public Coin(int i, int f, int s, int t)
 	{
 		this.First = f;
 		this.Second = s;
 		this.Third = t;
-		this.index = this.Index();
+		this.fCoord = realPosition[i][0];
+		this.sCoord = realPosition[i][1];
+		this.tCoord = realPosition[i][2];
+		this.index = Index();
 	}
 	
 	public Coin(int[] fc, int f, int[] sc, int s, int[] tc, int t)
@@ -232,6 +235,7 @@ public class Coin {
 	
 	void makeBlack(Cube t)
 	{
+		if (index == -1) return;
 		t.setColor(realPosition[index][0]);
 		t.setColor(realPosition[index][1]);
 		t.setColor(realPosition[index][2]);
@@ -245,14 +249,29 @@ public class Coin {
 		Cube t = new Cube(test);
 		makeBlack(black);
 		Chemin ans = new Chemin(test, black);
-		int r = ans.runFindCoin();
+		int r = ans.runFindCoin(true);
+		
 		if (!ans.found())
 		{
 			t.show2D("Test");
 			black.show2D("Black : real position");
 			ans.print();
 		}
+		
 		return r;
+	}
+	
+	public boolean correctPosition()
+	{
+		if (First != fCoord[0]) return false;
+		if (Second != sCoord[0]) return false;
+		if (Third != tCoord[0]) return false;
+		return true;
+	}
+	
+	public void print()
+	{
+		System.out.format("Coin #%d: Color %d, Position %d %d %d ; Color %d, Position %d %d %d ; Color %d, Position %d %d %d\n", index, First, fCoord[0], fCoord[1], fCoord[2], Second, sCoord[0], sCoord[1], sCoord[2], Third, tCoord[0], tCoord[1], tCoord[2]);
 	}
 
 }
