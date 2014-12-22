@@ -1,6 +1,8 @@
 package Cube;
 import java.io.*;
+
 import javax.swing.*;
+
 import java.util.*;
 
 public class Cube {
@@ -25,7 +27,14 @@ public class Cube {
 	 */
 
 	int[][][] color = new int[6][3][3];
-	static int width = 60;
+	static int width = 60;  //Modifier la taille une fois pour toute en utilisant une variable statique
+	
+	public static Cube src = new Cube("Test.txt");  //Ce cube est l'état final
+	public static Cube black = new Cube("Black.txt");  //Ce cube est tout noir pour le test
+	
+	/*
+	 * Reproduire le même cube
+	 */
 	
 	public Cube(Cube c)
 	{
@@ -133,7 +142,7 @@ public class Cube {
 	 * Modifier la taille d'affichage
 	 */
 	
-	public void setWidth(int w)
+	public static void setWidth(int w)
 	{
 		width = w;
 	}
@@ -145,6 +154,18 @@ public class Cube {
 	public void show2D(){
 		Plan dessin = new Plan(this, width);
 		JFrame frame=new JFrame("Rubik's cube");
+		frame.setSize(width * 14 + 20, width * 11 + 40);
+		frame.setVisible(true);
+		frame.add(dessin);
+	}
+	
+	/*
+	 * Dessiner le cube avec un titre
+	 */
+	
+	public void show2D(String str){
+		Plan dessin = new Plan(this, width);
+		JFrame frame=new JFrame(str);
 		frame.setSize(width * 14 + 20, width * 11 + 40);
 		frame.setVisible(true);
 		frame.add(dessin);
@@ -175,6 +196,24 @@ public class Cube {
 		return ancien;
 	}
 	
+	/*
+	 * Modifier la couleur d'une seule case
+	 */
+	
+	void setColor(int color, int[] coord)
+	{
+		this.color[coord[0]][coord[1]][coord[2]] = color;
+	}
+	
+	/*
+	 * Reset la bonne couleur qui se trouve dans le numéro de la face
+	 */
+	
+	void setColor(int[] coord)
+	{
+		this.color[coord[0]][coord[1]][coord[2]] = coord[0];
+	}
+		
 	/*
 	 * Modifier seulement les couleurs de la face quand on tourne
 	 */
@@ -285,5 +324,47 @@ public class Cube {
 		}
 		return true;
 	}
+	
+	/*
+	 * Vérifier si la face est bonne, on compare avec le centre qui ne bouge pas
+	 */
+	
+	public boolean faceHomogene(int face){
+		int base = color[face][1][1];
+		for (int rang = 0 ; rang < 3 ; rang++)
+		{
+			for (int colonne = 0 ; colonne < 3 ; colonne++)
+			{
+				if (color[face][rang][colonne] != base)
+				{
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	/*
+	 * Deux méthode qui ne servent qu'au test
+	 */
+	
+	public boolean correctCoins(int face){
+		int center = color[face][1][1];
+		if (color[face][0][0] != center) return false;
+		if (color[face][2][0] != center) return false;
+		if (color[face][0][2] != center) return false;
+		if (color[face][2][2] != center) return false;
+		return true;
+	}
+	
+	public boolean correctEdges(int face){
+		int center = color[face][1][1];
+		if (color[face][0][1] != center) return false;
+		if (color[face][1][0] != center) return false;
+		if (color[face][1][2] != center) return false;
+		if (color[face][2][1] != center) return false;
+		return true;
+	}
 
 }
+
