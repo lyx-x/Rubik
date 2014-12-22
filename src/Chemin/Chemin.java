@@ -168,7 +168,61 @@ public class Chemin {
 		}
 	}
 	
-	void findAStar()
+	void findAStar(boolean sum, String mode)
+	{
+		LinkedList<LinkedList<Action>> queue = new LinkedList<LinkedList<Action>>();
+		queue.addLast(new LinkedList<Action>());
+		while(!queue.isEmpty())
+		{
+			LinkedList<Action> current = queue.peek();   //On recommence toujours de la disposition initiale
+			Cube test = new Cube(original);
+			int currentFace = -1;
+			//System.out.println(current.distance);
+			for (Action a : current)
+			{
+				a.Run(test);
+				currentFace = a.Face();  //Enregistrer la face qu'on vient de tourner pour ne pas la tourner deux fois de suite
+			}
+			int currentDistance = test.distance(sum, mode);
+			for (int face = 0 ; face < 6 ; face++)
+			{
+				if (currentFace == face) continue;
+				for (int tour = 0 ; tour < 3 ; tour++)
+				{
+					Action a = new Action(face, tour);
+					a.Run(test);
+					int dist = test.distance(sum, mode);
+					//System.out.println(dist);
+					if (test.same(source))
+					{
+						chemin = current;
+						chemin.add(a);
+						found = true;
+						return;
+					}
+					else  //Ajouter les nouvelles dispositions intermédiares dans la queue
+					{
+						if (dist > currentDistance)
+						{
+							a.Rollback(test);
+							continue;
+						}
+						LinkedList<Action> tmp = new LinkedList<Action>();  //Toujours copier-coller pour créer une nouvelle suite
+						for (Action i : current)
+						{
+							tmp.add(i);
+						}
+						tmp.add(a);
+						queue.addLast(tmp);
+					}
+					a.Rollback(test);  //Afin de tester les autres chemins, il faut revenir en arrière
+				}
+			}
+			queue.remove();
+		}
+	}
+	
+	void findAStarPQ(boolean sum, String mode)
 	{
 		PriorityQueue<Disposition> queue = new PriorityQueue<Disposition>(10, new DispositionComparator());
 		queue.add(new Disposition());
@@ -177,7 +231,7 @@ public class Chemin {
 			Disposition current = queue.peek();  //On recommence toujours de la disposition initiale
 			Cube test = new Cube(original);
 			int currentFace = -1;
-			System.out.println(current.distance);
+			//System.out.println(current.distance);
 			for (Action a : current.actions)
 			{
 				a.Run(test);
@@ -190,7 +244,7 @@ public class Chemin {
 				{
 					Action a = new Action(face, tour);
 					a.Run(test);
-					int dist = test.distance();
+					int dist = test.distance(sum, mode);
 					//System.out.println(dist);
 					if (test.same(source))
 					{
@@ -201,7 +255,7 @@ public class Chemin {
 					}
 					else  //Ajouter les nouvelles dispositions intermédiares dans la queue
 					{
-						if (dist > current.distance)
+						if (dist > current.distance + 1)
 						{
 							a.Rollback(test);
 							continue;
@@ -222,13 +276,13 @@ public class Chemin {
 		}
 	}
 	
-	public void runFindAStar()
+	public void runFindAStar(boolean sum, String mode)
 	{
 		if (original.same(source))
 		{
 			found = true;
 			return;
 		}
-		findAStar();
+		findAStarPQ(sum, mode);
 	}
 }

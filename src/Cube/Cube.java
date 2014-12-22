@@ -369,7 +369,28 @@ public class Cube {
 		return true;
 	}
 	
-	public int distanceSimple()
+	public int distance(boolean sum, String str)
+	{
+		int dist = -1;
+		if (str.equals("Simple")) 
+			dist = distanceSimple(sum);
+		if (str.equals("Total"))
+			dist = distanceTotal(sum);
+		if (str.equals("Coin"))
+			dist = distanceCoin(sum);
+		if (str.equals("EdgeOdd"))
+			dist = distanceEdgeOdd(sum);
+		if (str.equals("EdgePair"))
+			dist = distanceEdgePair(sum);
+		if (str.equals("Final"))
+			if (sum)
+				dist = Math.min(Math.min(distanceCoin(sum), distanceEdgeOdd(sum)), distanceEdgePair(sum));
+			else
+				dist = Math.max(Math.max(distanceCoin(sum), distanceEdgeOdd(sum)), distanceEdgePair(sum));
+		return dist;
+	}
+	
+	public int distanceSimple(boolean sum)
 	{
 		Cube test = new Cube(this);
 		int ans = 0;
@@ -400,11 +421,11 @@ public class Cube {
 			}
 		}
 		
-		return somme;
+		return sum ? somme : ans;
 	}
 	
 	
-	public int distance()
+	public int distanceTotal(boolean sum)
 	{
 		int ans = 0;
 		int somme = 0;
@@ -430,7 +451,63 @@ public class Cube {
 			if (ans < tmp) ans = tmp;
 			somme += tmp;
 		}
-		return ans;
+		return sum ? somme : ans;
+	}
+	
+	public int distanceCoin(boolean sum)
+	{
+		int ans = 0;
+		int somme = 0;
+		int tmp = 0;
+		for (int coin = 0 ; coin < 8 ; coin++)
+		{
+			int[][] cCoord = Coin.realPosition[coin];
+			int f = color[cCoord[0][0]][cCoord[0][1]][cCoord[0][2]];
+			int s = color[cCoord[1][0]][cCoord[1][1]][cCoord[1][2]];
+			int t = color[cCoord[2][0]][cCoord[2][1]][cCoord[2][2]];
+			tmp = Path.distCoin[coin][f][s][t];
+			if (ans < tmp) ans = tmp;
+			somme += tmp;
+		}
+		return sum ? somme : ans;
+	}
+	
+	public int distanceEdgeOdd(boolean sum)
+	{
+		int ans = 0;
+		int somme = 0;
+		int tmp = 0;
+		
+		for (int edge = 0 ; edge < 12; edge += 2)
+		{
+			int[][] eCoord = Edge.realPosition[edge];
+			int f = color[eCoord[0][0]][eCoord[0][1]][eCoord[0][2]];
+			int s = color[eCoord[1][0]][eCoord[1][1]][eCoord[1][2]];
+			tmp = Path.distEdge[edge][f][s];
+			if (ans < tmp) ans = tmp;
+			somme += tmp;
+		}
+		
+		return sum ? somme : ans;
+	}
+	
+	public int distanceEdgePair(boolean sum)
+	{
+		int ans = 0;
+		int somme = 0;
+		int tmp = 0;
+		
+		for (int edge = 1 ; edge < 12; edge += 2)
+		{
+			int[][] eCoord = Edge.realPosition[edge];
+			int f = color[eCoord[0][0]][eCoord[0][1]][eCoord[0][2]];
+			int s = color[eCoord[1][0]][eCoord[1][1]][eCoord[1][2]];
+			tmp = Path.distEdge[edge][f][s];
+			if (ans < tmp) ans = tmp;
+			somme += tmp;
+		}
+		
+		return sum ? somme : ans;
 	}
 	
 	public void printDistance()

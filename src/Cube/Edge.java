@@ -247,6 +247,7 @@ public class Edge {
 	
 	void makeBlack(Cube t)
 	{
+		if (index < 0) return;
 		t.setColor(realPosition[index][0]);
 		t.setColor(realPosition[index][1]);
 	}
