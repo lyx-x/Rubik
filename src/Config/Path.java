@@ -19,7 +19,8 @@ public class Path {
 					for (int l = 0 ; l < 6 ; l++)
 					{
 						Coin c = new Coin(i, j, k, l);
-						int steps = c.recoverSteps();
+						//int steps = c.recoverSteps();
+						int steps = c.manhattanDistance();
 						distCoin[i][j][k][l] = (steps >= 0) ? steps : 9;
 					}
 				}
@@ -32,7 +33,8 @@ public class Path {
 				for (int k = 0 ; k < 6 ; k++)
 				{
 					Edge e = new Edge(i, j, k);
-					int steps = e.recoverSteps();
+					//int steps = e.recoverSteps();
+					int steps = e.ManhattanDistance();
 					distEdge[i][j][k] = (steps >= 0) ? steps : 9;
 				}
 			}

@@ -34,6 +34,8 @@ public class Cube {
 	public static Cube src = new Cube("Test.txt");  //Ce cube est l'état final
 	public static Cube black = new Cube("Black.txt");  //Ce cube est tout noir pour le test
 	
+	public static int[] oppose = {5, 3, 4, 1, 2, 0};
+	
 	/*
 	 * Reproduire le même cube
 	 */
@@ -369,6 +371,26 @@ public class Cube {
 		return true;
 	}
 	
+	public int estimateDistance(boolean two, boolean sum, String str)
+	{
+		int dist = distance(sum, str);
+		if (two)
+		{
+			for (int face = 0 ; face < 6 ; face++)
+			{
+				for (int tour = 0 ; tour < 3 ; tour++)
+				{
+					Action a = new Action(face, tour);
+					a.Run(this);
+					int tmp = this.distance(sum, str);
+					if (tmp < dist) dist = tmp;
+					a.Rollback(this);
+				}
+			}
+		}
+		return dist;
+	}
+	
 	public int distance(boolean sum, String str)
 	{
 		int dist = -1;
@@ -436,6 +458,7 @@ public class Cube {
 			int[][] eCoord = Edge.realPosition[edge];
 			int f = color[eCoord[0][0]][eCoord[0][1]][eCoord[0][2]];
 			int s = color[eCoord[1][0]][eCoord[1][1]][eCoord[1][2]];
+			if (f == 6 || s == 6) continue;
 			tmp = Path.distEdge[edge][f][s];
 			if (ans < tmp) ans = tmp;
 			somme += tmp;
@@ -447,6 +470,7 @@ public class Cube {
 			int f = color[cCoord[0][0]][cCoord[0][1]][cCoord[0][2]];
 			int s = color[cCoord[1][0]][cCoord[1][1]][cCoord[1][2]];
 			int t = color[cCoord[2][0]][cCoord[2][1]][cCoord[2][2]];
+			if (f == 6 || s == 6 || t == 6) continue;
 			tmp = Path.distCoin[coin][f][s][t];
 			if (ans < tmp) ans = tmp;
 			somme += tmp;
@@ -465,6 +489,7 @@ public class Cube {
 			int f = color[cCoord[0][0]][cCoord[0][1]][cCoord[0][2]];
 			int s = color[cCoord[1][0]][cCoord[1][1]][cCoord[1][2]];
 			int t = color[cCoord[2][0]][cCoord[2][1]][cCoord[2][2]];
+			if (f == 6 || s == 6 || t == 6) continue;
 			tmp = Path.distCoin[coin][f][s][t];
 			if (ans < tmp) ans = tmp;
 			somme += tmp;
@@ -483,6 +508,7 @@ public class Cube {
 			int[][] eCoord = Edge.realPosition[edge];
 			int f = color[eCoord[0][0]][eCoord[0][1]][eCoord[0][2]];
 			int s = color[eCoord[1][0]][eCoord[1][1]][eCoord[1][2]];
+			if (f == 6 || s == 6) continue;
 			tmp = Path.distEdge[edge][f][s];
 			if (ans < tmp) ans = tmp;
 			somme += tmp;
@@ -502,6 +528,7 @@ public class Cube {
 			int[][] eCoord = Edge.realPosition[edge];
 			int f = color[eCoord[0][0]][eCoord[0][1]][eCoord[0][2]];
 			int s = color[eCoord[1][0]][eCoord[1][1]][eCoord[1][2]];
+			if (f == 6 || s == 6) continue;
 			tmp = Path.distEdge[edge][f][s];
 			if (ans < tmp) ans = tmp;
 			somme += tmp;
@@ -517,6 +544,7 @@ public class Cube {
 			int[][] eCoord = Edge.realPosition[edge];
 			int f = color[eCoord[0][0]][eCoord[0][1]][eCoord[0][2]];
 			int s = color[eCoord[1][0]][eCoord[1][1]][eCoord[1][2]];
+			if (f == 6 || s == 6) continue;
 			System.out.format("%d %d %d %d\n",edge, f, s, Path.distEdge[edge][f][s]);
 		}
 		System.out.println();
@@ -526,9 +554,11 @@ public class Cube {
 			int f = color[cCoord[0][0]][cCoord[0][1]][cCoord[0][2]];
 			int s = color[cCoord[1][0]][cCoord[1][1]][cCoord[1][2]];
 			int t = color[cCoord[2][0]][cCoord[2][1]][cCoord[2][2]];
+			if (f == 6 || s == 6 || t == 6) continue;
 			System.out.format("%d %d %d %d %d\n",coin, f, s, t, Path.distCoin[coin][f][s][t]);
 		}
 	}
+	
 
 }
 

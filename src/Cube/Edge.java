@@ -28,6 +28,8 @@ public class Edge {
 	int Second;
 	int[] sCoord;
 	int index;  //Numéro de chaque pièce de 0 à 11 suivant leurs couleurs
+	int occupied;
+	
 	static int[][][] realPosition = {  //Les coordonnées de chaque pièce (les pièces sont ordonnées par leurs couleurs)
 		{{0, 1, 0}, {1, 0, 1}},
 		{{0, 2, 1}, {2, 0, 1}},
@@ -43,6 +45,12 @@ public class Edge {
 		{{4, 2, 1}, {5, 2, 1}},
 	};
 	
+	static int[][] realCoord = {
+		{1, 0, 2}, {2, 1, 2}, {1, 2, 2}, {0, 1, 2}, 
+		{2, 0, 1}, {0, 0, 1}, {1, 0, 0}, {2, 2, 1},
+		{2, 1, 0}, {0, 2, 0}, {1, 2, 0}, {0, 1, 0}
+	};
+	
 	/*
 	 * Créer une pièce à partir d'un cube et du numéro de la pièce, on récupère d'abord les coordonnées et puis les couleurs sur ces cases-là
 	 */
@@ -54,6 +62,7 @@ public class Edge {
 		this.First = c.color[fCoord[0]][fCoord[1]][fCoord[2]];
 		this.Second = c.color[sCoord[0]][sCoord[1]][sCoord[2]];
 		this.index = Index();  //i représente le numéro de la case occupée par la pièce et index est le numéro de la pièce elle-même, une pièce peut bien-sûr occuper une fausse case
+		this.occupied = i;
 	}
 	
 	public Edge(int i, int f, int s)
@@ -63,6 +72,7 @@ public class Edge {
 		this.fCoord = realPosition[i][0];
 		this.sCoord = realPosition[i][1];
 		this.index = Index();
+		this.occupied = i;
 	}
 	
 	/*
@@ -270,6 +280,17 @@ public class Edge {
 		}
 		*/
 		return r;
+	}
+	
+	public int ManhattanDistance()
+	{
+		int dist = 0;
+		if (occupied < 0 || index < 0) return -1;
+		for (int i = 0 ; i < 3 ; i++)
+		{
+			dist += Math.abs(realCoord[occupied][i] - realCoord[index][i]);
+		}
+		return dist;
 	}
 	
 	/*

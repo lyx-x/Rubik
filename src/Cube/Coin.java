@@ -15,6 +15,7 @@ public class Coin {
 	int Third;
 	int[] tCoord;
 	int index = -1;
+	int occupied = -1;
 	
 	static int[][][] realPosition = {
 		{{0, 2, 0}, {1, 0, 2}, {2, 0, 0}},
@@ -27,6 +28,10 @@ public class Coin {
 		{{3, 2 ,2}, {4, 2, 0}, {5, 2, 2}},
 		};
 	
+	static int[][] realCoord = {
+		{2, 0, 2}, {0, 0, 2}, {2, 2, 2}, {0, 2, 2}, {2, 0, 0}, {0, 0, 0}, {2, 2, 0}, {0, 2, 0}
+	};
+	
 	public Coin(int i, Cube c)
 	{
 		this.fCoord = realPosition[i][0];
@@ -36,6 +41,7 @@ public class Coin {
 		this.Second = c.color[sCoord[0]][sCoord[1]][sCoord[2]];
 		this.Third = c.color[tCoord[0]][tCoord[1]][tCoord[2]];
 		this.index = Index();
+		this.occupied = i;
 	}
 	
 	public Coin(int i, int f, int s, int t)
@@ -47,6 +53,7 @@ public class Coin {
 		this.sCoord = realPosition[i][1];
 		this.tCoord = realPosition[i][2];
 		this.index = Index();
+		this.occupied = i;
 	}
 	
 	public Coin(int[] fc, int f, int[] sc, int s, int[] tc, int t)
@@ -258,6 +265,32 @@ public class Coin {
 			ans.print();
 		}
 		*/
+		return r;
+	}
+	
+	public int manhattanDistance()
+	{
+		int dist = 0;
+		if (occupied < 0 || index < 0) return -1;
+		for (int i = 0 ; i < 3 ; i++)
+		{
+			dist += Math.abs(realCoord[occupied][i] - realCoord[index][i]);
+		}
+		return dist;
+	}
+	
+	public static int recoverSteps(Coin[] coins)
+	{
+		Cube black = new Cube(Cube.black);
+		Cube test = new Cube(Cube.black);
+		for (Coin c : coins)
+		{
+			c.makeTest(test);
+			c.makeBlack(black);
+		}
+		Chemin ans = new Chemin(test, black);
+		ans.runFindAStar(false, "Coin");
+		int r = ans.size();
 		return r;
 	}
 	

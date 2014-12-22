@@ -8,11 +8,12 @@ public class Test {
 		init();
 		//testSimple(8);
 		//debugCoinEdge(20);
-		//testAStar(10, true, "Total");
+		testAStar(10, true, "Total");
 		//testInit();
 		//testDistance();
 		//debugCoinEdge();
-		testHorizontal(8);
+		//testHorizontal(7);
+		//debugCoins();
 	}
 	
 	/*
@@ -128,17 +129,17 @@ public class Test {
 		//tmp = new Cube(test);
 		//subTest("EdgePair", true, tmp);
 		//tmp = new Cube(test);
-		subTest("EdgeOdd", true, tmp);
-		tmp = new Cube(test);
+		//subTest("EdgeOdd", true, tmp);
+		//tmp = new Cube(test);
 		subTest("Final", true, tmp);
 		//tmp = new Cube(test);
 		//subTest("Total", false, tmp);
 		//tmp = new Cube(test);
 		//subTest("Coin", false, tmp);
-		tmp = new Cube(test);
-		subTest("EdgePair", false, tmp);
 		//tmp = new Cube(test);
-		//subTest("Final", false, tmp);
+		//subTest("EdgePair", false, tmp);
+		tmp = new Cube(test);
+		subTest("Final", false, tmp);
 	}
 	
 	static void subTest(String mode, boolean sum, Cube test)
@@ -167,6 +168,19 @@ public class Test {
 		System.out.format("\nDistance minimale : %d\n",test.distance(false, "Simple"));
 		//test.show2D();
 		//test.printDistance();
+	}
+	
+	static void debugCoins()
+	{
+		Cube test = new Cube(Cube.src);
+		melanger(test, 20, true);
+		Coin[] coins = new Coin[8];
+		for (int i = 0 ; i < 8 ; i++)
+		{
+			coins[i] = new Coin(i, test);
+		}
+		int tmp = Coin.recoverSteps(coins);
+		System.out.println(tmp);
 	}
 
 }

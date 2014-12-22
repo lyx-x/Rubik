@@ -12,7 +12,7 @@ public class Chemin {
 	Cube original;  //Disposition initiale
 	Cube source;  //Disposition finale
 	boolean found = false;  //Voir si une solution existe
-	int etape = 2;  //Limiter le nombre d'étapes
+	int etape = 10;  //Limiter le nombre d'étapes
 	int size = -1;
 	
 	public Chemin()
@@ -159,6 +159,7 @@ public class Chemin {
 		if (original.same(source))
 		{
 			found = true;
+			size = 0;
 			return 0;
 		}
 		else
@@ -198,6 +199,7 @@ public class Chemin {
 						chemin = current;
 						chemin.add(a);
 						found = true;
+						size = chemin.size();
 						return;
 					}
 					else  //Ajouter les nouvelles dispositions intermédiares dans la queue
@@ -231,7 +233,6 @@ public class Chemin {
 			Disposition current = queue.peek();  //On recommence toujours de la disposition initiale
 			Cube test = new Cube(original);
 			int currentFace = -1;
-			//System.out.println(current.distance);
 			for (Action a : current.actions)
 			{
 				a.Run(test);
@@ -244,21 +245,23 @@ public class Chemin {
 				{
 					Action a = new Action(face, tour);
 					a.Run(test);
-					int dist = test.distance(sum, mode);
+					int dist = test.distance(sum, mode) + current.actions.size() + 1;
+					//int dist = test.estimateDistance(true, sum, mode) + current.actions.size() + 1;
 					//System.out.println(dist);
 					if (test.same(source))
 					{
 						chemin = current.actions;
 						chemin.add(a);
 						found = true;
+						size = chemin.size();
 						return;
 					}
 					else  //Ajouter les nouvelles dispositions intermédiares dans la queue
 					{
-						if (dist > current.distance + 1)
+						if (dist > current.distance)
 						{
-							a.Rollback(test);
-							continue;
+							//a.Rollback(test);
+							//continue;
 						}
 						LinkedList<Action> tmp = new LinkedList<Action>();  //Toujours copier-coller pour créer une nouvelle suite
 						for (Action i : current.actions)
@@ -281,6 +284,7 @@ public class Chemin {
 		if (original.same(source))
 		{
 			found = true;
+			size = 0;
 			return;
 		}
 		findAStarPQ(sum, mode);
