@@ -5,9 +5,9 @@ import Chemin.*;
 public class Test {
 	
 	public static void main(String[] args){
-		init();
+		//init();
 		//testSimple(5);
-		debugCoinEdge(20);
+		//debugCoinEdge(20);
 		//testAStar(10);
 		//testInit();
 		//testDistance();
@@ -47,7 +47,7 @@ public class Test {
 			System.out.format("\n//======== Test %d =======\n", i + 1);
 			Cube test = new Cube(Cube.src);
 			melanger(test, i, true);
-			System.out.format("\nDistance minimale : %d\n",test.distance());
+			System.out.format("\nDistance minimale : %d\n",test.distanceSimple());
 			Cube dest = new Cube(test);  //Sauvegarder la disposition pour l'affichage
 			dest.show2D();
 			long startTime = System.currentTimeMillis();
@@ -91,7 +91,7 @@ public class Test {
 	}
 	
 	static void debugCoinEdge(){
-		Coin c = new Coin(7, 2, 3, 5);
+		Coin c = new Coin(7, 2, 2, 5);
 		int tmp = c.recoverSteps();
 		System.out.println(tmp);
 	}
@@ -118,6 +118,7 @@ public class Test {
 	
 	static void testInit()
 	{
+		Path p = new Path();
 		Path.print();
 	}
 	

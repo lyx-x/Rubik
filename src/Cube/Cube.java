@@ -368,8 +368,8 @@ public class Cube {
 		if (color[face][2][1] != center) return false;
 		return true;
 	}
-	/*
-	public int distance()
+	
+	public int distanceSimple()
 	{
 		Cube test = new Cube(this);
 		int ans = 0;
@@ -402,7 +402,7 @@ public class Cube {
 		
 		return somme;
 	}
-	*/
+	
 	
 	public int distance()
 	{

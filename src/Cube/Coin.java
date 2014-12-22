@@ -246,18 +246,18 @@ public class Coin {
 		Cube black = new Cube(Cube.black);
 		Cube test = new Cube(Cube.black);
 		makeTest(test);
-		Cube t = new Cube(test);
+		//Cube t = new Cube(test);
 		makeBlack(black);
 		Chemin ans = new Chemin(test, black);
 		int r = ans.runFindCoin(true);
-		
+		/*
 		if (!ans.found())
 		{
 			t.show2D("Test");
 			black.show2D("Black : real position");
 			ans.print();
 		}
-		
+		*/
 		return r;
 	}
 	
