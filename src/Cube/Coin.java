@@ -140,6 +140,22 @@ public class Coin {
 		t.setColor(realPosition[index][2]);
 	}
 	
+	public int recover(Cube t, int fixeFace)
+	{
+		Cube black = new Cube(Cube.black);
+		Cube test = new Cube(Cube.black);
+		makeTest(test);
+		makeBlack(black);
+		Chemin ans = new Chemin(test, black);
+		ans.runDFSLimited('t', fixeFace);
+		for (Action a : ans.chemin())
+		{
+			a.Run(t);
+		}
+		ans.print();
+		return ans.size();
+	}
+	
 	public int recoverSteps()
 	{
 		Cube black = new Cube(Cube.black);
@@ -147,7 +163,7 @@ public class Coin {
 		makeTest(test);
 		makeBlack(black);
 		Chemin ans = new Chemin(test, black);
-		int r = ans.runFindSimple(3);
+		int r = ans.runFindSimple(3, 6);
 		return r;
 	}
 	
@@ -175,6 +191,28 @@ public class Coin {
 		ans.runDFS('m');
 		int r = ans.size();
 		return r;
+	}
+	
+	public static int recoverStepsImproved(Coin[] coins)
+	{
+		Cube black = new Cube(Cube.black);
+		Cube test = new Cube(Cube.black);
+		for (Coin c : coins)
+		{
+			c.makeTest(test);
+			c.makeBlack(black);
+		}
+		int i = 0;
+		for (i = 0 ; i < 8 ; i++)
+		{
+			if (coins[i].index == 7)
+				break;
+		}
+		int cost = coins[i].recover(test, 6);
+		Chemin ans = new Chemin(test, black);
+		ans.runDFSLimited('t', 3);
+		int r = ans.size();
+		return r + cost;
 	}
 	
 	public boolean correctPosition()

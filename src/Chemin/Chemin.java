@@ -47,6 +47,11 @@ public class Chemin {
 		return found;
 	}
 	
+	public LinkedList<Action> chemin()
+	{
+		return chemin;
+	}
+	
 	public void print()
 	{
 		System.out.println();
@@ -69,7 +74,7 @@ public class Chemin {
 	 * Une méthode privée permettant de parcourir l'arbre en largeur afin d'atteidre le but
 	 */
 	
-	void findSimple(int limite)
+	void findSimple(int limite, int fixeFace)
 	{
 		LinkedList<LinkedList<Action>> queue = new LinkedList<LinkedList<Action>>();
 		queue.addLast(new LinkedList<Action>());
@@ -87,7 +92,7 @@ public class Chemin {
 			{
 				break;
 			}
-			for (int face = 0 ; face < 6 ; face++)
+			for (int face = 0 ; face < fixeFace ; face++)
 			{
 				if (currentFace == face) continue;
 				for (int tour = 0 ; tour < 3 ; tour++)
@@ -119,7 +124,7 @@ public class Chemin {
 		}
 	}
 	
-	public int runFindSimple(int t)
+	public int runFindSimple(int t, int fixeFace)
 	{
 		etape = t;
 		if (original.same(source))
@@ -128,7 +133,7 @@ public class Chemin {
 			size = 0;
 			return 0;
 		}
-		findSimple(etape);
+		findSimple(etape, fixeFace);
 		return size;
 	}
 	
@@ -180,7 +185,7 @@ public class Chemin {
 		}
 	}
 	
-	int findDFS(Cube test, int bound, int cost, char mode)
+	int findDFS(Cube test, int bound, int cost, char mode, int fixeFace)
 	{
 		int f = cost + test.distance(mode);
 		//System.out.println(cost);
@@ -192,7 +197,7 @@ public class Chemin {
 			return -2;
 		}
 		LinkedList<Action> list = new LinkedList<Action>();
-		for (int face = 0 ; face < 6 ; face++)
+		for (int face = 0 ; face < fixeFace ; face++)
 		{
 			for (int tour = 0 ; tour < 3 ; tour++)
 			{
@@ -211,7 +216,7 @@ public class Chemin {
 		{
 			a.Run(test);
 			chemin.addLast(a);
-			int t = findDFS(test, bound, cost + 1, mode);
+			int t = findDFS(test, bound, cost + 1, mode, fixeFace);
 			if (t == -2)
 				return -2;
 			if (t < threshold)
@@ -245,7 +250,26 @@ public class Chemin {
 		int dist = original.distance(mode);
 		while (true)
 		{
-			int t = findDFS(original, dist, 0, mode);
+			int t = findDFS(original, dist, 0, mode, 6);
+			if (t == -2) break;
+			if (t >= 200000000) t = dist + 1;
+			dist = t;
+		}
+		return size;
+	}
+	
+	public int runDFSLimited(char mode, int fixeFace)
+	{
+		if (original.same(source))
+		{
+			found = true;
+			size = 0;
+			return 0;
+		}
+		int dist = original.distance(mode);
+		while (true)
+		{
+			int t = findDFS(original, dist, 0, mode, fixeFace);
 			if (t == -2) break;
 			if (t >= 200000000) t = dist + 1;
 			dist = t;

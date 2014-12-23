@@ -12,7 +12,7 @@ public class Test {
 		//testInit();
 		//testDistance();
 		//debugCoinEdge();
-		debugCoins(15);
+		debugCoins(20);
 		//testDFS(20, 'm');
 	}
 	
@@ -54,7 +54,7 @@ public class Test {
 			dest.show2D();
 			long startTime = System.currentTimeMillis();
 			Chemin ans = new Chemin(test, Cube.src);
-			ans.runFindSimple(i);  //Trouver le chemin
+			ans.runFindSimple(i, 6);  //Trouver le chemin
 			long endTime = System.currentTimeMillis();
 			long duration = endTime - startTime;
 			ans.print();
@@ -144,7 +144,7 @@ public class Test {
 				coins[i] = new Coin(i, test);
 			}
 			long startTime = System.currentTimeMillis();
-			int tmp = Coin.recoverSteps(coins);
+			int tmp = Coin.recoverStepsImproved(coins);
 			long endTime = System.currentTimeMillis();
 			long duration = endTime - startTime;
 			System.out.println(tmp);
