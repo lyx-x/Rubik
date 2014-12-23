@@ -353,6 +353,8 @@ public class Cube {
 			dist = distanceSimple();
 		if (mode == 't')
 			dist = distanceTotal();
+		if (mode == 'm')
+			dist = distanceManhattan();
 		return dist;
 	}
 	
@@ -409,6 +411,34 @@ public class Cube {
 			if (ans < tmp) ans = tmp;
 		}
 		return ans;
+	}
+	
+	public int distanceManhattan()
+	{
+		int somme = 0;
+		int tmp = 0;
+		
+		for (int edge = 0 ; edge < 12; edge++)
+		{
+			int[][] eCoord = Edge.realPosition[edge];
+			int f = color[eCoord[0][0]][eCoord[0][1]][eCoord[0][2]];
+			int s = color[eCoord[1][0]][eCoord[1][1]][eCoord[1][2]];
+			if (f == 6 || s == 6) continue;
+			tmp = Distance.distEdge[edge][f][s];
+			somme += tmp;
+		}
+		
+		for (int coin = 0 ; coin < 8 ; coin++)
+		{
+			int[][] cCoord = Coin.realPosition[coin];
+			int f = color[cCoord[0][0]][cCoord[0][1]][cCoord[0][2]];
+			int s = color[cCoord[1][0]][cCoord[1][1]][cCoord[1][2]];
+			int t = color[cCoord[2][0]][cCoord[2][1]][cCoord[2][2]];
+			if (f == 6 || s == 6 || t == 6) continue;
+			tmp = Distance.distCoin[coin][f][s][t];
+			somme += tmp;
+		}
+		return (somme + 7) / 8;
 	}
 	
 	public void printDistance()

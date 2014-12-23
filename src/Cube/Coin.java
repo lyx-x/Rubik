@@ -172,7 +172,7 @@ public class Coin {
 			c.makeBlack(black);
 		}
 		Chemin ans = new Chemin(test, black);
-		ans.runDFS('t');
+		ans.runDFS('m');
 		int r = ans.size();
 		return r;
 	}

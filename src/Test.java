@@ -12,8 +12,8 @@ public class Test {
 		//testInit();
 		//testDistance();
 		//debugCoinEdge();
-		debugCoins();
-		//testDFS(20, 't');
+		debugCoins(15);
+		//testDFS(20, 'm');
 	}
 	
 	/*
@@ -131,17 +131,25 @@ public class Test {
 		//test.printDistance();
 	}
 	
-	static void debugCoins()
+	static void debugCoins(int etape)
 	{
-		Cube test = new Cube(Cube.src);
-		melanger(test, 20, true);
-		Coin[] coins = new Coin[8];
-		for (int i = 0 ; i < 8 ; i++)
+		for (int j = 5 ; j <= etape ; j++)
 		{
-			coins[i] = new Coin(i, test);
-		}
-		int tmp = Coin.recoverSteps(coins);
-		System.out.println(tmp);
+			System.out.format("\n//======== Test %d =======\n", j + 1);
+			Cube test = new Cube(Cube.src);
+			melanger(test, j, true);
+			Coin[] coins = new Coin[8];
+			for (int i = 0 ; i < 8 ; i++)
+			{
+				coins[i] = new Coin(i, test);
+			}
+			long startTime = System.currentTimeMillis();
+			int tmp = Coin.recoverSteps(coins);
+			long endTime = System.currentTimeMillis();
+			long duration = endTime - startTime;
+			System.out.println(tmp);
+			System.out.printf("\nElapsed time: %d milliseconds\n", duration);
+		}	
 	}
 	
 	static void testDFS(int etape, char mode){
