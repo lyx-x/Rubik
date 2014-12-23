@@ -29,11 +29,6 @@ public class Chemin {
 		size = -1;
 	}
 	
-	public void setEtape(int e)
-	{
-		etape = e;
-	}
-	
 	/*
 	 * Retourner la longueur du chemin qu'on a trouvé
 	 */
@@ -74,7 +69,7 @@ public class Chemin {
 	 * Une méthode privée permettant de parcourir l'arbre en largeur afin d'atteidre le but
 	 */
 	
-	void findSimple(int limite, boolean stepLimite, boolean coin, boolean edge)
+	void findSimple(int limite)
 	{
 		LinkedList<LinkedList<Action>> queue = new LinkedList<LinkedList<Action>>();
 		queue.addLast(new LinkedList<Action>());
@@ -88,15 +83,13 @@ public class Chemin {
 				a.Run(test);
 				currentFace = a.Face();  //Enregistrer la face qu'on vient de tourner pour ne pas la tourner deux fois de suite
 			}
-			if (stepLimite && current.size() > limite - 1)  //Limiter le nombre d'étape
+			if (current.size() > limite - 1)  //Limiter le nombre d'étape
 			{
 				break;
 			}
 			for (int face = 0 ; face < 6 ; face++)
 			{
 				if (currentFace == face) continue;
-				//if (coin && test.correctCoins(face)) continue;  //Ne pas tourner une face quand les quatre coins sont bons, utilisé pour accélérer le test
-				//if (edge && test.correctEdges(face)) continue;
 				for (int tour = 0 ; tour < 3 ; tour++)
 				{
 					Action a = new Action(face, tour);
@@ -126,105 +119,20 @@ public class Chemin {
 		}
 	}
 	
-	public void runFindSimple()
+	public int runFindSimple(int t)
 	{
-		if (original.same(source))
-		{
-			found = true;
-			return;
-		}
-		findSimple(etape, true, false, false);
-	}
-	
-	/*
-	 * Deux méthodes pour tester le calcul de la distance entre les deux dispositions d'une pièce, sommet ou arête
-	 */
-	
-	public int runFindCoin(boolean limite)
-	{
-		if (original.same(source))
-		{
-			found = true;
-			return 0;
-		}
-		else
-		{
-			findSimple(2, limite, true, false);
-			return size;
-		}
-	}
-	
-	public int runFindEdge(boolean limite)
-	{
+		etape = t;
 		if (original.same(source))
 		{
 			found = true;
 			size = 0;
 			return 0;
 		}
-		else
-		{
-			findSimple(3, limite, false, true);
-			return size;
-		}
+		findSimple(etape);
+		return size;
 	}
 	
-	void findAStar(boolean sum, String mode)
-	{
-		LinkedList<LinkedList<Action>> queue = new LinkedList<LinkedList<Action>>();
-		queue.addLast(new LinkedList<Action>());
-		while(!queue.isEmpty())
-		{
-			LinkedList<Action> current = queue.peek();   //On recommence toujours de la disposition initiale
-			Cube test = new Cube(original);
-			int currentFace = -1;
-			//System.out.println(current.distance);
-			for (Action a : current)
-			{
-				a.Run(test);
-				currentFace = a.Face();  //Enregistrer la face qu'on vient de tourner pour ne pas la tourner deux fois de suite
-			}
-			int currentDistance = test.distance(sum, mode);
-			for (int face = 0 ; face < 6 ; face++)
-			{
-				if (currentFace == face) continue;
-				for (int tour = 0 ; tour < 3 ; tour++)
-				{
-					Action a = new Action(face, tour);
-					a.Run(test);
-					int dist = test.distance(sum, mode);
-					//System.out.println(dist);
-					if (test.same(source))
-					{
-						chemin = current;
-						chemin.add(a);
-						found = true;
-						size = chemin.size();
-						return;
-					}
-					else  //Ajouter les nouvelles dispositions intermédiares dans la queue
-					{
-						if (dist > currentDistance)
-						{
-							a.Rollback(test);
-							continue;
-						}
-						LinkedList<Action> tmp = new LinkedList<Action>();  //Toujours copier-coller pour créer une nouvelle suite
-						for (Action i : current)
-						{
-							tmp.add(i);
-						}
-						tmp.add(a);
-						queue.addLast(tmp);
-					}
-					a.Rollback(test);  //Afin de tester les autres chemins, il faut revenir en arrière
-				}
-			}
-			queue.remove();
-		}
-	}
-	
-	void findAStarPQ(boolean sum, String mode)
+	void findAStarPQ(char mode)
 	{
 		PriorityQueue<Disposition> queue = new PriorityQueue<Disposition>(10, new DispositionComparator());
 		queue.add(new Disposition());
@@ -245,9 +153,7 @@ public class Chemin {
 				{
 					Action a = new Action(face, tour);
 					a.Run(test);
-					int dist = test.distance(sum, mode) + current.actions.size() + 1;
-					//int dist = test.estimateDistance(true, sum, mode) + current.actions.size() + 1;
-					//System.out.println(dist);
+					int dist = test.distance(mode) + current.actions.size() + 1;
 					if (test.same(source))
 					{
 						chemin = current.actions;
@@ -258,11 +164,6 @@ public class Chemin {
 					}
 					else  //Ajouter les nouvelles dispositions intermédiares dans la queue
 					{
-						if (dist > current.distance)
-						{
-							//a.Rollback(test);
-							//continue;
-						}
 						LinkedList<Action> tmp = new LinkedList<Action>();  //Toujours copier-coller pour créer une nouvelle suite
 						for (Action i : current.actions)
 						{
@@ -279,14 +180,76 @@ public class Chemin {
 		}
 	}
 	
-	public void runFindAStar(boolean sum, String mode)
+	int findDFS(Cube test, int bound, int cost, char mode)
+	{
+		int f = cost + test.distance(mode);
+		//System.out.println(cost);
+		if (f > bound) return f;
+		if (test.same(source))
+		{
+			found = true;
+			size = chemin.size();
+			return -2;
+		}
+		LinkedList<Action> list = new LinkedList<Action>();
+		for (int face = 0 ; face < 6 ; face++)
+		{
+			for (int tour = 0 ; tour < 3 ; tour++)
+			{
+				Action a = new Action(face, tour);
+				a.Run(test);
+				f = test.distance(mode) + cost + 1;
+				if (f <= bound)
+				{
+					list.addLast(a);
+				}
+				a.Rollback(test);  
+			}
+		}
+		int threshold = 200000000;
+		for (Action a : list)
+		{
+			a.Run(test);
+			chemin.addLast(a);
+			int t = findDFS(test, bound, cost + 1, mode);
+			if (t == -2)
+				return -2;
+			if (t < threshold)
+				threshold = t;
+			chemin.removeLast();
+			a.Rollback(test);
+		}
+		return threshold;
+	}
+	
+	public int runFindAStar(char mode)
 	{
 		if (original.same(source))
 		{
 			found = true;
 			size = 0;
-			return;
+			return 0;
 		}
-		findAStarPQ(sum, mode);
+		findAStarPQ(mode);
+		return size;
+	}
+	
+	public int runDFS(char mode)
+	{
+		if (original.same(source))
+		{
+			found = true;
+			size = 0;
+			return 0;
+		}
+		int dist = original.distance(mode);
+		while (true)
+		{
+			int t = findDFS(original, dist, 0, mode);
+			if (t == -2) break;
+			if (t >= 200000000) t = dist + 1;
+			dist = t;
+		}
+		return size;
 	}
 }

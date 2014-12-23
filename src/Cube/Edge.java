@@ -138,110 +138,6 @@ public class Edge {
 	}
 	
 	/*
-	 * Faciliter l'écriture, mais ne sert à pas grand-chose
-	 */
-	
-	int[] toArray(int a, int b, int c)
-	{
-		int[] ans = {a, b, c};
-		return ans;
-	}
-	
-	/*
-	 * Retourner les coordonnées correctes de la pièce, mais on utilise plutôt le tableau écrit ci-dessus
-	 */
-
-	public int[][] Place()
-	{
-		int f = Math.min(First, Second);
-		int s = Math.max(First, Second);
-		int[][] ans = new int[2][3];
-		for (int i = 0 ; i < 2 ; i++)
-		{
-			for (int j = 0 ; j < 3 ; j++)
-			{
-				ans[i][j] = -1;
-			}
-		}
-		switch (f)
-		{
-		case 0:
-			switch (s)
-			{
-			case 1:
-				ans[0] = toArray(0, 1, 0);
-				ans[1] = toArray(1, 0, 1);
-				break;
-			case 2:
-				ans[0] = toArray(0, 2, 1);
-				ans[1] = toArray(2, 0, 1);
-				break;
-			case 3:
-				ans[0] = toArray(0, 1, 2);
-				ans[1] = toArray(3, 0, 1);
-				break;
-			case 4:
-				ans[0] = toArray(0, 0, 1);
-				ans[1] = toArray(4, 0, 1);
-				break;
-			}
-			break;
-		case 1:
-			switch (s)
-			{
-			case 2:
-				ans[0] = toArray(1, 1, 2);
-				ans[1] = toArray(2, 1, 0);
-				break;
-			case 4:
-				ans[0] = toArray(1, 1, 0);
-				ans[1] = toArray(4, 1, 2);
-				break;
-			case 5:
-				ans[0] = toArray(1, 2, 1);
-				ans[1] = toArray(5, 1, 0);
-				break;
-			}
-			break;
-		case 2:
-			switch (s)
-			{
-			case 3:
-				ans[0] = toArray(2, 1, 2);
-				ans[1] = toArray(3, 1, 0);
-				break;
-			case 5:
-				ans[0] = toArray(2, 2, 1);
-				ans[1] = toArray(5, 0, 1);
-				break;
-			}
-			break;
-		case 3:
-			switch (s)
-			{
-			case 4:
-				ans[0] = toArray(3, 1, 2);
-				ans[1] = toArray(4, 1, 0);
-				break;
-			case 5:
-				ans[0] = toArray(3, 2, 1);
-				ans[1] = toArray(5, 1, 2);
-				break;
-			}
-			break;
-		case 4:
-			if (s == 5)
-			{
-				ans[0] = toArray(4, 2, 1);
-				ans[1] = toArray(5, 2, 1);
-				break;
-			}
-			break;
-		}
-		return ans;
-	}
-	
-	/*
 	 * Générer un cube sachant l'information de cette arête
 	 */
 	
@@ -267,18 +163,9 @@ public class Edge {
 		Cube black = new Cube(Cube.black);
 		Cube test = new Cube(Cube.black);  //Le reste du cube est noir
 		makeTest(test);
-		//Cube t = new Cube(test);
 		makeBlack(black);
 		Chemin ans = new Chemin(test, black);
-		int r = ans.runFindEdge(true);
-		/*
-		if (!ans.found())  //Pour le test
-		{
-			t.show2D("Test");
-			black.show2D("Black : real position");
-			ans.print();
-		}
-		*/
+		int r = ans.runFindSimple(4);
 		return r;
 	}
 	

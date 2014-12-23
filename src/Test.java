@@ -1,19 +1,19 @@
-import Config.Path;
+import Config.*;
 import Cube.*;
 import Chemin.*;
 
 public class Test {
 	
 	public static void main(String[] args){
-		init();
+		init("DistanceSimple.txt");
 		//testSimple(8);
 		//debugCoinEdge(20);
-		testAStar(10, true, "Total");
+		//testAStar(10, 't');
 		//testInit();
 		//testDistance();
 		//debugCoinEdge();
-		//testHorizontal(7);
-		//debugCoins();
+		debugCoins();
+		//testDFS(20, 't');
 	}
 	
 	/*
@@ -33,10 +33,10 @@ public class Test {
 	 * Initialisation du test, on pourrait précalculer la distance entre toutes les dispositions d'une certaine pièce ici
 	 */
 	
-	static void init()
+	static void init(String path)
 	{
 		Cube.setWidth(40);
-		Path init = new Path();
+		Distance init = new Distance(path);
 	}
 	
 	/*
@@ -49,13 +49,12 @@ public class Test {
 			System.out.format("\n//======== Test %d =======\n", i + 1);
 			Cube test = new Cube(Cube.src);
 			melanger(test, i, true);
-			System.out.format("\nDistance minimale : %d\n",test.distance(false, "Simple"));
+			System.out.format("\nDistance minimale : %d\n",test.distance('s'));
 			Cube dest = new Cube(test);  //Sauvegarder la disposition pour l'affichage
 			dest.show2D();
 			long startTime = System.currentTimeMillis();
 			Chemin ans = new Chemin(test, Cube.src);
-			ans.setEtape(i);  //Définir le nombre d'étape maximal pour faire la BFS
-			ans.runFindSimple();  //Trouver le chemin
+			ans.runFindSimple(i);  //Trouver le chemin
 			long endTime = System.currentTimeMillis();
 			long duration = endTime - startTime;
 			ans.print();
@@ -98,19 +97,18 @@ public class Test {
 		System.out.println(tmp);
 	}
 	
-	static void testAStar(int etape, boolean sum, String mode){
+	static void testAStar(int etape, char mode){
 		for (int i = 0 ; i <= etape ; i++)
 		{
 			System.out.format("\n//======== Test %d =======\n", i + 1);
 			Cube test = new Cube(Cube.src);
 			melanger(test, i, true);
-			System.out.format("\nDistance minimale : %d\n",test.distance(sum, mode));
+			System.out.format("\nDistance minimale : %d\n",test.distance(mode));
 			Cube dest = new Cube(test);  //Sauvegarder la disposition pour l'affichage
 			dest.show2D();
 			long startTime = System.currentTimeMillis();
 			Chemin ans = new Chemin(test, Cube.src);
-			ans.setEtape(i);  //Définir le nombre d'étape maximal pour faire la BFS
-			ans.runFindAStar(sum, mode);  //Trouver le chemin
+			ans.runFindAStar(mode);  //Trouver le chemin
 			long endTime = System.currentTimeMillis();
 			long duration = endTime - startTime;
 			ans.print();
@@ -118,54 +116,17 @@ public class Test {
 		}	
 	}
 	
-	static void testHorizontal(int etape)
-	{
-		Cube test = new Cube(Cube.src);
-		melanger(test, etape, true);
-		Cube tmp = new Cube(test);
-		//subTest("Total", true, tmp);
-		//tmp = new Cube(test);
-		//subTest("Coin", true, tmp);
-		//tmp = new Cube(test);
-		//subTest("EdgePair", true, tmp);
-		//tmp = new Cube(test);
-		//subTest("EdgeOdd", true, tmp);
-		//tmp = new Cube(test);
-		subTest("Final", true, tmp);
-		//tmp = new Cube(test);
-		//subTest("Total", false, tmp);
-		//tmp = new Cube(test);
-		//subTest("Coin", false, tmp);
-		//tmp = new Cube(test);
-		//subTest("EdgePair", false, tmp);
-		tmp = new Cube(test);
-		subTest("Final", false, tmp);
-	}
-	
-	static void subTest(String mode, boolean sum, Cube test)
-	{
-		System.out.format("\n//======== Mode %s %b =======\n", mode, sum);
-		System.out.format("\nDistance minimale : %d\n",test.distance(sum, mode));
-		long startTime = System.currentTimeMillis();
-		Chemin ans = new Chemin(test, Cube.src);
-		ans.runFindAStar(sum, mode);  //Trouver le chemin
-		long endTime = System.currentTimeMillis();
-		long duration = endTime - startTime;
-		ans.print();
-		System.out.printf("\nElapsed time: %d milliseconds\n", duration);
-	}
-	
 	static void testInit()
 	{
-		Path p = new Path();
-		Path.print();
+		Distance p = new Distance();
+		Distance.print();
 	}
 	
 	static void testDistance()
 	{
 		Cube test = new Cube(Cube.src);
 		melanger(test, 3, true);
-		System.out.format("\nDistance minimale : %d\n",test.distance(false, "Simple"));
+		System.out.format("\nDistance minimale : %d\n",test.distance('s'));
 		//test.show2D();
 		//test.printDistance();
 	}
@@ -181,6 +142,23 @@ public class Test {
 		}
 		int tmp = Coin.recoverSteps(coins);
 		System.out.println(tmp);
+	}
+	
+	static void testDFS(int etape, char mode){
+		for (int i = 0 ; i <= etape ; i++)
+		{
+			System.out.format("\n//======== Test %d =======\n", i + 1);
+			Cube test = new Cube(Cube.src);
+			melanger(test, i, true);
+			System.out.format("\nDistance minimale : %d\n",test.distance(mode));
+			long startTime = System.currentTimeMillis();
+			Chemin ans = new Chemin(test, Cube.src);
+			ans.runDFS(mode);  //Trouver le chemin
+			long endTime = System.currentTimeMillis();
+			long duration = endTime - startTime;
+			ans.print();
+			System.out.printf("\nElapsed time: %d milliseconds\n", duration);
+		}	
 	}
 
 }

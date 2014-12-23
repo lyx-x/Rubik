@@ -125,114 +125,6 @@ public class Coin {
 		return -1;
 	}
 	
-	int[] toArray(int a, int b, int c)
-	{
-		int[] ans = {a, b, c};
-		return ans;
-	}
-	
-	public int[][] Place()
-	{
-		int[] l = {First, Second, Third};
-		int[][] ans = new int[3][3];
-		for (int i = 0 ; i < 3 ; i++)
-		{
-			for (int j = 0 ; j < 3 ; j++)
-			{
-				ans[i][j] = -1;
-			}
-		}
-		for (int i = 0 ; i < 2 ; i++)
-		{
-			for (int j = i + 1 ; j < 3 ; j++)
-			{
-				if (l[i] > l[j])
-				{
-					int tmp = l[i];
-					l[i] = l[j];
-					l[j] = tmp;
-				}
-			}
-		}
-		switch (l[0])
-		{
-		case 0:
-			switch (l[1])
-			{
-			case 1:
-				switch (l[2])
-				{
-				case 2:
-					ans[0] = toArray(0, 2, 0);
-					ans[1] = toArray(1, 0, 2);
-					ans[2] = toArray(2, 0, 0);
-					break;
-				case 4:
-					ans[0] = toArray(0, 0, 0);
-					ans[1] = toArray(1, 0, 0);
-					ans[2] = toArray(4, 0, 2);
-					break;
-				}
-				break;
-			case 2:
-				if (l[2] == 3)
-				{
-					ans[0] = toArray(0, 2, 2);
-					ans[1] = toArray(2, 0, 2);
-					ans[2] = toArray(3, 0, 0);
-				}
-				break;
-			case 3:
-				if (l[2] == 4)
-				{
-					ans[0] = toArray(0, 0, 2);
-					ans[1] = toArray(3, 0, 2);
-					ans[2] = toArray(4, 0, 0);
-				}
-				break;
-			}
-			break;
-		case 1:
-			switch (l[1])
-			{
-			case 2:
-				if (l[2] == 5)
-				{
-					ans[0] = toArray(1, 2, 2);
-					ans[1] = toArray(2, 2, 0);
-					ans[2] = toArray(5, 0, 0);
-				}
-				break;
-			case 4:
-				if (l[2] == 5)
-				{
-					ans[0] = toArray(1, 2, 0);
-					ans[1] = toArray(4, 2, 2);
-					ans[2] = toArray(5, 2, 0);
-				}
-				break;
-			}
-			break;
-		case 2:
-			if (l[1] == 3 && l[2] == 5)
-			{
-				ans[0] = toArray(2, 2, 2);
-				ans[1] = toArray(3, 2, 0);
-				ans[2] = toArray(5, 0, 2);
-			}
-			break;
-		case 3:
-			if (l[1] == 4 && l[2] == 5)
-			{
-				ans[0] = toArray(3, 2, 2);
-				ans[1] = toArray(4, 2, 0);
-				ans[2] = toArray(5, 2, 2);
-			}
-			break;
-		}
-		return ans;
-	}
-	
 	void makeTest(Cube t)
 	{
 		t.setColor(First, fCoord);
@@ -253,18 +145,9 @@ public class Coin {
 		Cube black = new Cube(Cube.black);
 		Cube test = new Cube(Cube.black);
 		makeTest(test);
-		//Cube t = new Cube(test);
 		makeBlack(black);
 		Chemin ans = new Chemin(test, black);
-		int r = ans.runFindCoin(true);
-		/*
-		if (!ans.found())
-		{
-			t.show2D("Test");
-			black.show2D("Black : real position");
-			ans.print();
-		}
-		*/
+		int r = ans.runFindSimple(3);
 		return r;
 	}
 	
@@ -289,7 +172,7 @@ public class Coin {
 			c.makeBlack(black);
 		}
 		Chemin ans = new Chemin(test, black);
-		ans.runFindAStar(false, "Coin");
+		ans.runDFS('t');
 		int r = ans.size();
 		return r;
 	}
