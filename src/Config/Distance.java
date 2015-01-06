@@ -6,6 +6,10 @@ import Cube.*;
 
 public class Distance {
 	
+	/*
+	 * Les fichiers sont générés par copier-coller
+	 */
+	
 	public static int[][][][] distCoin;
 	public static int[][][] distEdge;
 	

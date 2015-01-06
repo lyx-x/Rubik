@@ -185,7 +185,7 @@ public class Chemin {
 		}
 	}
 	
-	int findDFS(Cube test, int bound, int cost, char mode, int fixeFace)
+	int findDFS(Cube test, int bound, int cost, char mode, int fixeFace, int currentFace)
 	{
 		int f = cost + test.distance(mode);
 		//System.out.println(cost);
@@ -196,17 +196,19 @@ public class Chemin {
 			size = chemin.size();
 			return -2;
 		}
-		LinkedList<Action> list = new LinkedList<Action>();
+		PriorityQueue<Action> list = new PriorityQueue<Action>(18, new ActionComparator());
 		for (int face = 0 ; face < fixeFace ; face++)
 		{
+			if (face == currentFace) continue;
 			for (int tour = 0 ; tour < 3 ; tour++)
 			{
 				Action a = new Action(face, tour);
 				a.Run(test);
 				f = test.distance(mode) + cost + 1;
+				a.change = f;
 				if (f <= bound)
 				{
-					list.addLast(a);
+					list.add(a);
 				}
 				a.Rollback(test);  
 			}
@@ -216,7 +218,7 @@ public class Chemin {
 		{
 			a.Run(test);
 			chemin.addLast(a);
-			int t = findDFS(test, bound, cost + 1, mode, fixeFace);
+			int t = findDFS(test, bound, cost + 1, mode, fixeFace, a.Face());
 			if (t == -2)
 				return -2;
 			if (t < threshold)
@@ -250,7 +252,8 @@ public class Chemin {
 		int dist = original.distance(mode);
 		while (true)
 		{
-			int t = findDFS(original, dist, 0, mode, 6);
+			System.err.println(dist);
+			int t = findDFS(original, dist, 0, mode, 6, -1);
 			if (t == -2) break;
 			if (t >= 200000000) t = dist + 1;
 			dist = t;
@@ -269,7 +272,7 @@ public class Chemin {
 		int dist = original.distance(mode);
 		while (true)
 		{
-			int t = findDFS(original, dist, 0, mode, fixeFace);
+			int t = findDFS(original, dist, 0, mode, fixeFace, -1);
 			if (t == -2) break;
 			if (t >= 200000000) t = dist + 1;
 			dist = t;

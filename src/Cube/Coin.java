@@ -140,14 +140,14 @@ public class Coin {
 		t.setColor(realPosition[index][2]);
 	}
 	
-	public int recover(Cube t, int fixeFace)
+	public int recover(Cube t)
 	{
 		Cube black = new Cube(Cube.black);
 		Cube test = new Cube(Cube.black);
 		makeTest(test);
 		makeBlack(black);
 		Chemin ans = new Chemin(test, black);
-		ans.runDFSLimited('t', fixeFace);
+		ans.runFindAStar('t');
 		for (Action a : ans.chemin())
 		{
 			a.Run(t);
@@ -208,7 +208,7 @@ public class Coin {
 			if (coins[i].index == 7)
 				break;
 		}
-		int cost = coins[i].recover(test, 6);
+		int cost = coins[i].recover(test);
 		Chemin ans = new Chemin(test, black);
 		ans.runDFSLimited('t', 3);
 		int r = ans.size();

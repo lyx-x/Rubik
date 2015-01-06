@@ -5,15 +5,20 @@ import Chemin.*;
 public class Test {
 	
 	public static void main(String[] args){
-		init("DistanceSimple.txt");
+		init();
+		//init("DistanceManhattan.txt");
+		//initPattern();
 		//testSimple(8);
 		//debugCoinEdge(20);
 		//testAStar(10, 't');
 		//testInit();
 		//testDistance();
 		//debugCoinEdge();
-		debugCoins(20);
-		//testDFS(20, 'm');
+		//debugCoins(30);
+		//Pattern.print();
+		testDFS(20, 'p');
+		//testHash();
+		//testInitPattern();
 	}
 	
 	/*
@@ -29,6 +34,11 @@ public class Test {
 		}
 	}
 	
+	static void init(){
+		Cube.setWidth(40);
+		Pattern init = new Pattern(true);
+	}
+	
 	/*
 	 * Initialisation du test, on pourrait précalculer la distance entre toutes les dispositions d'une certaine pièce ici
 	 */
@@ -37,6 +47,13 @@ public class Test {
 	{
 		Cube.setWidth(40);
 		Distance init = new Distance(path);
+	}
+	
+	static void initPattern(){
+		Cube.setWidth(40);
+		Pattern init = new Pattern();
+		Pattern.file();
+		//Pattern.print();
 	}
 	
 	/*
@@ -91,11 +108,19 @@ public class Test {
 		System.out.format("Max steps : %d\n", max);  //Estimer le nombre d'étape maximal
 	}
 	
+	/*
+	 * Tester si on trouve le bon nombre d'étape pour remettre une pièce en position
+	 */
+	
 	static void debugCoinEdge(){
 		Coin c = new Coin(7, 2, 2, 5);
 		int tmp = c.recoverSteps();
 		System.out.println(tmp);
 	}
+	
+	/*
+	 * La recherche A*
+	 */
 	
 	static void testAStar(int etape, char mode){
 		for (int i = 0 ; i <= etape ; i++)
@@ -137,7 +162,7 @@ public class Test {
 		{
 			System.out.format("\n//======== Test %d =======\n", j + 1);
 			Cube test = new Cube(Cube.src);
-			melanger(test, j, true);
+			melanger(test, j, false);
 			Coin[] coins = new Coin[8];
 			for (int i = 0 ; i < 8 ; i++)
 			{
@@ -168,5 +193,44 @@ public class Test {
 			System.out.printf("\nElapsed time: %d milliseconds\n", duration);
 		}	
 	}
+	
+	/*
+	 * Tester la fonction de hachage
+	 */
+	
+	static void testHash(){
+		Cube test = new Cube(Cube.src);
+		melanger(test, 1, true);
+		test.show2D();
+		System.out.println(test.hashCoin());
+		System.out.println(test.hashEdgeOne());
+		System.out.println(test.hashEdgeTwo());
+	}
+	
+	/*
+	 * Tester le bon fonctionnement du pattern
+	 * On constate qu'une limite de 5 étapes ne sont pas suffisante, mais une plus grande limite demande beaucoup de temps pour l'initiation
+	 */
 
+	static void testInitPattern(){
+		long startTime = System.currentTimeMillis();
+		Pattern p = new Pattern(true);
+		//Pattern.print();
+		int i = 0;
+		while(i<20)
+		{
+			System.out.format("\n//======== Test %d =======\n", i++);
+			Cube test = new Cube(Cube.src);
+			melanger(test, 8, true);
+			System.out.println(test.hashCoin());
+			System.out.println(test.hashEdgeOne());
+			System.out.println(test.hashEdgeTwo());
+			System.out.format("\nDistance minimale Coin : %d\n",test.distance('c'));
+			System.out.format("\nDistance minimale EdgeOne : %d\n",test.distance('o'));
+			System.out.format("\nDistance minimale EdgeTwo : %d\n",test.distance('e'));
+		}
+		long endTime = System.currentTimeMillis();
+		long duration = endTime - startTime;
+		System.out.printf("\nElapsed time: %d milliseconds\n", duration);
+	}
 }

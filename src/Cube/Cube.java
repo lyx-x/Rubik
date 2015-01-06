@@ -1,4 +1,5 @@
 package Cube;
+import Config.*;
 import java.io.*;
 import javax.swing.*;
 import Config.*;
@@ -355,6 +356,16 @@ public class Cube {
 			dist = distanceTotal();
 		if (mode == 'm')
 			dist = distanceManhattan();
+		if (mode == 'i')
+			dist = distanceManhattanImproved();
+		if (mode == 'c')
+			dist = distancePatternCoin();
+		if (mode == 'o')
+			dist = distancePatternEdgeOne();
+		if (mode == 'e')
+			dist = distancePatternEdgeTwo();
+		if (mode == 'p')
+			dist = distancePattern();
 		return dist;
 	}
 	
@@ -441,6 +452,80 @@ public class Cube {
 		return (somme + 7) / 8;
 	}
 	
+	public int distanceManhattanImproved()
+	{
+		int sommeEdge = 0;
+		int tmp = 0;
+		
+		for (int edge = 0 ; edge < 12; edge++)
+		{
+			int[][] eCoord = Edge.realPosition[edge];
+			int f = color[eCoord[0][0]][eCoord[0][1]][eCoord[0][2]];
+			int s = color[eCoord[1][0]][eCoord[1][1]][eCoord[1][2]];
+			if (f == 6 || s == 6) continue;
+			tmp = Distance.distEdge[edge][f][s];
+			sommeEdge += tmp;
+		}
+		int sommeCoin = 0;
+		for (int coin = 0 ; coin < 8 ; coin++)
+		{
+			int[][] cCoord = Coin.realPosition[coin];
+			int f = color[cCoord[0][0]][cCoord[0][1]][cCoord[0][2]];
+			int s = color[cCoord[1][0]][cCoord[1][1]][cCoord[1][2]];
+			int t = color[cCoord[2][0]][cCoord[2][1]][cCoord[2][2]];
+			if (f == 6 || s == 6 || t == 6) continue;
+			tmp = Distance.distCoin[coin][f][s][t];
+			sommeCoin += tmp;
+		}
+		return Math.max((sommeCoin + 3) / 4, (sommeEdge + 3) / 4);
+	}
+	
+	public int distancePattern()
+	{
+		int max = Math.max(this.distancePatternCoin(), this.distancePatternEdgeOne());
+		max = Math.max(max, this.distancePatternEdgeTwo());
+		return max;
+	}
+	
+	public int distancePatternCoin()
+	{
+		long key = this.hashCoin();
+		if (Pattern.coin.containsKey(key))
+		{
+			return Pattern.coin.get(key);
+		}
+		else
+		{
+			return 7;
+		}
+	}
+	
+	public int distancePatternEdgeOne()
+	{
+		long key = this.hashEdgeOne();
+		if (Pattern.edgeOne.containsKey(key))
+		{
+			return Pattern.edgeOne.get(key);
+		}
+		else
+		{
+			return 7;
+		}
+	}
+	
+	public int distancePatternEdgeTwo()
+	{
+		long key = this.hashEdgeTwo();
+		if (Pattern.edgeTwo.containsKey(key))
+		{
+			return Pattern.edgeTwo.get(key);
+		}
+		else
+		{
+			return 7;
+		}
+	}
+	
 	public void printDistance()
 	{
 		for (int edge = 0 ; edge < 12; edge++)
@@ -463,6 +548,58 @@ public class Cube {
 		}
 	}
 	
-
+	/*
+	 * Calculer le hashCode d'une façon naïve : une série de chiffre représentant le numéro du sommet et son orientation
+	 * L'orientation du sommet est la position relative de la plus grande couleur puisque les cases sont ordonnées par leur couleur correcte
+	 */
+	
+	public long hashCoin()
+	{
+		long hash = 0;
+		for (int i = 0 ; i < 8 ; i++)
+		{
+			Coin c = new Coin(i, this);
+			int index = c.index;
+			int max = 0;
+			int compare = -1;
+			for (int j = 0 ; j < 3 ; j++)
+			{
+				if (compare < color[Coin.realPosition[index][j][0]][Coin.realPosition[index][j][1]][Coin.realPosition[index][j][2]])
+				{
+					compare = color[Coin.realPosition[index][j][0]][Coin.realPosition[index][j][1]][Coin.realPosition[index][j][2]];
+					max = j + 1;
+				}
+			}
+			hash = hash * 10 + max;
+			hash = hash * 10 + index;
+		}
+		return hash;
+	}
+	
+	/*
+	 * On prend ici 6 arêtes choisies aléatoirement
+	 */
+	
+	public long hashEdgeOne()
+	{
+		long hash = 0;
+		for (int i = 0 ; i < 6 ; i++)
+		{
+			hash = hash * 10 + color[Edge.realPosition[i][0][0]][Edge.realPosition[i][0][1]][Edge.realPosition[i][0][2]];
+			hash = hash * 10 + color[Edge.realPosition[i][1][0]][Edge.realPosition[i][1][1]][Edge.realPosition[i][1][2]];
+		}
+		return hash;
+	}
+	
+	public long hashEdgeTwo()
+	{
+		long hash = 0;
+		for (int i = 6 ; i < 12 ; i++)
+		{
+			hash = hash * 10 + color[Edge.realPosition[i][0][0]][Edge.realPosition[i][0][1]][Edge.realPosition[i][0][2]];
+			hash = hash * 10 + color[Edge.realPosition[i][1][0]][Edge.realPosition[i][1][1]][Edge.realPosition[i][1][2]];
+		}
+		return hash;
+	}
 }
 
