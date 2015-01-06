@@ -1,6 +1,5 @@
 package Chemin;
 import java.util.*;
-import Cube.Action;
 
 public class Disposition {
 	

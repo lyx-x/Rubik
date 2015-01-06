@@ -14,9 +14,9 @@ public class Test {
 		//testInitDistance();
 		//testDistance();
 		//debugCoinEdge();
-		debugCoins(30);
+		//debugCoins(30);
 		//Pattern.print();
-		//testDFS(20, 'p');
+		testDFS(20, 'p');
 		//testHash();
 		//testInitPattern();
 		//testCompare(20);

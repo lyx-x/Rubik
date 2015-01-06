@@ -1,5 +1,6 @@
 package Config;
 
+import Chemin.Action;
 import Cube.*;
 
 import java.io.*;
@@ -18,7 +19,7 @@ public class Pattern {
 		coin.put(3031323334353637L, 0);
 		edgeOne.put(10203041214L, 0);
 		edgeTwo.put(152325343545L, 0);
-		int limite = 7;
+		int limite = 6;
 		//patternDFSInt(limite);
 		//patternDFSNaive(limite);
 		patternDFS(new Cube(Cube.src), 1, limite, -1);
