@@ -4,6 +4,10 @@ import java.io.FileReader;
 
 import Cube.*;
 
+/*
+ * On a le choix entre la distance précise et la distance dite de Manhattan
+ */
+
 public class Distance {
 	
 	/*

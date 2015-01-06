@@ -10,7 +10,7 @@ public class Action {
 	int face;
 	int tour;
 	
-	public int change = 100;
+	public int change = 100;  //pour mesurer la performance d'une action
 	
 	public Action(int f, int t)
 	{

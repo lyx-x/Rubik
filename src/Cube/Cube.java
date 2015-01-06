@@ -29,10 +29,10 @@ public class Cube {
 	int[][][] color = new int[6][3][3];
 	static int width = 60;  //Modifier la taille une fois pour toute en utilisant une variable statique
 	
-	public static Cube src = new Cube("Test.txt");  //Ce cube est l'état final
+	public static Cube src = new Cube("Source.txt");  //Ce cube est l'état final
 	public static Cube black = new Cube("Black.txt");  //Ce cube est tout noir pour le test
 	
-	public static int[] oppose = {5, 3, 4, 1, 2, 0};
+	static int[] oppose = {5, 3, 4, 1, 2, 0};
 	
 	/*
 	 * Reproduire le même cube
@@ -350,24 +350,38 @@ public class Cube {
 	public int distance(char mode)
 	{
 		int dist = -1;
-		if (mode == 's') 
+		switch (mode){
+		case 's':  //simple
 			dist = distanceSimple();
-		if (mode == 't')
-			dist = distanceTotal();
-		if (mode == 'm')
+			break;
+		case 't':  //total
+			dist = distanceMemory();
+			break;
+		case 'm':  //manhattan
 			dist = distanceManhattan();
-		if (mode == 'i')
+			break;
+		case 'i':  //improved
 			dist = distanceManhattanImproved();
-		if (mode == 'c')
+			break;
+		case 'c':  //coin
 			dist = distancePatternCoin();
-		if (mode == 'o')
+			break;
+		case 'o':  //one
 			dist = distancePatternEdgeOne();
-		if (mode == 'e')
+			break;
+		case 'e':  //edge
 			dist = distancePatternEdgeTwo();
-		if (mode == 'p')
+			break;
+		case 'p':  //pattern
 			dist = distancePattern();
+			break;
+		}
 		return dist;
 	}
+	
+	/*
+	 * La distance est calculé chaque fois qu'on lui demande
+	 */
 	
 	public int distanceSimple()
 	{
@@ -395,8 +409,11 @@ public class Cube {
 		return ans;
 	}
 	
+	/*
+	 * La distance est précalculé d'une façon exacte
+	 */
 	
-	public int distanceTotal()
+	public int distanceMemory()
 	{
 		int ans = 0;
 		int tmp = 0;
@@ -435,7 +452,7 @@ public class Cube {
 			int f = color[eCoord[0][0]][eCoord[0][1]][eCoord[0][2]];
 			int s = color[eCoord[1][0]][eCoord[1][1]][eCoord[1][2]];
 			if (f == 6 || s == 6) continue;
-			tmp = Distance.distEdge[edge][f][s];
+			tmp = Distance.distEdge[edge][f][s];  //utiliser la bonne distance dans ce cas-là
 			somme += tmp;
 		}
 		
@@ -477,7 +494,7 @@ public class Cube {
 			tmp = Distance.distCoin[coin][f][s][t];
 			sommeCoin += tmp;
 		}
-		return Math.max((sommeCoin + 3) / 4, (sommeEdge + 3) / 4);
+		return Math.max((sommeCoin + 3) / 4, (sommeEdge + 3) / 4);  //une formule trouvée sur Internet
 	}
 	
 	public int distancePattern()
@@ -496,7 +513,7 @@ public class Cube {
 		}
 		else
 		{
-			return 7;
+			return 7;  //la valeur dépend du niveau de pattern qui est 6 actuellement
 		}
 	}
 	

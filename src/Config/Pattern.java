@@ -18,10 +18,29 @@ public class Pattern {
 		coin.put(3031323334353637L, 0);
 		edgeOne.put(10203041214L, 0);
 		edgeTwo.put(152325343545L, 0);
-		int limite = 6;
+		int limite = 7;
 		//patternDFSInt(limite);
 		//patternDFSNaive(limite);
 		patternDFS(new Cube(Cube.src), 1, limite, -1);
+		/*
+		 * Ecrire tout puis construire hashmap, ceci demande beaucoup d'espace sur le disque dur
+		 * Sinon il faut augmenter la taille de mémoire d'exécution
+		try {
+			File fileCoin = new File("Coins.txt");
+			BufferedWriter outputCoin = new BufferedWriter(new FileWriter(fileCoin));
+			File fileOne = new File("One.txt");
+			BufferedWriter outputOne = new BufferedWriter(new FileWriter(fileOne));
+			File fileTwo = new File("Two.txt");
+			BufferedWriter outputTwo = new BufferedWriter(new FileWriter(fileTwo));
+			patternDFSFile(new Cube(Cube.src), 1, limite, -1, outputCoin, outputOne, outputTwo);
+			outputCoin.close();
+			outputOne.close();
+			outputTwo.close();
+			Restart();
+		} catch ( IOException e ) {
+			e.printStackTrace();
+		}
+		*/
 	}
 	
 	/*
@@ -159,6 +178,32 @@ public class Pattern {
 		}
 	}
 	
+	void patternDFSFile(Cube c, int level, int limite, int lastFace, BufferedWriter outputCoin, BufferedWriter outputOne, BufferedWriter outputTwo) throws IOException
+	{
+		for (int face = 0 ; face < 6 ; face++)
+		{
+			if (lastFace == face) continue;  //toujours réduire 18 en 15
+			for (int tour = 0 ; tour < 3 ; tour++)
+			{
+				Action a = new Action(face, tour);
+				a.Run(c);
+				{
+					long key = c.hashCoin();
+					String str = String.valueOf(key) + "\n" + level + "\n";
+					outputCoin.write(str);
+					key = c.hashEdgeOne();
+					str = String.valueOf(key) + "\n" + level + "\n";
+					outputOne.write(str);
+					key = c.hashEdgeTwo();
+					str = String.valueOf(key) + "\n" + level + "\n";
+					outputTwo.write(str);
+				}
+				if (level < limite) patternDFSFile(c, level + 1, limite, face, outputCoin, outputOne, outputTwo);
+				a.Rollback(c);  //on retourne en arrière après le parcours
+			}
+		}
+	}
+	
 	/*
 	 * Bilan du pattern
 	 */
@@ -290,6 +335,89 @@ public class Pattern {
 					long key = Long.parseLong(l);
 					String s = read.readLine();
 					edgeTwo.put(key, Integer.parseInt(s));
+				}
+			}
+			catch (Exception e)
+			{
+				System.out.println(e.getMessage());
+			}
+			read.close();
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	/*
+	 * Une autre méthode de lire le fichier
+	 */
+	
+	public void Restart()
+	{
+		try{
+			FileReader file = new FileReader("Coins.txt");
+			BufferedReader read = new BufferedReader(file);
+			try
+			{
+				while (read.ready()) 
+				{
+					String l = read.readLine();
+					long key = Long.parseLong(l);
+					String s = read.readLine();
+					int value = Integer.parseInt(s);
+					if (!coin.containsKey(key) || (coin.containsKey(key) && coin.get(key) > value)) 
+						coin.put(key, value);
+				}
+			}
+			catch (Exception e)
+			{
+				System.out.println(e.getMessage());
+			}
+			read.close();
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+		try{
+			FileReader file = new FileReader("One.txt");
+			BufferedReader read = new BufferedReader(file);
+			try
+			{
+				while (read.ready()) 
+				{
+					String l = read.readLine();
+					long key = Long.parseLong(l);
+					String s = read.readLine();
+					int value = Integer.parseInt(s);
+					if (!edgeOne.containsKey(key) || (edgeOne.containsKey(key) && edgeOne.get(key) > value)) 
+						edgeOne.put(key, value);
+				}
+			}
+			catch (Exception e)
+			{
+				System.out.println(e.getMessage());
+			}
+			read.close();
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+		try{
+			FileReader file = new FileReader("Two.txt");
+			BufferedReader read = new BufferedReader(file);
+			try
+			{
+				while (read.ready()) 
+				{
+					String l = read.readLine();
+					long key = Long.parseLong(l);
+					String s = read.readLine();
+					int value = Integer.parseInt(s);
+					if (!edgeTwo.containsKey(key) || (edgeTwo.containsKey(key) && edgeTwo.get(key) > value)) 
+						edgeTwo.put(key, value);
 				}
 			}
 			catch (Exception e)

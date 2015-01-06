@@ -9,8 +9,8 @@ import java.util.*;
 public class Chemin {
 	
 	LinkedList<Action> chemin;
-	Cube original;  //Disposition initiale
-	Cube source;  //Disposition finale
+	Cube initial;  //Disposition initiale
+	Cube finale;  //Disposition finale
 	boolean found = false;  //Voir si une solution existe
 	int etape = 10;  //Limiter le nombre d'étapes
 	int size = -1;
@@ -18,15 +18,13 @@ public class Chemin {
 	public Chemin()
 	{
 		chemin = new LinkedList<Action>();
-		size = -1;
 	}
 	
-	public Chemin(Cube t, Cube s)
+	public Chemin(Cube i, Cube f)
 	{
 		chemin = new LinkedList<Action>();
-		this.original = t;
-		this.source = s;
-		size = -1;
+		this.initial = i;
+		this.finale = f;
 	}
 	
 	/*
@@ -39,7 +37,7 @@ public class Chemin {
 	}
 	
 	/*
-	 * Retourner l'état final de la recherche
+	 * Retourner l'état finale de la recherche
 	 */
 	
 	public boolean found()
@@ -74,14 +72,14 @@ public class Chemin {
 	 * Une méthode privée permettant de parcourir l'arbre en largeur afin d'atteidre le but
 	 */
 	
-	void findSimple(int limite, int fixeFace)
+	void findSimple(int limite)
 	{
 		LinkedList<LinkedList<Action>> queue = new LinkedList<LinkedList<Action>>();
 		queue.addLast(new LinkedList<Action>());
 		while(!queue.isEmpty())
 		{
 			LinkedList<Action> current = queue.peek();  //On recommence toujours de la disposition initiale
-			Cube test = new Cube(original);
+			Cube test = new Cube(initial);
 			int currentFace = -1;
 			for (Action a : current)
 			{
@@ -92,14 +90,14 @@ public class Chemin {
 			{
 				break;
 			}
-			for (int face = 0 ; face < fixeFace ; face++)
+			for (int face = 0 ; face < 6 ; face++)
 			{
 				if (currentFace == face) continue;
 				for (int tour = 0 ; tour < 3 ; tour++)
 				{
 					Action a = new Action(face, tour);
 					a.Run(test);
-					if (test.same(source))
+					if (test.same(finale))
 					{
 						chemin = current;
 						chemin.add(a);
@@ -124,18 +122,22 @@ public class Chemin {
 		}
 	}
 	
-	public int runFindSimple(int t, int fixeFace)
+	public int runFindSimple(int t)
 	{
 		etape = t;
-		if (original.same(source))
+		if (initial.same(finale))
 		{
 			found = true;
 			size = 0;
 			return 0;
 		}
-		findSimple(etape, fixeFace);
+		findSimple(etape);
 		return size;
 	}
+	
+	/*
+	 * Algotithme A*
+	 */
 	
 	void findAStarPQ(char mode)
 	{
@@ -144,7 +146,7 @@ public class Chemin {
 		while(!queue.isEmpty())
 		{
 			Disposition current = queue.peek();  //On recommence toujours de la disposition initiale
-			Cube test = new Cube(original);
+			Cube test = new Cube(initial);
 			int currentFace = -1;
 			for (Action a : current.actions)
 			{
@@ -158,8 +160,8 @@ public class Chemin {
 				{
 					Action a = new Action(face, tour);
 					a.Run(test);
-					int dist = test.distance(mode) + current.actions.size() + 1;
-					if (test.same(source))
+					int dist = test.distance(mode) + current.actions.size() + 1;  //toujours par le chemin le plus court
+					if (test.same(finale))
 					{
 						chemin = current.actions;
 						chemin.add(a);
@@ -185,19 +187,30 @@ public class Chemin {
 		}
 	}
 	
-	int findDFS(Cube test, int bound, int cost, char mode, int fixeFace, int currentFace)
+	public int runFindAStar(char mode)
+	{
+		if (initial.same(finale))
+		{
+			found = true;
+			size = 0;
+			return 0;
+		}
+		findAStarPQ(mode);
+		return size;
+	}
+	
+	int findDFS(Cube test, int bound, int cost, char mode, int currentFace)
 	{
 		int f = cost + test.distance(mode);
-		//System.out.println(cost);
 		if (f > bound) return f;
-		if (test.same(source))
+		if (test.same(finale))
 		{
 			found = true;
 			size = chemin.size();
 			return -2;
 		}
 		PriorityQueue<Action> list = new PriorityQueue<Action>(18, new ActionComparator());
-		for (int face = 0 ; face < fixeFace ; face++)
+		for (int face = 0 ; face < 6 ; face++)
 		{
 			if (face == currentFace) continue;
 			for (int tour = 0 ; tour < 3 ; tour++)
@@ -218,7 +231,7 @@ public class Chemin {
 		{
 			a.Run(test);
 			chemin.addLast(a);
-			int t = findDFS(test, bound, cost + 1, mode, fixeFace, a.Face());
+			int t = findDFS(test, bound, cost + 1, mode, a.Face());
 			if (t == -2)
 				return -2;
 			if (t < threshold)
@@ -229,50 +242,18 @@ public class Chemin {
 		return threshold;
 	}
 	
-	public int runFindAStar(char mode)
-	{
-		if (original.same(source))
-		{
-			found = true;
-			size = 0;
-			return 0;
-		}
-		findAStarPQ(mode);
-		return size;
-	}
-	
 	public int runDFS(char mode)
 	{
-		if (original.same(source))
+		if (initial.same(finale))
 		{
 			found = true;
 			size = 0;
 			return 0;
 		}
-		int dist = original.distance(mode);
+		int dist = initial.distance(mode);
 		while (true)
 		{
-			System.err.println(dist);
-			int t = findDFS(original, dist, 0, mode, 6, -1);
-			if (t == -2) break;
-			if (t >= 200000000) t = dist + 1;
-			dist = t;
-		}
-		return size;
-	}
-	
-	public int runDFSLimited(char mode, int fixeFace)
-	{
-		if (original.same(source))
-		{
-			found = true;
-			size = 0;
-			return 0;
-		}
-		int dist = original.distance(mode);
-		while (true)
-		{
-			int t = findDFS(original, dist, 0, mode, fixeFace, -1);
+			int t = findDFS(initial, dist, 0, mode, -1);
 			if (t == -2) break;
 			if (t >= 200000000) t = dist + 1;
 			dist = t;

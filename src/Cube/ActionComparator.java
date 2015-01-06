@@ -1,6 +1,10 @@
 package Cube;
 import java.util.*;
 
+/*
+ * Pour construire une queue de priorité lors de la recherche A*
+ */
+
 public class ActionComparator implements Comparator<Action>{
 	
 	@Override

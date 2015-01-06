@@ -165,7 +165,7 @@ public class Edge {
 		makeTest(test);
 		makeBlack(black);
 		Chemin ans = new Chemin(test, black);
-		int r = ans.runFindSimple(4, 6);
+		int r = ans.runFindSimple(4);
 		return r;
 	}
 	

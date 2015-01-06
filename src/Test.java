@@ -6,19 +6,20 @@ public class Test {
 	
 	public static void main(String[] args){
 		init();
-		//init("DistanceManhattan.txt");
+		//initDistance("DistanceManhattan.txt");
 		//initPattern();
 		//testSimple(8);
 		//debugCoinEdge(20);
 		//testAStar(10, 't');
-		//testInit();
+		//testInitDistance();
 		//testDistance();
 		//debugCoinEdge();
-		//debugCoins(30);
+		debugCoins(30);
 		//Pattern.print();
-		testDFS(20, 'p');
+		//testDFS(20, 'p');
 		//testHash();
 		//testInitPattern();
+		//testCompare(20);
 	}
 	
 	/*
@@ -34,16 +35,21 @@ public class Test {
 		}
 	}
 	
+	/*
+	 * Initialisation du programme
+	 */
+	
 	static void init(){
 		Cube.setWidth(40);
-		Pattern init = new Pattern(true);
+		Pattern pat = new Pattern(true);  //lire les fichiers
+		Distance dist = new Distance("DistanceManhattan.txt");
 	}
 	
 	/*
 	 * Initialisation du test, on pourrait précalculer la distance entre toutes les dispositions d'une certaine pièce ici
 	 */
 	
-	static void init(String path)
+	static void initDistance(String path)
 	{
 		Cube.setWidth(40);
 		Distance init = new Distance(path);
@@ -52,8 +58,7 @@ public class Test {
 	static void initPattern(){
 		Cube.setWidth(40);
 		Pattern init = new Pattern();
-		Pattern.file();
-		//Pattern.print();
+		Pattern.file();  //enregistrer dans les fichiers
 	}
 	
 	/*
@@ -71,7 +76,7 @@ public class Test {
 			dest.show2D();
 			long startTime = System.currentTimeMillis();
 			Chemin ans = new Chemin(test, Cube.src);
-			ans.runFindSimple(i, 6);  //Trouver le chemin
+			ans.runFindSimple(i);  //Trouver le chemin
 			long endTime = System.currentTimeMillis();
 			long duration = endTime - startTime;
 			ans.print();
@@ -141,11 +146,19 @@ public class Test {
 		}	
 	}
 	
-	static void testInit()
+	/*
+	 * Tester la classe Distance
+	 */
+	
+	static void testInitDistance()
 	{
 		Distance p = new Distance();
 		Distance.print();
 	}
+	
+	/*
+	 * Tester le calcul de la distance
+	 */
 	
 	static void testDistance()
 	{
@@ -155,6 +168,10 @@ public class Test {
 		//test.show2D();
 		//test.printDistance();
 	}
+	
+	/*
+	 * Tester si on peut calculer le nombre d'étapes pour remettre tous les sommets
+	 */
 	
 	static void debugCoins(int etape)
 	{
@@ -169,13 +186,17 @@ public class Test {
 				coins[i] = new Coin(i, test);
 			}
 			long startTime = System.currentTimeMillis();
-			int tmp = Coin.recoverStepsImproved(coins);
+			int tmp = Coin.recoverSteps(coins);  //on pourra changer la méthode de recherche
 			long endTime = System.currentTimeMillis();
 			long duration = endTime - startTime;
 			System.out.println(tmp);
 			System.out.printf("\nElapsed time: %d milliseconds\n", duration);
 		}	
 	}
+	
+	/*
+	 * Test principal qu'on utilise pour résoudre le cube
+	 */
 	
 	static void testDFS(int etape, char mode){
 		for (int i = 0 ; i <= etape ; i++)
@@ -232,5 +253,36 @@ public class Test {
 		long endTime = System.currentTimeMillis();
 		long duration = endTime - startTime;
 		System.out.printf("\nElapsed time: %d milliseconds\n", duration);
+	}
+	
+	/*
+	 * Comparer la méthode Pattern et la méthode avec une distance simple, très grande différence
+	 */
+	
+	static void testCompare(int etape)
+	{
+		for (int i = 0 ; i <= etape ; i++)
+		{
+			System.out.format("\n//======== Test %d =======\n", i + 1);
+			Cube test = new Cube(Cube.src);
+			melanger(test, i, true);
+			Cube compare = new Cube(test);
+			System.out.format("\nDistance minimale : %d\n",test.distance('p'));
+			long startTime = System.currentTimeMillis();
+			Chemin ans = new Chemin(test, Cube.src);
+			ans.runDFS('p');  //Trouver le chemin
+			long endTime = System.currentTimeMillis();
+			long duration = endTime - startTime;
+			ans.print();
+			System.out.printf("\nElapsed time: %d milliseconds pour Pattern\n\n", duration);
+			System.out.format("\nDistance minimale : %d\n",test.distance('i'));
+			startTime = System.currentTimeMillis();
+			ans = new Chemin(compare, Cube.src);
+			ans.runDFS('i');  //Trouver le chemin
+			endTime = System.currentTimeMillis();
+			duration = endTime - startTime;
+			ans.print();
+			System.out.printf("\nElapsed time: %d milliseconds pour Manhattan\n", duration);
+		}	
 	}
 }

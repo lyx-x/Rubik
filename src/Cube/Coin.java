@@ -8,8 +8,8 @@ import Chemin.*;
 
 public class Coin {
 	
-	int First;
-	int[] fCoord;
+	int First;  //couleur de la première case
+	int[] fCoord;  //coordonnées de la première case
 	int Second;
 	int[] sCoord;
 	int Third;
@@ -17,7 +17,7 @@ public class Coin {
 	int index = -1;
 	int occupied = -1;
 	
-	static int[][][] realPosition = {
+	static int[][][] realPosition = {  //les coordonnées des sommets en ordre
 		{{0, 2, 0}, {1, 0, 2}, {2, 0, 0}},
 		{{0, 0, 0}, {1, 0, 0}, {4, 0, 2}},
 		{{0, 2, 2}, {2, 0, 2}, {3, 0, 0}},
@@ -28,7 +28,7 @@ public class Coin {
 		{{3, 2 ,2}, {4, 2, 0}, {5, 2, 2}},
 		};
 	
-	static int[][] realCoord = {
+	static int[][] realCoord = {  //position en espace de la pièce pour calculer la distance de Manhattan
 		{2, 0, 2}, {0, 0, 2}, {2, 2, 2}, {0, 2, 2}, {2, 0, 0}, {0, 0, 0}, {2, 2, 0}, {0, 2, 0}
 	};
 	
@@ -40,8 +40,8 @@ public class Coin {
 		this.First = c.color[fCoord[0]][fCoord[1]][fCoord[2]];
 		this.Second = c.color[sCoord[0]][sCoord[1]][sCoord[2]];
 		this.Third = c.color[tCoord[0]][tCoord[1]][tCoord[2]];
-		this.index = Index();
-		this.occupied = i;
+		this.index = Index();  //le numéro de la pièce réelle
+		this.occupied = i;  //la position de la pièce
 	}
 	
 	public Coin(int i, int f, int s, int t)
@@ -163,7 +163,8 @@ public class Coin {
 		makeTest(test);
 		makeBlack(black);
 		Chemin ans = new Chemin(test, black);
-		int r = ans.runFindSimple(3, 6);
+		//int r = ans.runFindSimple(3);
+		int r = ans.runDFS('c');  //pas beaucoup d'amélioration
 		return r;
 	}
 	
@@ -178,6 +179,10 @@ public class Coin {
 		return dist;
 	}
 	
+	/*
+	 * Rétablir tous les sommets
+	 */
+	
 	public static int recoverSteps(Coin[] coins)
 	{
 		Cube black = new Cube(Cube.black);
@@ -191,28 +196,6 @@ public class Coin {
 		ans.runDFS('m');
 		int r = ans.size();
 		return r;
-	}
-	
-	public static int recoverStepsImproved(Coin[] coins)
-	{
-		Cube black = new Cube(Cube.black);
-		Cube test = new Cube(Cube.black);
-		for (Coin c : coins)
-		{
-			c.makeTest(test);
-			c.makeBlack(black);
-		}
-		int i = 0;
-		for (i = 0 ; i < 8 ; i++)
-		{
-			if (coins[i].index == 7)
-				break;
-		}
-		int cost = coins[i].recover(test);
-		Chemin ans = new Chemin(test, black);
-		ans.runDFSLimited('t', 3);
-		int r = ans.size();
-		return r + cost;
 	}
 	
 	public boolean correctPosition()
