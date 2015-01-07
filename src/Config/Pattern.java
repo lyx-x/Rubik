@@ -12,7 +12,7 @@ public class Pattern {
 	public static HashMap<Long, Integer> edgeOne = new HashMap<Long, Integer>();
 	public static HashMap<Long, Integer> edgeTwo = new HashMap<Long, Integer>();
 	
-	public Pattern(){
+	public static void calculatePattern(){
 		coin = new HashMap<Long, Integer>();
 		edgeOne = new HashMap<Long, Integer>();
 		edgeTwo = new HashMap<Long, Integer>();
@@ -23,6 +23,7 @@ public class Pattern {
 		//patternDFSInt(limite);
 		//patternDFSNaive(limite);
 		patternDFS(new Cube(Cube.src), 1, limite, -1);
+		writeFile();
 		/*
 		 * Ecrire tout puis construire hashmap, ceci demande beaucoup d'espace sur le disque dur
 		 * Sinon il faut augmenter la taille de mémoire d'exécution
@@ -37,7 +38,7 @@ public class Pattern {
 			outputCoin.close();
 			outputOne.close();
 			outputTwo.close();
-			Restart();
+			readPatternImproved("Coins.txt", "One.txt", "Two.txt");
 		} catch ( IOException e ) {
 			e.printStackTrace();
 		}
@@ -53,7 +54,7 @@ public class Pattern {
 	
 	//Environ 9 secondes pour une limite de 5 étapes
 	
-	void patternDFSInt(int limite)
+	static void patternDFSInt(int limite)
 	{
 		LinkedList<Long> queue = new LinkedList<Long>();
 		queue.addLast(1L);
@@ -99,7 +100,7 @@ public class Pattern {
 	
 	//Environ 9 secondes pour une limite de 5 étapes
 	
-	void patternDFSNaive(int limite)
+	static void patternDFSNaive(int limite)
 	{
 		LinkedList<LinkedList<Action>> queue = new LinkedList<LinkedList<Action>>();
 		queue.addLast(new LinkedList<Action>());
@@ -153,7 +154,7 @@ public class Pattern {
 	 * Environ 3 secondes pour 5 étapes et 45 pour 6 étapes, on a bien un facteur de 15
 	 */
 	
-	void patternDFS(Cube c, int level, int limite, int lastFace)
+	static void patternDFS(Cube c, int level, int limite, int lastFace)
 	{
 		for (int face = 0 ; face < 6 ; face++)
 		{
@@ -179,7 +180,7 @@ public class Pattern {
 		}
 	}
 	
-	void patternDFSFile(Cube c, int level, int limite, int lastFace, BufferedWriter outputCoin, BufferedWriter outputOne, BufferedWriter outputTwo) throws IOException
+	static void patternDFSFile(Cube c, int level, int limite, int lastFace, BufferedWriter outputCoin, BufferedWriter outputOne, BufferedWriter outputTwo) throws IOException
 	{
 		for (int face = 0 ; face < 6 ; face++)
 		{
@@ -231,7 +232,7 @@ public class Pattern {
 	 * Ecrire les résultats dans un fichier
 	 */
 	
-	public static void file(){
+	static void writeFile(){
 		try {
 			File fileCoin = new File("Coin.txt");
 			BufferedWriter outputCoin = new BufferedWriter(new FileWriter(fileCoin));
@@ -277,10 +278,10 @@ public class Pattern {
 	 * Lire les résultats
 	 */
 	
-	public Pattern(boolean fichier)
+	public static void readPattern(String c, String eo, String et)
 	{
 		try{
-			FileReader file = new FileReader("Coin.txt");
+			FileReader file = new FileReader(c);
 			BufferedReader read = new BufferedReader(file);
 			try
 			{
@@ -303,7 +304,7 @@ public class Pattern {
 			System.out.println(e.getMessage());
 		}
 		try{
-			FileReader file = new FileReader("EdgeOne.txt");
+			FileReader file = new FileReader(eo);
 			BufferedReader read = new BufferedReader(file);
 			try
 			{
@@ -326,7 +327,7 @@ public class Pattern {
 			System.out.println(e.getMessage());
 		}
 		try{
-			FileReader file = new FileReader("EdgeTwo.txt");
+			FileReader file = new FileReader(et);
 			BufferedReader read = new BufferedReader(file);
 			try
 			{
@@ -354,10 +355,10 @@ public class Pattern {
 	 * Une autre méthode de lire le fichier
 	 */
 	
-	public void Restart()
+	public void readPatternImproved(String c, String eo, String et)
 	{
 		try{
-			FileReader file = new FileReader("Coins.txt");
+			FileReader file = new FileReader(c);
 			BufferedReader read = new BufferedReader(file);
 			try
 			{
@@ -382,7 +383,7 @@ public class Pattern {
 			System.out.println(e.getMessage());
 		}
 		try{
-			FileReader file = new FileReader("One.txt");
+			FileReader file = new FileReader(eo);
 			BufferedReader read = new BufferedReader(file);
 			try
 			{
@@ -407,7 +408,7 @@ public class Pattern {
 			System.out.println(e.getMessage());
 		}
 		try{
-			FileReader file = new FileReader("Two.txt");
+			FileReader file = new FileReader(et);
 			BufferedReader read = new BufferedReader(file);
 			try
 			{

@@ -17,7 +17,7 @@ public class Distance {
 	public static int[][][][] distCoin;
 	public static int[][][] distEdge;
 	
-	public Distance()
+	public static void calculateDistance()
 	{
 		distCoin = new int[8][6][6][6];
 		distEdge = new int[12][6][6];
@@ -30,7 +30,39 @@ public class Distance {
 					for (int l = 0 ; l < 6 ; l++)
 					{
 						Coin c = new Coin(i, j, k, l);
-						//int steps = c.recoverSteps();
+						int steps = c.recoverSteps();
+						distCoin[i][j][k][l] = (steps >= 0) ? steps : 9;
+					}
+				}
+			}
+		}
+		for (int i = 0 ; i < 12 ; i++)
+		{
+			for (int j = 0 ; j < 6 ; j++)
+			{
+				for (int k = 0 ; k < 6 ; k++)
+				{
+					Edge e = new Edge(i, j, k);
+					int steps = e.recoverSteps();
+					distEdge[i][j][k] = (steps >= 0) ? steps : 9;
+				}
+			}
+		}
+	}
+	
+	public static void calculateDistanceManhattan()
+	{
+		distCoin = new int[8][6][6][6];
+		distEdge = new int[12][6][6];
+		for (int i = 0 ; i < 8 ; i++)
+		{
+			for (int j = 0 ; j < 6 ; j++)
+			{
+				for (int k = 0 ; k < 6 ; k++)
+				{
+					for (int l = 0 ; l < 6 ; l++)
+					{
+						Coin c = new Coin(i, j, k, l);
 						int steps = c.manhattanDistance();
 						distCoin[i][j][k][l] = (steps >= 0) ? steps : 9;
 					}
@@ -44,7 +76,6 @@ public class Distance {
 				for (int k = 0 ; k < 6 ; k++)
 				{
 					Edge e = new Edge(i, j, k);
-					//int steps = e.recoverSteps();
 					int steps = e.ManhattanDistance();
 					distEdge[i][j][k] = (steps >= 0) ? steps : 9;
 				}
@@ -52,7 +83,7 @@ public class Distance {
 		}
 	}
 	
-	public Distance(String path)
+	public static void readDistance(String path)
 	{
 		try{
 			FileReader file = new FileReader(path);

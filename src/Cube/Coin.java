@@ -163,8 +163,8 @@ public class Coin {
 		makeTest(test);
 		makeBlack(black);
 		Chemin ans = new Chemin(test, black);
-		//int r = ans.runFindSimple(3);
-		int r = ans.runDFS('c');  //pas beaucoup d'amélioration
+		int r = ans.runFindSimple(3);
+		//int r = ans.runDFS('c');  //pas beaucoup d'amélioration
 		return r;
 	}
 	

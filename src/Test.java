@@ -6,17 +6,15 @@ public class Test {
 	
 	public static void main(String[] args){
 		init();
-		//initDistance("DistanceManhattan.txt");
-		//initPattern();
-		//testSimple(8);
-		//debugCoinEdge(20);
+		//testFindSimple(8);
+		//debugDistanceCoinEdge(20);
 		//testAStar(10, 't');
 		//testInitDistance();
 		//testDistance();
 		//debugCoinEdge();
 		//debugCoins(30);
 		//Pattern.print();
-		testDFS(20, 'p');
+		testFindDFS(20, 'p');
 		//testHash();
 		//testInitPattern();
 		//testCompare(20);
@@ -41,31 +39,15 @@ public class Test {
 	
 	static void init(){
 		Cube.setWidth(40);
-		Pattern pat = new Pattern(true);  //lire les fichiers
-		Distance dist = new Distance("DistanceManhattan.txt");
-	}
-	
-	/*
-	 * Initialisation du test, on pourrait précalculer la distance entre toutes les dispositions d'une certaine pièce ici
-	 */
-	
-	static void initDistance(String path)
-	{
-		Cube.setWidth(40);
-		Distance init = new Distance(path);
-	}
-	
-	static void initPattern(){
-		Cube.setWidth(40);
-		Pattern init = new Pattern();
-		Pattern.file();  //enregistrer dans les fichiers
+		Pattern.readPattern("Coin.txt", "EdgeOne.txt", "EdgeTwo.txt");  //lire les fichiers
+		Distance.readDistance("DistanceManhattan.txt");
 	}
 	
 	/*
 	 * Générer une suite de test simple en augmentant la complexité du cube à résoudre
 	 */
 	
-	static void testSimple(int etape){
+	static void testFindSimple(int etape){
 		for (int i = 0 ; i <= etape ; i++)
 		{
 			System.out.format("\n//======== Test %d =======\n", i + 1);
@@ -88,7 +70,7 @@ public class Test {
 	 * Une suite de test pour calculer la distance entre une pièce à une position quelconque et sa posotion correcte
 	 */
 	
-	static void debugCoinEdge(int etape){
+	static void debugDistanceCoinEdge(int etape){
 		int max = 0;
 		System.out.println("Test Edge :");
 		for (int i = 0 ; i < etape ; i++)
@@ -114,7 +96,7 @@ public class Test {
 	}
 	
 	/*
-	 * Tester si on trouve le bon nombre d'étape pour remettre une pièce en position
+	 * Tester de façon déterminée si on trouve le bon nombre d'étape pour remettre une pièce en position
 	 */
 	
 	static void debugCoinEdge(){
@@ -152,8 +134,18 @@ public class Test {
 	
 	static void testInitDistance()
 	{
-		Distance p = new Distance();
+		Distance.calculateDistance();
 		Distance.print();
+	}
+	
+	/*
+	 * Tester la classe Pattern
+	 */
+	
+	static void testInitPattern()
+	{
+		Pattern.calculatePattern();
+		Pattern.print();
 	}
 	
 	/*
@@ -198,7 +190,7 @@ public class Test {
 	 * Test principal qu'on utilise pour résoudre le cube
 	 */
 	
-	static void testDFS(int etape, char mode){
+	static void testFindDFS(int etape, char mode){
 		for (int i = 0 ; i <= etape ; i++)
 		{
 			System.out.format("\n//======== Test %d =======\n", i + 1);
@@ -233,10 +225,9 @@ public class Test {
 	 * On constate qu'une limite de 5 étapes ne sont pas suffisante, mais une plus grande limite demande beaucoup de temps pour l'initiation
 	 */
 
-	static void testInitPattern(){
+	static void testPattern(){
 		long startTime = System.currentTimeMillis();
-		Pattern p = new Pattern(true);
-		//Pattern.print();
+		Pattern.readPattern("Coin.txt", "EdgeOne.txt", "EdgeTwo.txt");
 		int i = 0;
 		while(i<20)
 		{

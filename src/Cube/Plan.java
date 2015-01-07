@@ -8,6 +8,11 @@ import javax.swing.*;
 
 public class Plan extends JPanel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	int[][][] color = new int[6][3][3];
 	int width = 40;
 	int arcWidth = 4;  //rectangle arondi

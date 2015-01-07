@@ -2,7 +2,6 @@ package Cube;
 import Config.*;
 import java.io.*;
 import javax.swing.*;
-import Config.*;
 import java.util.*;
 
 public class Cube {
