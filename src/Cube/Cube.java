@@ -586,8 +586,8 @@ public class Cube {
 					max = j + 1;
 				}
 			}
-			hash = hash * 10 + max;
-			hash = hash * 10 + index;
+			hash = hash * 8 + max;
+			hash = hash * 8 + index;
 		}
 		return hash;
 	}
@@ -601,8 +601,8 @@ public class Cube {
 		long hash = 0;
 		for (int i = 0 ; i < 6 ; i++)
 		{
-			hash = hash * 10 + color[Edge.realPosition[i][0][0]][Edge.realPosition[i][0][1]][Edge.realPosition[i][0][2]];
-			hash = hash * 10 + color[Edge.realPosition[i][1][0]][Edge.realPosition[i][1][1]][Edge.realPosition[i][1][2]];
+			hash = hash * 8 + color[Edge.realPosition[i][0][0]][Edge.realPosition[i][0][1]][Edge.realPosition[i][0][2]];
+			hash = hash * 8 + color[Edge.realPosition[i][1][0]][Edge.realPosition[i][1][1]][Edge.realPosition[i][1][2]];
 		}
 		return hash;
 	}
@@ -612,8 +612,8 @@ public class Cube {
 		long hash = 0;
 		for (int i = 6 ; i < 12 ; i++)
 		{
-			hash = hash * 10 + color[Edge.realPosition[i][0][0]][Edge.realPosition[i][0][1]][Edge.realPosition[i][0][2]];
-			hash = hash * 10 + color[Edge.realPosition[i][1][0]][Edge.realPosition[i][1][1]][Edge.realPosition[i][1][2]];
+			hash = hash * 8 + color[Edge.realPosition[i][0][0]][Edge.realPosition[i][0][1]][Edge.realPosition[i][0][2]];
+			hash = hash * 8 + color[Edge.realPosition[i][1][0]][Edge.realPosition[i][1][1]][Edge.realPosition[i][1][2]];
 		}
 		return hash;
 	}

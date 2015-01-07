@@ -8,22 +8,24 @@ import java.util.*;
 
 public class Pattern {
 	
-	public static HashMap<Long, Integer> coin = new HashMap<Long, Integer>();
-	public static HashMap<Long, Integer> edgeOne = new HashMap<Long, Integer>();
-	public static HashMap<Long, Integer> edgeTwo = new HashMap<Long, Integer>();
+	public static HashMap<Long, Byte> coin = new HashMap<Long, Byte>();
+	public static HashMap<Long, Byte> edgeOne = new HashMap<Long, Byte>();
+	public static HashMap<Long, Byte> edgeTwo = new HashMap<Long, Byte>();
 	
 	public static void calculatePattern(){
-		coin = new HashMap<Long, Integer>();
-		edgeOne = new HashMap<Long, Integer>();
-		edgeTwo = new HashMap<Long, Integer>();
-		coin.put(3031323334353637L, 0);
-		edgeOne.put(10203041214L, 0);
-		edgeTwo.put(152325343545L, 0);
+		coin = new HashMap<Long, Byte>();
+		edgeOne = new HashMap<Long, Byte>();
+		edgeTwo = new HashMap<Long, Byte>();
+		Cube src = new Cube(Cube.src);
+		coin.put(src.hashCoin(), (byte)0);
+		edgeOne.put(src.hashEdgeOne(), (byte)0);
+		edgeTwo.put(src.hashEdgeTwo(), (byte)0);
 		int limite = 6;
 		//patternDFSInt(limite);
 		//patternDFSNaive(limite);
-		patternDFS(new Cube(Cube.src), 1, limite, -1);
-		writeFile();
+		patternDFS(src, (byte)1, limite, -1);
+		//writePattern();
+		writeBinaryPattern();
 		/*
 		 * Ecrire tout puis construire hashmap, ceci demande beaucoup d'espace sur le disque dur
 		 * Sinon il faut augmenter la taille de mémoire d'exécution
@@ -83,13 +85,13 @@ public class Pattern {
 					{
 						long key = test.hashCoin();
 						if (!coin.containsKey(key)) 
-							coin.put(key, current.size() + 1);
+							coin.put(key, (byte)(current.size() + 1));
 						key = test.hashEdgeOne();
 						if (!edgeOne.containsKey(key))
-							edgeOne.put(key, current.size() + 1);
+							edgeOne.put(key, (byte)(current.size() + 1));
 						key = test.hashEdgeTwo();
 						if (!edgeTwo.containsKey(key))
-							edgeTwo.put(key, current.size() + 1);
+							edgeTwo.put(key, (byte)(current.size() + 1));
 					}
 					queue.addFirst((cur * 10 + a.Face()) * 10 + a.Tour());
 					a.Rollback(test);  //Afin de tester les autres chemins, il faut revenir en arrière
@@ -128,13 +130,13 @@ public class Pattern {
 					{
 						long key = test.hashCoin();
 						if (!coin.containsKey(key)) 
-							coin.put(key, current.size() + 1);
+							coin.put(key, (byte)(current.size() + 1));
 						key = test.hashEdgeOne();
 						if (!edgeOne.containsKey(key))
-							edgeOne.put(key, current.size() + 1);
+							edgeOne.put(key, (byte)(current.size() + 1));
 						key = test.hashEdgeTwo();
 						if (!edgeTwo.containsKey(key))
-							edgeTwo.put(key, current.size() + 1);
+							edgeTwo.put(key, (byte)(current.size() + 1));
 					}
 					LinkedList<Action> tmp = new LinkedList<Action>();  
 					for (Action i : current)
@@ -154,7 +156,7 @@ public class Pattern {
 	 * Environ 3 secondes pour 5 étapes et 45 pour 6 étapes, on a bien un facteur de 15
 	 */
 	
-	static void patternDFS(Cube c, int level, int limite, int lastFace)
+	static void patternDFS(Cube c, byte level, int limite, int lastFace)
 	{
 		for (int face = 0 ; face < 6 ; face++)
 		{
@@ -174,7 +176,7 @@ public class Pattern {
 					if (!edgeTwo.containsKey(key) || (edgeTwo.containsKey(key) && edgeTwo.get(key) > level))
 						edgeTwo.put(key, level);
 				}
-				if (level < limite) patternDFS(c, level + 1, limite, face);
+				if (level < limite) patternDFS(c, (byte)(level + 1), limite, face);
 				a.Rollback(c);  //on retourne en arrière après le parcours
 			}
 		}
@@ -228,11 +230,17 @@ public class Pattern {
 		System.out.format("%d dispositions pour les 6 autres arêtes.\n", edgeTwo.keySet().size());
 	}
 	
+	public static void printResume(){
+		System.out.format("%d dispositions pour les sommets.\n", coin.keySet().size());
+		System.out.format("%d dispositions pour les 6 premières arêtes.\n", edgeOne.keySet().size());
+		System.out.format("%d dispositions pour les 6 autres arêtes.\n", edgeTwo.keySet().size());
+	}
+	
 	/*
 	 * Ecrire les résultats dans un fichier
 	 */
 	
-	static void writeFile(){
+	static void writePattern(){
 		try {
 			File fileCoin = new File("Coin.txt");
 			BufferedWriter outputCoin = new BufferedWriter(new FileWriter(fileCoin));
@@ -290,7 +298,7 @@ public class Pattern {
 					String l = read.readLine();
 					long key = Long.parseLong(l);
 					String s = read.readLine();
-					coin.put(key, Integer.parseInt(s));
+					coin.put(key, Byte.parseByte(s));
 				}
 			}
 			catch (Exception e)
@@ -313,7 +321,7 @@ public class Pattern {
 					String l = read.readLine();
 					long key = Long.parseLong(l);
 					String s = read.readLine();
-					edgeOne.put(key, Integer.parseInt(s));
+					edgeOne.put(key, Byte.parseByte(s));
 				}
 			}
 			catch (Exception e)
@@ -336,7 +344,7 @@ public class Pattern {
 					String l = read.readLine();
 					long key = Long.parseLong(l);
 					String s = read.readLine();
-					edgeTwo.put(key, Integer.parseInt(s));
+					edgeTwo.put(key, Byte.parseByte(s));
 				}
 			}
 			catch (Exception e)
@@ -367,7 +375,7 @@ public class Pattern {
 					String l = read.readLine();
 					long key = Long.parseLong(l);
 					String s = read.readLine();
-					int value = Integer.parseInt(s);
+					byte value = Byte.parseByte(s);
 					if (!coin.containsKey(key) || (coin.containsKey(key) && coin.get(key) > value)) 
 						coin.put(key, value);
 				}
@@ -392,7 +400,7 @@ public class Pattern {
 					String l = read.readLine();
 					long key = Long.parseLong(l);
 					String s = read.readLine();
-					int value = Integer.parseInt(s);
+					byte value = Byte.parseByte(s);
 					if (!edgeOne.containsKey(key) || (edgeOne.containsKey(key) && edgeOne.get(key) > value)) 
 						edgeOne.put(key, value);
 				}
@@ -417,7 +425,7 @@ public class Pattern {
 					String l = read.readLine();
 					long key = Long.parseLong(l);
 					String s = read.readLine();
-					int value = Integer.parseInt(s);
+					byte value = Byte.parseByte(s);
 					if (!edgeTwo.containsKey(key) || (edgeTwo.containsKey(key) && edgeTwo.get(key) > value)) 
 						edgeTwo.put(key, value);
 				}
@@ -427,6 +435,121 @@ public class Pattern {
 				System.out.println(e.getMessage());
 			}
 			read.close();
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	static void writeBinaryPattern() {
+		try{
+			FileOutputStream fileCoin = new FileOutputStream("Coin.dat");
+			BufferedOutputStream bfCoin = new BufferedOutputStream(fileCoin);
+			DataOutputStream outCoin = new DataOutputStream(bfCoin);
+			for (long l : coin.keySet())
+			{
+				outCoin.writeLong(l);
+				outCoin.writeByte(coin.get(l));
+			}
+			outCoin.close();
+			fileCoin.close();
+			FileOutputStream fileOne = new FileOutputStream("EdgeOne.dat");
+			BufferedOutputStream bfOne = new BufferedOutputStream(fileOne);
+			DataOutputStream outOne = new DataOutputStream(bfOne);
+			for (long l : edgeOne.keySet())
+			{
+				outOne.writeLong(l);
+				outOne.writeByte(edgeOne.get(l));
+			}
+			outOne.close();
+			fileOne.close();
+			FileOutputStream fileTwo = new FileOutputStream("EdgeTwo.dat");
+			BufferedOutputStream bfTwo = new BufferedOutputStream(fileTwo);
+			DataOutputStream outTwo = new DataOutputStream(bfTwo);
+			for (long l : edgeTwo.keySet())
+			{
+				outTwo.writeLong(l);
+				outTwo.writeByte(edgeTwo.get(l));
+			}
+			outTwo.close();
+			fileTwo.close();
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+	}
+
+	public static void readBinaryPattern(String c, String eo, String et)
+	{
+		try{
+			FileInputStream fileCoin = new FileInputStream(c);
+			BufferedInputStream bfCoin = new BufferedInputStream(fileCoin);
+			DataInputStream inCoin = new DataInputStream(bfCoin);
+			try
+			{
+				while (true) 
+				{
+					long key = inCoin.readLong();
+					byte value = inCoin.readByte();
+					coin.put(key, value);
+				}
+			}
+			catch (Exception e)
+			{
+				System.out.format("%d dispositions pour les sommets.\n", coin.keySet().size());
+			}
+			inCoin.close();
+			fileCoin.close();
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+		try{
+			FileInputStream fileOne = new FileInputStream(eo);
+			BufferedInputStream bfOne = new BufferedInputStream(fileOne);
+			DataInputStream inOne = new DataInputStream(bfOne);
+			try
+			{
+				while (true) 
+				{
+					long key = inOne.readLong();
+					byte value = inOne.readByte();
+					edgeOne.put(key, value);
+				}
+			}
+			catch (Exception e)
+			{
+				System.out.format("%d dispositions pour les 6 premières arêtes.\n", edgeOne.keySet().size());
+			}
+			inOne.close();
+			fileOne.close();
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+		try{
+			FileInputStream fileTwo = new FileInputStream(et);
+			BufferedInputStream bfTwo = new BufferedInputStream(fileTwo);
+			DataInputStream inTwo = new DataInputStream(bfTwo);
+			try
+			{
+				while (true) 
+				{
+					long key = inTwo.readLong();
+					byte value = inTwo.readByte();
+					edgeTwo.put(key, value);
+				}
+			}
+			catch (Exception e)
+			{
+				System.out.format("%d dispositions pour les 6 autres arêtes.\n", edgeTwo.keySet().size());
+			}
+			inTwo.close();
+			fileTwo.close();
 		}
 		catch (Exception e)
 		{

@@ -200,8 +200,9 @@ public class Chemin {
 		return size;
 	}
 	
-	int findDFS(Cube test, int bound, int cost, char mode, int currentFace)
+	int findDFS(Cube test, int bound, int cost, char mode, int currentFace, int[] count)
 	{
+		count[0]++;
 		int f = cost + test.distance(mode);
 		if (f > bound) return f;
 		if (test.same(finale))
@@ -232,7 +233,7 @@ public class Chemin {
 		{
 			a.Run(test);
 			chemin.addLast(a);
-			int t = findDFS(test, bound, cost + 1, mode, a.Face());
+			int t = findDFS(test, bound, cost + 1, mode, a.Face(),count);
 			if (t == -2)
 				return -2;
 			if (t < threshold)
@@ -252,13 +253,15 @@ public class Chemin {
 			return 0;
 		}
 		int dist = initial.distance(mode);
+		int[] count = {0};
 		while (true)
 		{
-			int t = findDFS(initial, dist, 0, mode, -1);
+			int t = findDFS(initial, dist, 0, mode, -1, count);
 			if (t == -2) break;
 			if (t >= 200000000) t = dist + 1;
 			dist = t;
 		}
+		System.out.format("Tested configurations : %d\n", count[0]);
 		return size;
 	}
 }

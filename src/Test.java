@@ -10,13 +10,14 @@ public class Test {
 		//debugDistanceCoinEdge(20);
 		//testAStar(10, 't');
 		//testInitDistance();
+		//testInitPattern();
 		//testDistance();
 		//debugCoinEdge();
 		//debugCoins(30);
 		//Pattern.print();
 		testFindDFS(20, 'p');
 		//testHash();
-		//testInitPattern();
+		//testPattern(5);
 		//testCompare(20);
 	}
 	
@@ -38,9 +39,13 @@ public class Test {
 	 */
 	
 	static void init(){
+		System.out.println("\n=========== Début d'initialisation ===========\n");
 		Cube.setWidth(40);
-		Pattern.readPattern("Coin.txt", "EdgeOne.txt", "EdgeTwo.txt");  //lire les fichiers
+		//Pattern.readPattern("Coin.txt", "EdgeOne.txt", "EdgeTwo.txt");  //lire les fichiers
+		Pattern.readBinaryPattern("Coin.dat", "EdgeOne.dat", "EdgeTwo.dat");
+		//Pattern.printResume();
 		Distance.readDistance("DistanceManhattan.txt");
+		System.out.println("\n=========== Fin d'initialisation ===========\n");
 	}
 	
 	/*
@@ -145,7 +150,7 @@ public class Test {
 	static void testInitPattern()
 	{
 		Pattern.calculatePattern();
-		Pattern.print();
+		Pattern.printResume();
 	}
 	
 	/*
@@ -225,15 +230,17 @@ public class Test {
 	 * On constate qu'une limite de 5 étapes ne sont pas suffisante, mais une plus grande limite demande beaucoup de temps pour l'initiation
 	 */
 
-	static void testPattern(){
+	static void testPattern(int steps){
 		long startTime = System.currentTimeMillis();
-		Pattern.readPattern("Coin.txt", "EdgeOne.txt", "EdgeTwo.txt");
+		//Pattern.readPattern("Coin.txt", "EdgeOne.txt", "EdgeTwo.txt");
+		Pattern.readBinaryPattern("Coin.dat", "EdgeOne.dat", "EdgeTwo.dat");
+		Pattern.printResume();
 		int i = 0;
 		while(i<20)
 		{
 			System.out.format("\n//======== Test %d =======\n", i++);
 			Cube test = new Cube(Cube.src);
-			melanger(test, 8, true);
+			melanger(test, steps, true);
 			System.out.println(test.hashCoin());
 			System.out.println(test.hashEdgeOne());
 			System.out.println(test.hashEdgeTwo());
