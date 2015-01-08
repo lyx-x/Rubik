@@ -8,11 +8,16 @@ import javax.swing.*;
 
 public class Plan extends JPanel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	int[][][] color = new int[6][3][3];
 	int width = 40;
 	int arcWidth = 4;  //rectangle arondi
 	Color border = Color.BLACK;  //la couleur du bord du rectangle
-	Color[] colors = {Color.WHITE, Color.GREEN, Color.RED, Color.BLUE, Color.ORANGE, Color.YELLOW};
+	Color[] colors = {Color.WHITE, Color.GREEN, Color.RED, Color.BLUE, Color.ORANGE, Color.YELLOW, Color.BLACK};  //La noir sert au test pour représenter une couleur quelconque
 	int[] X = new int[6];  //les coordonnées du début de chaque face
 	int[] Y = new int[6];
 	int winWidth = 560;   //les dimensions de la fenêtre en fonction de la taille de chaque case
@@ -68,7 +73,7 @@ public class Plan extends JPanel {
 		this.color = c.color;
 		setWidth(l);
 		this.border = b;
-		for (int i = 0 ; i < 6 ; i++)
+		for (int i = 0 ; i <= 6 ; i++)
 		{
 			this.colors[i] = cs[i];
 		}

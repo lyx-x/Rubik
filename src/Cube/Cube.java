@@ -1,4 +1,5 @@
 package Cube;
+import Config.*;
 import java.io.*;
 import javax.swing.*;
 import java.util.*;
@@ -25,10 +26,20 @@ public class Cube {
 	 */
 
 	int[][][] color = new int[6][3][3];
-	static int width = 60;
+	static int width = 60;  //Modifier la taille une fois pour toute en utilisant une variable statique
+	
+	public static Cube src = new Cube("Source.txt");  //Ce cube est l'état final
+	public static Cube black = new Cube("Black.txt");  //Ce cube est tout noir pour le test
+	
+	static int[] oppose = {5, 3, 4, 1, 2, 0};
+	
+	/*
+	 * Reproduire le même cube
+	 */
 	
 	public Cube(Cube c)
 	{
+		this.color = new int[6][3][3];
 		for (int face = 0 ; face < 6 ; face++)
 		{
 			for (int rang = 0 ; rang < 3 ; rang++)
@@ -133,7 +144,7 @@ public class Cube {
 	 * Modifier la taille d'affichage
 	 */
 	
-	public void setWidth(int w)
+	public static void setWidth(int w)
 	{
 		width = w;
 	}
@@ -145,6 +156,18 @@ public class Cube {
 	public void show2D(){
 		Plan dessin = new Plan(this, width);
 		JFrame frame=new JFrame("Rubik's cube");
+		frame.setSize(width * 14 + 20, width * 11 + 40);
+		frame.setVisible(true);
+		frame.add(dessin);
+	}
+	
+	/*
+	 * Dessiner le cube avec un titre
+	 */
+	
+	public void show2D(String str){
+		Plan dessin = new Plan(this, width);
+		JFrame frame=new JFrame(str);
 		frame.setSize(width * 14 + 20, width * 11 + 40);
 		frame.setVisible(true);
 		frame.add(dessin);
@@ -175,6 +198,24 @@ public class Cube {
 		return ancien;
 	}
 	
+	/*
+	 * Modifier la couleur d'une seule case
+	 */
+	
+	void setColor(int color, int[] coord)
+	{
+		this.color[coord[0]][coord[1]][coord[2]] = color;
+	}
+	
+	/*
+	 * Reset la bonne couleur qui se trouve dans le numéro de la face
+	 */
+	
+	void setColor(int[] coord)
+	{
+		this.color[coord[0]][coord[1]][coord[2]] = coord[0];
+	}
+		
 	/*
 	 * Modifier seulement les couleurs de la face quand on tourne
 	 */
@@ -285,5 +326,296 @@ public class Cube {
 		}
 		return true;
 	}
-
+	
+	/*
+	 * Vérifier si la face est bonne, on compare avec le centre qui ne bouge pas
+	 */
+	
+	public boolean faceHomogene(int face){
+		int base = color[face][1][1];
+		for (int rang = 0 ; rang < 3 ; rang++)
+		{
+			for (int colonne = 0 ; colonne < 3 ; colonne++)
+			{
+				if (color[face][rang][colonne] != base)
+				{
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	public int distance(char mode)
+	{
+		int dist = -1;
+		switch (mode){
+		case 's':  //simple
+			dist = distanceSimple();
+			break;
+		case 't':  //total
+			dist = distanceMemory();
+			break;
+		case 'm':  //manhattan
+			dist = distanceManhattan();
+			break;
+		case 'i':  //improved
+			dist = distanceManhattanImproved();
+			break;
+		case 'c':  //coin
+			dist = distancePatternCoin();
+			break;
+		case 'o':  //one
+			dist = distancePatternEdgeOne();
+			break;
+		case 'e':  //edge
+			dist = distancePatternEdgeTwo();
+			break;
+		case 'p':  //pattern
+			dist = distancePattern();
+			break;
+		}
+		return dist;
+	}
+	
+	/*
+	 * La distance est calculé chaque fois qu'on lui demande
+	 */
+	
+	public int distanceSimple()
+	{
+		Cube test = new Cube(this);
+		int ans = 0;
+		int tmp = 0;
+		for (int edge = 0 ; edge < 12; edge++)
+		{
+			Edge e = new Edge(edge, test);
+			if (!e.correctPosition())
+			{
+				tmp = e.recoverSteps();
+				if (ans < tmp) ans = tmp;
+			}
+		}
+		for (int coin = 0 ; coin < 8 ; coin++)
+		{
+			Coin c = new Coin(coin, test);
+			if (!c.correctPosition())
+			{
+				tmp = c.recoverSteps();
+				if (ans < tmp) ans = tmp;
+			}
+		}
+		return ans;
+	}
+	
+	/*
+	 * La distance est précalculé d'une façon exacte
+	 */
+	
+	public int distanceMemory()
+	{
+		int ans = 0;
+		int tmp = 0;
+		
+		for (int edge = 0 ; edge < 12; edge++)
+		{
+			int[][] eCoord = Edge.realPosition[edge];
+			int f = color[eCoord[0][0]][eCoord[0][1]][eCoord[0][2]];
+			int s = color[eCoord[1][0]][eCoord[1][1]][eCoord[1][2]];
+			if (f == 6 || s == 6) continue;
+			tmp = Distance.distEdge[edge][f][s];
+			if (ans < tmp) ans = tmp;
+		}
+		
+		for (int coin = 0 ; coin < 8 ; coin++)
+		{
+			int[][] cCoord = Coin.realPosition[coin];
+			int f = color[cCoord[0][0]][cCoord[0][1]][cCoord[0][2]];
+			int s = color[cCoord[1][0]][cCoord[1][1]][cCoord[1][2]];
+			int t = color[cCoord[2][0]][cCoord[2][1]][cCoord[2][2]];
+			if (f == 6 || s == 6 || t == 6) continue;
+			tmp = Distance.distCoin[coin][f][s][t];
+			if (ans < tmp) ans = tmp;
+		}
+		return ans;
+	}
+	
+	public int distanceManhattan()
+	{
+		int somme = 0;
+		int tmp = 0;
+		
+		for (int edge = 0 ; edge < 12; edge++)
+		{
+			int[][] eCoord = Edge.realPosition[edge];
+			int f = color[eCoord[0][0]][eCoord[0][1]][eCoord[0][2]];
+			int s = color[eCoord[1][0]][eCoord[1][1]][eCoord[1][2]];
+			if (f == 6 || s == 6) continue;
+			tmp = Distance.distEdge[edge][f][s];  //utiliser la bonne distance dans ce cas-là
+			somme += tmp;
+		}
+		
+		for (int coin = 0 ; coin < 8 ; coin++)
+		{
+			int[][] cCoord = Coin.realPosition[coin];
+			int f = color[cCoord[0][0]][cCoord[0][1]][cCoord[0][2]];
+			int s = color[cCoord[1][0]][cCoord[1][1]][cCoord[1][2]];
+			int t = color[cCoord[2][0]][cCoord[2][1]][cCoord[2][2]];
+			if (f == 6 || s == 6 || t == 6) continue;
+			tmp = Distance.distCoin[coin][f][s][t];
+			somme += tmp;
+		}
+		return (somme + 7) / 8;
+	}
+	
+	public int distanceManhattanImproved()
+	{
+		int sommeEdge = 0;
+		int tmp = 0;
+		
+		for (int edge = 0 ; edge < 12; edge++)
+		{
+			int[][] eCoord = Edge.realPosition[edge];
+			int f = color[eCoord[0][0]][eCoord[0][1]][eCoord[0][2]];
+			int s = color[eCoord[1][0]][eCoord[1][1]][eCoord[1][2]];
+			if (f == 6 || s == 6) continue;
+			tmp = Distance.distEdge[edge][f][s];
+			sommeEdge += tmp;
+		}
+		int sommeCoin = 0;
+		for (int coin = 0 ; coin < 8 ; coin++)
+		{
+			int[][] cCoord = Coin.realPosition[coin];
+			int f = color[cCoord[0][0]][cCoord[0][1]][cCoord[0][2]];
+			int s = color[cCoord[1][0]][cCoord[1][1]][cCoord[1][2]];
+			int t = color[cCoord[2][0]][cCoord[2][1]][cCoord[2][2]];
+			if (f == 6 || s == 6 || t == 6) continue;
+			tmp = Distance.distCoin[coin][f][s][t];
+			sommeCoin += tmp;
+		}
+		return Math.max((sommeCoin + 3) / 4, (sommeEdge + 3) / 4);  //une formule trouvée sur Internet
+	}
+	
+	public int distancePattern()
+	{
+		int max = Math.max(this.distancePatternCoin(), this.distancePatternEdgeOne());
+		max = Math.max(max, this.distancePatternEdgeTwo());
+		return max;
+	}
+	
+	public int distancePatternCoin()
+	{
+		long key = this.hashCoin();
+		if (Pattern.coin.containsKey(key))
+		{
+			return Pattern.coin.get(key);
+		}
+		else
+		{
+			return 7;  //la valeur dépend du niveau de pattern qui est 6 actuellement
+		}
+	}
+	
+	public int distancePatternEdgeOne()
+	{
+		long key = this.hashEdgeOne();
+		if (Pattern.edgeOne.containsKey(key))
+		{
+			return Pattern.edgeOne.get(key);
+		}
+		else
+		{
+			return 7;
+		}
+	}
+	
+	public int distancePatternEdgeTwo()
+	{
+		long key = this.hashEdgeTwo();
+		if (Pattern.edgeTwo.containsKey(key))
+		{
+			return Pattern.edgeTwo.get(key);
+		}
+		else
+		{
+			return 7;
+		}
+	}
+	
+	public void printDistance()
+	{
+		for (int edge = 0 ; edge < 12; edge++)
+		{
+			int[][] eCoord = Edge.realPosition[edge];
+			int f = color[eCoord[0][0]][eCoord[0][1]][eCoord[0][2]];
+			int s = color[eCoord[1][0]][eCoord[1][1]][eCoord[1][2]];
+			if (f == 6 || s == 6) continue;
+			System.out.format("%d %d %d %d\n",edge, f, s, Distance.distEdge[edge][f][s]);
+		}
+		System.out.println();
+		for (int coin = 0 ; coin < 8 ; coin++)
+		{
+			int[][] cCoord = Coin.realPosition[coin];
+			int f = color[cCoord[0][0]][cCoord[0][1]][cCoord[0][2]];
+			int s = color[cCoord[1][0]][cCoord[1][1]][cCoord[1][2]];
+			int t = color[cCoord[2][0]][cCoord[2][1]][cCoord[2][2]];
+			if (f == 6 || s == 6 || t == 6) continue;
+			System.out.format("%d %d %d %d %d\n",coin, f, s, t, Distance.distCoin[coin][f][s][t]);
+		}
+	}
+	
+	/*
+	 * Calculer le hashCode d'une façon naïve : une série de chiffre représentant le numéro du sommet et son orientation
+	 * L'orientation du sommet est la position relative de la plus grande couleur puisque les cases sont ordonnées par leur couleur correcte
+	 */
+	
+	public long hashCoin()
+	{
+		long hash = 0;
+		for (int i = 0 ; i < 8 ; i++)
+		{
+			Coin c = new Coin(i, this);
+			int index = c.index;
+			int max = 0;
+			int compare = -1;
+			for (int j = 0 ; j < 3 ; j++)
+			{
+				if (compare < color[Coin.realPosition[index][j][0]][Coin.realPosition[index][j][1]][Coin.realPosition[index][j][2]])
+				{
+					compare = color[Coin.realPosition[index][j][0]][Coin.realPosition[index][j][1]][Coin.realPosition[index][j][2]];
+					max = j + 1;
+				}
+			}
+			hash = hash * 8 + max;
+			hash = hash * 8 + index;
+		}
+		return hash;
+	}
+	
+	/*
+	 * On prend ici 6 arêtes choisies aléatoirement
+	 */
+	
+	public long hashEdgeOne()
+	{
+		long hash = 0;
+		for (int i = 0 ; i < 6 ; i++)
+		{
+			hash = hash * 8 + color[Edge.realPosition[i][0][0]][Edge.realPosition[i][0][1]][Edge.realPosition[i][0][2]];
+			hash = hash * 8 + color[Edge.realPosition[i][1][0]][Edge.realPosition[i][1][1]][Edge.realPosition[i][1][2]];
+		}
+		return hash;
+	}
+	
+	public long hashEdgeTwo()
+	{
+		long hash = 0;
+		for (int i = 6 ; i < 12 ; i++)
+		{
+			hash = hash * 8 + color[Edge.realPosition[i][0][0]][Edge.realPosition[i][0][1]][Edge.realPosition[i][0][2]];
+			hash = hash * 8 + color[Edge.realPosition[i][1][0]][Edge.realPosition[i][1][1]][Edge.realPosition[i][1][2]];
+		}
+		return hash;
+	}
 }
+
