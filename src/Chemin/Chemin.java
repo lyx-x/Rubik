@@ -16,6 +16,7 @@ public class Chemin {
 	boolean found = false;  //Voir si une solution existe
 	int etape = 10;  //Limiter le nombre d'étapes
 	int size = -1;
+	int Time = 500000;
 	
 	public Chemin()
 	{
@@ -74,12 +75,16 @@ public class Chemin {
 	 * Une méthode privée permettant de parcourir l'arbre en largeur afin d'atteidre le but
 	 */
 	
-	void findSimple(int limite)
+	void findSimple(int limite) throws TimeoutException
 	{
 		LinkedList<LinkedList<Action>> queue = new LinkedList<LinkedList<Action>>();
 		queue.addLast(new LinkedList<Action>());
+		int count = 0;
 		while(!queue.isEmpty())
 		{
+			count++;
+			if (count >= Time / 2)
+				throw new TimeoutException("Difficile de trouver une solution");
 			LinkedList<Action> current = queue.peek();  //On recommence toujours de la disposition initiale
 			Cube test = new Cube(initial);
 			int currentFace = -1;
@@ -124,7 +129,7 @@ public class Chemin {
 		}
 	}
 	
-	public int runFindSimple(int t)
+	public int runFindSimple(int t) throws TimeoutException
 	{
 		etape = t;
 		if (initial.same(finale))
@@ -141,12 +146,16 @@ public class Chemin {
 	 * Algotithme A*
 	 */
 	
-	void findAStarPQ(char mode)
+	void findSimplePQ(char mode) throws TimeoutException
 	{
 		PriorityQueue<Disposition> queue = new PriorityQueue<Disposition>(10, new DispositionComparator());
 		queue.add(new Disposition());
+		int count = 0;
 		while(!queue.isEmpty())
 		{
+			count++;
+			if (count >= Time / 6)
+				throw new TimeoutException("Difficile de trouver une solution");
 			Disposition current = queue.peek();  //On recommence toujours de la disposition initiale
 			Cube test = new Cube(initial);
 			int currentFace = -1;
@@ -189,7 +198,7 @@ public class Chemin {
 		}
 	}
 	
-	public int runFindAStar(char mode)
+	public int runFindSimplePQ(char mode) throws TimeoutException
 	{
 		if (initial.same(finale))
 		{
@@ -197,14 +206,14 @@ public class Chemin {
 			size = 0;
 			return 0;
 		}
-		findAStarPQ(mode);
+		findSimplePQ(mode);
 		return size;
 	}
 	
 	int findDFS(Cube test, int bound, int cost, char mode, int currentFace, int[] count) throws TimeoutException
 	{
 		count[0]++;
-		if (count[0] >= 1e5)
+		if (count[0] >= Time)
 			throw new TimeoutException("Difficile de trouver une solution");
 		int f = cost + test.distance(mode);
 		if (f > bound) return f;
@@ -247,7 +256,7 @@ public class Chemin {
 		return threshold;
 	}
 	
-	public int runDFS(char mode) throws TimeoutException
+	public int runDFS(char mode, boolean stat) throws TimeoutException
 	{
 		if (initial.same(finale))
 		{
@@ -264,7 +273,7 @@ public class Chemin {
 			if (t >= 200000000) t = dist + 1;
 			dist = t;
 		}
-		System.out.format("Tested configurations : %d\n", count[0]);
+		if (stat) System.out.format("Tested configurations : %d\n", count[0]);
 		return size;
 	}
 }

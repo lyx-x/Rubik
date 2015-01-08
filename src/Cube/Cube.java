@@ -451,7 +451,7 @@ public class Cube {
 			int f = color[eCoord[0][0]][eCoord[0][1]][eCoord[0][2]];
 			int s = color[eCoord[1][0]][eCoord[1][1]][eCoord[1][2]];
 			if (f == 6 || s == 6) continue;
-			tmp = Distance.distEdge[edge][f][s];  //utiliser la bonne distance dans ce cas-là
+			tmp = Distance.distEdgeManhattan[edge][f][s];  //utiliser la bonne distance dans ce cas-là
 			somme += tmp;
 		}
 		
@@ -462,7 +462,7 @@ public class Cube {
 			int s = color[cCoord[1][0]][cCoord[1][1]][cCoord[1][2]];
 			int t = color[cCoord[2][0]][cCoord[2][1]][cCoord[2][2]];
 			if (f == 6 || s == 6 || t == 6) continue;
-			tmp = Distance.distCoin[coin][f][s][t];
+			tmp = Distance.distCoinManhattan[coin][f][s][t];
 			somme += tmp;
 		}
 		return (somme + 7) / 8;
@@ -479,7 +479,7 @@ public class Cube {
 			int f = color[eCoord[0][0]][eCoord[0][1]][eCoord[0][2]];
 			int s = color[eCoord[1][0]][eCoord[1][1]][eCoord[1][2]];
 			if (f == 6 || s == 6) continue;
-			tmp = Distance.distEdge[edge][f][s];
+			tmp = Distance.distEdgeManhattan[edge][f][s];
 			sommeEdge += tmp;
 		}
 		int sommeCoin = 0;
@@ -490,7 +490,7 @@ public class Cube {
 			int s = color[cCoord[1][0]][cCoord[1][1]][cCoord[1][2]];
 			int t = color[cCoord[2][0]][cCoord[2][1]][cCoord[2][2]];
 			if (f == 6 || s == 6 || t == 6) continue;
-			tmp = Distance.distCoin[coin][f][s][t];
+			tmp = Distance.distCoinManhattan[coin][f][s][t];
 			sommeCoin += tmp;
 		}
 		return Math.max((sommeCoin + 3) / 4, (sommeEdge + 3) / 4);  //une formule trouvée sur Internet
@@ -617,5 +617,6 @@ public class Cube {
 		}
 		return hash;
 	}
+	
 }
 
