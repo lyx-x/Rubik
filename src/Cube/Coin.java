@@ -1,4 +1,6 @@
 package Cube;
+import java.util.concurrent.TimeoutException;
+
 import Chemin.*;
 
 /*
@@ -193,7 +195,13 @@ public class Coin {
 			c.makeBlack(black);
 		}
 		Chemin ans = new Chemin(test, black);
-		ans.runDFS('m');
+		try{
+			ans.runDFS('m');  
+		}
+		catch (TimeoutException e)
+		{
+			System.out.println(e.getMessage());
+		}	
 		int r = ans.size();
 		return r;
 	}

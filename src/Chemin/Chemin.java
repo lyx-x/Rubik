@@ -2,6 +2,7 @@ package Chemin;
 import Cube.*;
 
 import java.util.*;
+import java.util.concurrent.TimeoutException;
 
 /*
  * Cette classe permet de trouver un chemin entre deux dispositions
@@ -200,9 +201,11 @@ public class Chemin {
 		return size;
 	}
 	
-	int findDFS(Cube test, int bound, int cost, char mode, int currentFace, int[] count)
+	int findDFS(Cube test, int bound, int cost, char mode, int currentFace, int[] count) throws TimeoutException
 	{
 		count[0]++;
+		if (count[0] >= 1e5)
+			throw new TimeoutException("Difficile de trouver une solution");
 		int f = cost + test.distance(mode);
 		if (f > bound) return f;
 		if (test.same(finale))
@@ -244,7 +247,7 @@ public class Chemin {
 		return threshold;
 	}
 	
-	public int runDFS(char mode)
+	public int runDFS(char mode) throws TimeoutException
 	{
 		if (initial.same(finale))
 		{

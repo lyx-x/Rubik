@@ -1,3 +1,5 @@
+import java.util.concurrent.TimeoutException;
+
 import Config.*;
 import Cube.*;
 import Chemin.*;
@@ -204,10 +206,16 @@ public class Test {
 			System.out.format("\nDistance minimale : %d\n",test.distance(mode));
 			long startTime = System.currentTimeMillis();
 			Chemin ans = new Chemin(test, Cube.src);
-			ans.runDFS(mode);  //Trouver le chemin
+			try{
+				ans.runDFS(mode);  //Trouver le chemin
+				ans.print();
+			}
+			catch (TimeoutException e)
+			{
+				System.err.println(e.getMessage());
+			}	
 			long endTime = System.currentTimeMillis();
 			long duration = endTime - startTime;
-			ans.print();
 			System.out.printf("\nElapsed time: %d milliseconds\n", duration);
 		}	
 	}
@@ -268,18 +276,30 @@ public class Test {
 			System.out.format("\nDistance minimale : %d\n",test.distance('p'));
 			long startTime = System.currentTimeMillis();
 			Chemin ans = new Chemin(test, Cube.src);
-			ans.runDFS('p');  //Trouver le chemin
+			try{
+				ans.runDFS('p');  //Trouver le chemin
+				ans.print();
+			}
+			catch (TimeoutException e)
+			{
+				System.err.println(e.getMessage());
+			}	
 			long endTime = System.currentTimeMillis();
 			long duration = endTime - startTime;
-			ans.print();
 			System.out.printf("\nElapsed time: %d milliseconds pour Pattern\n\n", duration);
 			System.out.format("\nDistance minimale : %d\n",test.distance('i'));
 			startTime = System.currentTimeMillis();
 			ans = new Chemin(compare, Cube.src);
-			ans.runDFS('i');  //Trouver le chemin
+			try{
+				ans.runDFS('i');  //Trouver le chemin
+				ans.print();
+			}
+			catch (TimeoutException e)
+			{
+				System.err.println(e.getMessage());
+			}	
 			endTime = System.currentTimeMillis();
 			duration = endTime - startTime;
-			ans.print();
 			System.out.printf("\nElapsed time: %d milliseconds pour Manhattan\n", duration);
 		}	
 	}
