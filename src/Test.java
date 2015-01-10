@@ -7,25 +7,25 @@ import Chemin.*;
 public class Test {
 	
 	public static void main(String[] args){
-		//init();
+		init();
 		//testAffichage(8);
 		//testFindDFS(8);
 		//debugDistanceCoinEdge(20);
 		//testFindPQ(10, 't');
 		//testInitDistance();
-		testInitPattern();
+		//testInitPattern();
 		//testLimite(6);
 		//testSQL(12);
 		//testDistance();
 		//debugCoinEdge();
 		//debugCoins(30);
 		//Pattern.print();
-		//testFindIDA(20, 'p');
+		//testFindIDA(20, 'c');
 		//testHash();
 		//testPattern(20);
 		//testCompareFind(20, 'p');
-		//statCompareFind(16,5);
-		//statCompareDistance(14,10);
+		//statCompareFind(20,20);
+		statCompareDistance(16,10);
 	}
 	
 	/*
@@ -59,7 +59,7 @@ public class Test {
 		//Pattern.readPattern("Coin.txt", "EdgeOne.txt", "EdgeTwo.txt");  //lire les fichiers
 		//Pattern.readBinaryPattern("Coin.dat", "EdgeOne.dat", "EdgeTwo.dat");
 		//Pattern.printResume();
-		//Distance.readDistance("DistanceSimple.txt","DistanceManhattan.txt");
+		Distance.readDistance("DistanceSimple.txt","DistanceManhattan.txt");
 		PatternArray.readBinaryPattern();
 		System.out.println("\n=========== Fin d'initialisation ===========\n");
 	}
@@ -389,7 +389,7 @@ public class Test {
 				time[i][j] = 0;
 			}
 		}
-		for (int i = 0 ; i < step ; i++)
+		for (int i = 10 ; i < step ; i++)
 		{
 			for (int j = 0 ; j <= seed ; j++)
 			{
@@ -423,7 +423,7 @@ public class Test {
 				{
 					//System.out.println(e.getMessage());
 				}
-				
+				/*
 				if (i > 7) continue;
 				
 				compare = new Cube(test);
@@ -471,7 +471,7 @@ public class Test {
 				{
 					//System.out.println(e.getMessage());
 				}
-				
+				*/
 			}
 		}
 		for (int i = 0 ; i < n ; i++)
@@ -498,7 +498,7 @@ public class Test {
 	
 	static void statCompareDistance(int step, int seed)
 	{
-		int n = 8;
+		int n = 4;
 		long time[][] = new long[n][step];
 		int count[][] = new int[n][step];
 		int stat[][] = new int[n][step];
@@ -511,8 +511,8 @@ public class Test {
 				time[i][j] = 0;
 			}
 		}
-		char mode[] = {'s', 't', 'm', 'i', 'c', 'o', 't', 'p'};
-		int limit[] = {5, 8, 10, 10, 10, 11, 8, 14};
+		char mode[] = {'c', 'o', 't', 'p'};
+		int limit[] = {10, 11, 11, 14};
 		for (int i = 0 ; i < step ; i++)
 		{
 			for (int j = 0 ; j <= seed ; j++)
@@ -521,8 +521,6 @@ public class Test {
 				melanger(test, i, false);
 				for (int k = 0 ; k < n ; k++)
 				{
-					if (k < 1) continue;
-					
 					if (i > limit[k]) continue;
 					
 					Cube compare = new Cube(test);

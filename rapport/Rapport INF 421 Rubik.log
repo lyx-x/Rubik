@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.6-1.40.14 (TeX Live 2014/dev) (format=pdflatex 2014.12.19)  10 JAN 2015 20:17
+This is pdfTeX, Version 3.1415926-2.6-1.40.14 (TeX Live 2014/dev) (format=pdflatex 2014.12.19)  11 JAN 2015 00:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -613,6 +613,18 @@ Package: array 2008/09/09 v2.4c Tabular extension package (FMi)
 \everycr=\toks27
 \minrowclearance=\skip68
 )
+(/usr/share/texlive/texmf-dist/tex/latex/amscls/amsthm.sty
+Package: amsthm 2004/08/06 v2.20
+\thm@style=\toks28
+\thm@bodyfont=\toks29
+\thm@headfont=\toks30
+\thm@notefont=\toks31
+\thm@headpunct=\toks32
+\thm@preskip=\skip69
+\thm@postskip=\skip70
+\thm@headsep=\skip71
+\dth@everypar=\toks33
+)
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2012/11/06 v6.83m Hypertext links for LaTeX
 
@@ -723,30 +735,30 @@ Package: rerunfilecheck 2011/04/15 v1.7 Rerun checks for auxiliary files (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 82.
 )
-\Hy@SectionHShift=\skip69
+\Hy@SectionHShift=\skip72
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 28.
-Package hyperref Info: Option `breaklinks' set `true' on input line 28.
-Package hyperref Info: Option `bookmarksopen' set `false' on input line 28.
+Package hyperref Info: Option `colorlinks' set `true' on input line 30.
+Package hyperref Info: Option `breaklinks' set `true' on input line 30.
+Package hyperref Info: Option `bookmarksopen' set `false' on input line 30.
 
 (./Rapport INF 421 Rubik.aux)
 \openout1 = `"Rapport INF 421 Rubik.aux"'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
-LaTeX Font Info:    Try loading font information for OT1+ptm on input line 45.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 47.
+LaTeX Font Info:    ... okay on input line 47.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 47.
+LaTeX Font Info:    ... okay on input line 47.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 47.
+LaTeX Font Info:    ... okay on input line 47.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 47.
+LaTeX Font Info:    ... okay on input line 47.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 47.
+LaTeX Font Info:    ... okay on input line 47.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 47.
+LaTeX Font Info:    ... okay on input line 47.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 47.
+LaTeX Font Info:    ... okay on input line 47.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 47.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
@@ -758,12 +770,12 @@ File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 \scratchbox=\box31
 \nofMPsegments=\count132
 \nofMParguments=\count133
-\everyMPshowfont=\toks28
+\everyMPshowfont=\toks34
 \MPscratchCnt=\count134
 \MPscratchDim=\dimen164
 \MPnumerator=\count135
 \makeMPintoPDFobject=\count136
-\everyMPtoPDFconversion=\toks29
+\everyMPtoPDFconversion=\toks35
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
 
@@ -779,14 +791,14 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-LaTeX Info: Redefining \degres on input line 45.
-LaTeX Info: Redefining \dots on input line 45.
-LaTeX Info: Redefining \up on input line 45.
+LaTeX Info: Redefining \degres on input line 47.
+LaTeX Info: Redefining \dots on input line 47.
+LaTeX Info: Redefining \up on input line 47.
 
 
 Package frenchb.ldf Warning: OT1 encoding should not be used for French. 
 (frenchb.ldf)                Add \usepackage[T1]{fontenc} to the preamble
-(frenchb.ldf)                of your document, on input line 45.
+(frenchb.ldf)                of your document, on input line 47.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -832,8 +844,8 @@ Package lastpage Info: Please have a look at the pageslts package at
 (lastpage)             or
 (lastpage)             http://www.ctan.org/tex-archive/ 
 (lastpage)             install/macros/latex/contrib/pageslts.tds.zip
-(lastpage)             ! on input line 45.
-LaTeX Info: Redefining \microtypecontext on input line 45.
+(lastpage)             ! on input line 47.
+LaTeX Info: Redefining \microtypecontext on input line 47.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -847,7 +859,7 @@ Package microtype Info: No adjustment of character kerning.
 File: mt-ptm.cfg 2006/04/20 v1.7 microtype config. file: Times (RS)
 )
 \AtBeginShipoutBox=\box32
-Package hyperref Info: Link coloring ON on input line 45.
+Package hyperref Info: Link coloring ON on input line 47.
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
@@ -857,15 +869,15 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count137
 )
-LaTeX Info: Redefining \ref on input line 45.
-LaTeX Info: Redefining \pageref on input line 45.
-LaTeX Info: Redefining \nameref on input line 45.
+LaTeX Info: Redefining \ref on input line 47.
+LaTeX Info: Redefining \pageref on input line 47.
+LaTeX Info: Redefining \nameref on input line 47.
 
 (./Rapport INF 421 Rubik.out) (./Rapport INF 421 Rubik.out)
 \@outlinefile=\write3
 \openout3 = `"Rapport INF 421 Rubik.out"'.
 
-LaTeX Font Info:    Try loading font information for OT1+phv on input line 50.
+LaTeX Font Info:    Try loading font information for OT1+phv on input line 54.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1phv.fd
 File: ot1phv.fd 2001/06/04 scalable font definitions for OT1/phv.
@@ -875,12 +887,12 @@ Package microtype Info: Loading generic settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <9> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 50.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 54.
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <10> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 50.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 54.
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <20> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 50.
-LaTeX Font Info:    Try loading font information for OT1+ztmcm on input line 50
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 54.
+LaTeX Font Info:    Try loading font information for OT1+ztmcm on input line 54
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ztmcm.fd
@@ -890,30 +902,30 @@ Package microtype Info: Loading generic settings for font family
 (microtype)             `ztmcm' (encoding: OT1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-LaTeX Font Info:    Try loading font information for OML+ztmcm on input line 50
+LaTeX Font Info:    Try loading font information for OML+ztmcm on input line 54
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omlztmcm.fd
 File: omlztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ztmcm.
 )
-LaTeX Font Info:    Try loading font information for OMS+ztmcm on input line 50
+LaTeX Font Info:    Try loading font information for OMS+ztmcm on input line 54
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsztmcm.fd
 File: omsztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/ztmcm.
 )
-LaTeX Font Info:    Try loading font information for OMX+ztmcm on input line 50
+LaTeX Font Info:    Try loading font information for OMX+ztmcm on input line 54
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omxztmcm.fd
 File: omxztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/ztmcm.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 50.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 54.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 50.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 54.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 50.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 54.
 
 (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
@@ -922,45 +934,25 @@ File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <8> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 50.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 54.
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <12> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 52.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 56.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 52.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 56.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 52.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 56.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 52.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 56.
 
-(./Rapport INF 421 Rubik.toc
-LaTeX Font Info:    Try loading font information for OMS+phv on input line 22.
-
-(/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsphv.fd
-File: omsphv.fd 
-)
-LaTeX Font Info:    Font shape `OMS/phv/m/n' in size <8> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 22.
-
-Overfull \hbox (0.80887pt too wide) in paragraph at lines 26--29
- []|[][]\OT1/phv/m/n/8 (-20) Algorithmes de recherche[][]| \OMS/cmsy/m/n/8 ^^O 
-|[][]\OT1/phv/m/n/8 (-20) Estimateurs de dis-tance[][]| \OMS/cmsy/m/n/8 ^^O |[]
-[]\OT1/phv/m/n/8 (-20) Conclusion[][]| 
- []
-
-)
+(./Rapport INF 421 Rubik.toc)
 \tf@toc=\write4
 \openout4 = `"Rapport INF 421 Rubik.toc"'.
 
-
-Overfull \hbox (3.99538pt too wide) in paragraph at lines 62--64
-\OT1/ptm/m/n/10 (-20) non pas en suiv-ant une m[]ethode pr[]ed[]efinie qui est 
-s[]ure d'aboutir
- []
-
-<RubikCube.jpg, id=94, 385.44pt x 401.5pt>
+ <RubikCube.jpg, id=64, 385.44pt x 401.5pt>
 File: RubikCube.jpg Graphic file (type jpg)
- <use RubikCube.jpg>
-Package pdftex.def Info: RubikCube.jpg used on input line 71.
+
+<use RubikCube.jpg>
+Package pdftex.def Info: RubikCube.jpg used on input line 79.
 (pdftex.def)             Requested size: 115.63289pt x 120.45091pt.
  [1{/usr/share/texlive/texmf-dist/fonts/map/pdftex/updmap/pdftex.map}
 
@@ -971,104 +963,83 @@ Package microtype Info: Loading generic settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 
-Overfull \hbox (4.35202pt too wide) in paragraph at lines 87--89
+Overfull \hbox (4.35202pt too wide) in paragraph at lines 95--97
 []\OT1/ptm/m/n/10 (-20) Le pro-gramme est di-vis[]e en 4 pa-quets, [][][][][][]
  pour mod[]eliser
  []
 
 
-Overfull \hbox (2.8463pt too wide) in paragraph at lines 91--92
-\OT1/ptm/m/n/10 (-20) pour une rai-son de sim-plicit[]e les en-tiers de 0 []a 5
- pour num[]eroter
+Overfull \hbox (5.41629pt too wide) in paragraph at lines 99--100
+\OT1/ptm/m/n/10 (-20) pour une rai-son de sim-plicit[]e, les en-tiers de 0 []a 
+5 pour num[]eroter
  []
 
+<Plan.jpg, id=76, 774.895pt x 578.16pt>
+File: Plan.jpg Graphic file (type jpg)
+ <use Plan.jpg>
+Package pdftex.def Info: Plan.jpg used on input line 103.
+(pdftex.def)             Requested size: 162.73274pt x 121.41718pt.
 
-Overfull \hbox (2.14217pt too wide) in paragraph at lines 100--101
+Overfull \hbox (2.14217pt too wide) in paragraph at lines 114--115
 [] [][][][][][][][] \OT1/ptm/m/n/10 (-20) Cette classe est sim-i-laire []a [][]
 [][][][], elle mod[]elise
  []
 
 
-Overfull \hbox (7.72017pt too wide) in paragraph at lines 109--110
+Overfull \hbox (7.72017pt too wide) in paragraph at lines 123--124
 [] [][][][][][][][] \OT1/ptm/m/n/10 (-20) Une sim-ple classe impl[]ementant
  []
 
-[2]
-Overfull \hbox (4.22108pt too wide) in paragraph at lines 132--133
+[2 <./Plan.jpg>]
+Overfull \hbox (4.22108pt too wide) in paragraph at lines 146--147
 [] []\OT1/phv/b/n/9 IDA*[] \OT1/ptm/m/n/10 (-20) Com-ment donc choisir la bonne
  lim-ite dans l'algorithme
  []
 
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 135.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 149.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 135.
-
-Overfull \hbox (2.15266pt too wide) in paragraph at lines 159--161
-[]\OT1/ptm/m/n/10 (-20) Une fois que les cal-culs faits apr[]es un long mo-ment
- d'attente,
- []
-
-[3]
-Overfull \hbox (2.93645pt too wide) in paragraph at lines 183--184
-\OT1/ptm/m/n/10 (-20) r[]esultat d'un test de com-para-i-son en-tre les diff[]e
-rentes m[]ethodes. 
- []
-
-
-Overfull \hbox (10.57173pt too wide) in paragraph at lines 285--286
-\OT1/ptm/m/n/10 (-20) vitesse de la recherche. Rien n'interdit de r[]esoudre co
-mpl[]etement
- []
-
-[4]
-
-LaTeX Warning: Citation `Figueredo:2009dg' on page 5 undefined on input line 29
-3.
-
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 149.
+ [3] [4]
 
 AED: lastpage setting LastPage
 [5
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 295.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 295.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 315.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 315.
  (./Rapport INF 421 Rubik.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 295.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 295.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 315.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 315.
 Package rerunfilecheck Info: File `"Rapport INF 421 Rubik".out' has not changed
 .
-(rerunfilecheck)             Checksum: 1FF30B02CC13716F3436308B690A64A8;1026.
-
-
-LaTeX Warning: There were undefined references.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 295.
+(rerunfilecheck)             Checksum: 09AEDE92C083B6A8E05C5AD4FB1D3059;596.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 315.
  ) 
 Here is how much of TeX's memory you used:
- 12163 strings out of 495034
- 180401 string characters out of 6181676
- 418024 words of memory out of 5000000
- 14923 multiletter control sequences out of 15000+600000
- 52943 words of font info for 210 fonts, out of 8000000 for 9000
+ 12197 strings out of 495034
+ 180553 string characters out of 6181676
+ 416271 words of memory out of 5000000
+ 14950 multiletter control sequences out of 15000+600000
+ 53711 words of font info for 212 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 43i,13n,49p,1464b,494s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 43i,13n,49p,1505b,402s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf
 -dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmtt9.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helv
-etic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.
-pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share
-/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on "Rapport INF 421 Rubik.pdf" (5 pages, 186336 bytes).
+fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmtt9.pfb></usr/share/texlive/texmf-dist/fonts/type1/u
+rw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/
+uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on "Rapport INF 421 Rubik.pdf" (5 pages, 222037 bytes).
 PDF statistics:
- 190 PDF objects out of 1000 (max. 8388607)
- 156 compressed objects within 2 object streams
+ 165 PDF objects out of 1000 (max. 8388607)
+ 135 compressed objects within 2 object streams
  38 named destinations out of 1000 (max. 500000)
- 44670 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 44635 words of extra memory for PDF output out of 51595 (max. 10000000)
 
