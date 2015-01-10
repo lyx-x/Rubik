@@ -505,6 +505,7 @@ public class Cube {
 	
 	public int distancePatternCoin()
 	{
+		/*
 		long key = this.hashCoin();
 		if (Pattern.coin.containsKey(key))
 		{
@@ -514,10 +515,14 @@ public class Cube {
 		{
 			return 7;  //la valeur dépend du niveau de pattern qui est 6 actuellement
 		}
+		*/
+		int key = this.hashC();
+		return PatternArray.coin[key];
 	}
 	
 	public int distancePatternEdgeOne()
 	{
+		/*
 		long key = this.hashEdgeOne();
 		if (Pattern.edgeOne.containsKey(key))
 		{
@@ -527,10 +532,14 @@ public class Cube {
 		{
 			return 7;
 		}
+		*/
+		int key = this.hashO();
+		return PatternArray.edgeOne[key];
 	}
 	
 	public int distancePatternEdgeTwo()
 	{
+		/*
 		long key = this.hashEdgeTwo();
 		if (Pattern.edgeTwo.containsKey(key))
 		{
@@ -540,6 +549,9 @@ public class Cube {
 		{
 			return 7;
 		}
+		*/
+		int key = this.hashT();
+		return PatternArray.edgeTwo[key];
 	}
 	
 	public void printDistance()
@@ -616,6 +628,105 @@ public class Cube {
 			hash = hash * 8 + color[Edge.realPosition[i][1][0]][Edge.realPosition[i][1][1]][Edge.realPosition[i][1][2]];
 		}
 		return hash;
+	}
+	
+	public int hashC()
+	{
+		int pw = 1;
+		int fact = 1;
+		int per = 0;
+		int ori = 0;
+		for (int i = 0 ; i < 8 ; i++)
+		{
+			Coin c = new Coin(i, this);
+			int index = c.index;
+			int max = 0;
+			int compare = -1;
+			for (int j = 0 ; j < 3 ; j++)
+			{
+				if (compare < color[Coin.realPosition[index][j][0]][Coin.realPosition[index][j][1]][Coin.realPosition[index][j][2]])
+				{
+					compare = color[Coin.realPosition[index][j][0]][Coin.realPosition[index][j][1]][Coin.realPosition[index][j][2]];
+					max = j;
+				}
+			}
+			per += fact * index;
+			fact *= i + 1;
+			if (i < 7) 
+			{
+				ori += pw * max;
+				pw *= 3;
+			}
+		}
+		return per * pw + ori;
+	}
+	
+	public int hashO()
+	{
+		int pw = 1;
+		int fact = 1;
+		int per = 0;
+		int ori = 0;
+		boolean[] set = new boolean[12];
+		for (int i = 0 ; i < 12 ; i++)
+		{
+			set[i] = false;
+		}
+		for (int i = 0 ; i < 6 ; i++)
+		{
+			Edge e = new Edge(i, this);
+			set[e.index] = true;
+			per += fact * e.index;
+			fact *= i + 1;
+			ori += pw * ((e.First > e.Second) ? 1 : 0);
+			pw *= 2;
+		}
+		int hash = per * pw + ori;
+		int comb = 0;
+		pw = 1;
+		for (int i = 0 ; i < 12 ; i++)
+		{
+			if (set[i])
+			{
+				comb += pw * i;
+				pw++;
+			}
+		}
+		return hash * pw + comb;
+	}
+	
+	public int hashT()
+	{
+		int pw = 1;
+		int fact = 1;
+		int per = 0;
+		int ori = 0;
+		boolean[] set = new boolean[12];
+		for (int i = 0 ; i < 12 ; i++)
+		{
+			set[i] = false;
+		}
+		for (int i = 7 ; i < 12 ; i++)
+		{
+			Edge e = new Edge(i, this);
+			set[e.index] = true;
+			per += fact * e.index;
+			fact *= i + 1;
+			ori += pw * ((e.First > e.Second) ? 1 : 0);
+			pw *= 2;
+		}
+		int hash = per * pw + ori;
+		int comb = 0;
+		pw = 1;
+		for (int i = 0 ; i < 12 ; i++)
+		{
+			if (set[i])
+			{
+				comb += pw * i;
+				pw++;
+			}
+		}
+		return hash * pw + comb;
 	}
 	
 }

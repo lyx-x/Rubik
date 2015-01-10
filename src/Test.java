@@ -13,14 +13,14 @@ public class Test {
 		//debugDistanceCoinEdge(20);
 		//testFindPQ(10, 't');
 		//testInitDistance();
-		//testInitPattern();
+		testInitPattern();
 		//testLimite(6);
-		//testSQL(3);
+		//testSQL(12);
 		//testDistance();
 		//debugCoinEdge();
 		//debugCoins(30);
 		//Pattern.print();
-		//testFindIDA(20, 'm');
+		//testFindIDA(20, 'p');
 		//testHash();
 		//testPattern(20);
 		//testCompareFind(20, 'p');
@@ -57,9 +57,10 @@ public class Test {
 		System.out.println("\n=========== Début d'initialisation ===========\n");
 		Cube.setWidth(40);
 		//Pattern.readPattern("Coin.txt", "EdgeOne.txt", "EdgeTwo.txt");  //lire les fichiers
-		Pattern.readBinaryPattern("Coin.dat", "EdgeOne.dat", "EdgeTwo.dat");
+		//Pattern.readBinaryPattern("Coin.dat", "EdgeOne.dat", "EdgeTwo.dat");
 		//Pattern.printResume();
-		Distance.readDistance("DistanceSimple.txt","DistanceManhattan.txt");
+		//Distance.readDistance("DistanceSimple.txt","DistanceManhattan.txt");
+		PatternArray.readBinaryPattern();
 		System.out.println("\n=========== Fin d'initialisation ===========\n");
 	}
 	
@@ -175,8 +176,14 @@ public class Test {
 	
 	static void testInitPattern()
 	{
-		Pattern.calculatePattern();
-		Pattern.printResume();
+		long startTime = System.currentTimeMillis();
+		//Pattern.calculatePattern();
+		//Pattern.printResume();
+		PatternArray.calculatePattern((byte)7);
+		long endTime = System.currentTimeMillis();
+		long duration = endTime - startTime;
+		System.out.printf("\nElapsed time: %d milliseconds\n", duration);
+		
 	}
 	
 	static void testLimite(int limite)

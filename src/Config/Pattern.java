@@ -120,18 +120,19 @@ public class Pattern {
 				a.Run(c);
 				{
 					long key = c.hashCoin();
-					preparedStatement = connect.prepareStatement("select dist from rubik.coin where hash = ? ; ");
+					preparedStatement = connect.prepareStatement("select id, dist from rubik.coin where hash = ? limit 1; ");
 					preparedStatement.setLong(1, key);
 					resultSet = preparedStatement.executeQuery();
 					if (resultSet.next())
 					{
-						byte dist = resultSet.getByte("dist");
+						int id = resultSet.getInt(1);
+						byte dist = resultSet.getByte(2);
 						preparedStatement.close();
 						if (dist > level)
 						{
-							preparedStatement = connect.prepareStatement("update rubik.coin set dist = ? where hash = ?");
+							preparedStatement = connect.prepareStatement("update rubik.coin set dist = ? where id = ?");
 							preparedStatement.setByte(1, level);
-							preparedStatement.setLong(2, key);
+							preparedStatement.setInt(2, id);
 							preparedStatement.executeUpdate();
 						}
 					}
@@ -146,18 +147,19 @@ public class Pattern {
 					resultSet.close();
 					
 					key = c.hashEdgeOne();
-					preparedStatement = connect.prepareStatement("select dist from rubik.areteune where hash = ? ; ");
+					preparedStatement = connect.prepareStatement("select id, dist from rubik.areteune where hash = ? limit 1; ");
 					preparedStatement.setLong(1, key);
 					resultSet = preparedStatement.executeQuery();
 					if (resultSet.next())
 					{
-						byte dist = resultSet.getByte("dist");
+						int id = resultSet.getInt(1);
+						byte dist = resultSet.getByte(2);
 						preparedStatement.close();
 						if (dist > level)
 						{
-							preparedStatement = connect.prepareStatement("update rubik.areteune set dist = ? where hash = ?");
+							preparedStatement = connect.prepareStatement("update rubik.areteune set dist = ? where id = ?");
 							preparedStatement.setByte(1, level);
-							preparedStatement.setLong(2, key);
+							preparedStatement.setInt(2, id);
 							preparedStatement.executeUpdate();
 						}
 					}
@@ -172,18 +174,19 @@ public class Pattern {
 					resultSet.close();
 					
 					key = c.hashEdgeTwo();
-					preparedStatement = connect.prepareStatement("select dist from rubik.aretedeux where hash = ? ; ");
+					preparedStatement = connect.prepareStatement("select id, dist from rubik.aretedeux where hash = ? limit 1; ");
 					preparedStatement.setLong(1, key);
 					resultSet = preparedStatement.executeQuery();
 					if (resultSet.next())
 					{
-						byte dist = resultSet.getByte("dist");
+						int id = resultSet.getInt(1);
+						byte dist = resultSet.getByte(2);
 						preparedStatement.close();
 						if (dist > level)
 						{
-							preparedStatement = connect.prepareStatement("update rubik.aretedeux set dist = ? where hash = ?");
+							preparedStatement = connect.prepareStatement("update rubik.aretedeux set dist = ? where id = ?");
 							preparedStatement.setByte(1, level);
-							preparedStatement.setLong(2, key);
+							preparedStatement.setInt(2, id);
 							preparedStatement.executeUpdate();
 						}
 					}

@@ -7,11 +7,16 @@
 \usepackage{threeparttable}
 \usepackage{colortbl}
 \usepackage{xcolor}
+\usepackage{color}
+
+\definecolor{bg}{RGB}{235,235,235}
+\newcommand{\class}[1]{\colorbox{bg}{\textcolor{red}{\usefont{OT1}{cmtt}{m}{n}#1}}}
 
 \setlength{\parindent}{10pt}
 
 \usepackage{caption}
 \captionsetup[table]{name=Tableau}
+\captionsetup[figure]{name=Image}
 
 \setlength{\columnsep}{0.55cm} % Distance between the two columns of text
 \setlength{\fboxrule}{0.75pt} % Width of the border around the abstract
@@ -33,7 +38,7 @@
 %	ABSTRACT
 %----------------------------------------------------------------------------------------
 
-\Abstract{TODO}
+\Abstract{Nous avons suivi la méthode proposé par Richard E. Korf pour chercher une solution optimale du Rubik’s Cube. L’algorithm utilisé est IDA* (iterative deepening depth-first search) avec une fonction heuristique basée sur une grande base de données, ceci dit un coût de mémoire très large. Cette base de données enregistre le nombre exact de coups pour résoudre un sous-cube. Bien que notre programme est fortement limité par les ordinateurs de test, on verra qu’une taille raisonnable de la base de données nous a permis d’atteindre des améliorations importantes. On doit croire qu’avec un équipement plus performant et une optimisation plus poussée, cette méthode nous apportera une solution optimale du Rubik’s Cube.}
 
 %----------------------------------------------------------------------------------------
 
@@ -54,114 +59,120 @@
 
 \section{Analyse du sujet} % The \section*{} command stops section numbering
 
-\lipsum[1-3] % Dummy text
- and some mathematics $\cos\pi=-1$ and $\alpha$ in the text\footnote{And some mathematics $\cos\pi=-1$ and $\alpha$ in the text.}.
+~\\\indent
+Le projet consiste à résoudre le problème du Rubik's cube, non pas en suivant une méthode prédéfinie qui est sûre d'aboutir au bon résultat, mais en minimisant le nombre de coups nécessaires pour y parvenir. Commençons par analyser le problème.
+
+Le Rubik’s Cube est un casse-tête inventé en 1974 par le Hongrois Ernő Rubik. Le nombre total de configurations du Rubik's cube est de 8! x 3\textsuperscript{7} x 12! x 2\textsuperscript{10}. En effet, il y a 8! façons de placer les 8 coins, et 3 orientations possibles pour chaque coins, sachant que la configuration du dernier coin est fixée par celle des 7 autres, d'où 8! x 3\textsuperscript{7} possibilités. C'est la même chose pour les 12 arêtes qui ont chacune 2 orientations, d'où 12! x 2\textsuperscript{11} possibilités. Il faut cependant diviser ce total de configurations par 2, car imposer la configuration de toutes les arêtes enlève un degré de liberté et ne permet de fixer que les 6 premiers coins, les 2 restants étant déterminés par ces premiers et la position des arêtes. On obtient donc le nombre de 43252003274489856000 configurations possibles.
+
+Par la suite, on va utiliser des algorithmes qui utilisent des fonctions heuristiques estimant le nombre de coups restants à effectuer afin d'arrêter la recherche si ce nombre est trop grand par rapport au niveau de recherche. Le mathématicien Morley Davidson, l’ingénieur John Dethridge, le professeur de mathématiques Herbert Kociemba et le programmeur Tomas Rokicki viennent de prouver que le nombre de Dieu pour résoudre un Rubik’s Cube quelconque est de 20. Une distance plus grande que cette valeur n’a donc plus d’intérêt à parcourir. Pour cela, une condition nécessaire est que cette fonction soit un minorant du nombre réel de coups à réaliser. En effet, par contraposée, si ce n'est pas le cas, alors il existe une configuration pour laquelle la fonction estime un nombre strictement supérieur au nombre réel de coups qu'on peut nommer N. Or, si on choisit de restreindre l'algorithme aux fonctions nécessitant au maximum ce nombre précis N de coups, alors on ne retiendra pas cette configuration alors qu'elle aurait pu mener à la solution optimale. L'algorithme ne permet donc pas d'obtenir la meilleure solution.
+
+\begin{figure}[h]
+\centering 
+\includegraphics[scale = 0.3]{RubikCube.jpg}
+\caption{Rubik’s Cube}
+\end{figure}
+
+Dans la première partie, on présentera la structure de programme qu’on adopte et quelques notions  sur l’algorithmes de recherche. Puis dans la deuxième partie , on analysera nos résultats et expliquera les difficultés de la réalisation d’un tel programme et les éventuelles solutions et améliorations.
+
 
 %------------------------------------------------
 
 \section{Implémentation}
 
-\begin{figure*}[ht]\centering % Using \begin{figure*} makes the figure take up the entire width of the page
-\includegraphics[width=\linewidth]{view}
-\caption{Wide Picture}
-\label{fig:view}
-\end{figure*}
+~\\\indent
+Le projet est divisé en deux partie, le code et les études sur l’algorithme. Dans un premier temps, on montrera l’utilité de chaques classes pour donner une perspective sur notre programme et on présentera les différents algorithmes qu’on utilise par la suite.
 
-\lipsum[4] % Dummy text
+\subsection{Structure du programme}
 
-\begin{equation}
-\cos^3 \theta =\frac{1}{4}\cos\theta+\frac{3}{4}\cos 3\theta
-\label{eq:refname2}
-\end{equation}
+~\\\indent
+Le programme est divisé en 4 paquets, \class{Cube} pour modéliser le Rubik’s Cube, \class{Chemin} pour l’algorithme de recherche, \class{Config} pour l’initialisation du programme, enfin \class{Default} pour le test.
 
-\lipsum[5] % Dummy text
+\paragraph{\class{Cube.Cube}}
+Cette classe modèlise le cube par un tableau d’entier (6 faces de 3 * 3) : \class{int[][][] color}. On utilise pour une raison de simplicité les entiers de 0 à 5 pour numéroter les différentes faces. Les constructeurs principaux permettent soit de créer le cube en rentrant les couleurs (sous-entendu leur indice) dans la console d'Eclipse, soit de le créer en lisant un fichier texte. \class{print} et \class{show2D} permettent d'afficher le cube respectivement dans la console sous forme schématique ou dans une fenêtre extérieure comme décrit dans \class{Plan}. Pour tourner le cube, \class{ tournerFace} permet de ne tourner que la face de la rotation, tandis que la rotation des 4 faces environnantes se fait avec \class{set}, qui remplace une rangée (ligne ou colonne) par une autre et renvoie la rangée initiale, ce qui permet de faire la rotation pour les 4 faces. Puis on fait appel à \class{tourner} pour une rotation complète en faisant fait tourner une face entre une et 3 fois dans le sens trigonométrique, pour avoir demi-tour et sens horaire. Deux comparateurs \class{same} et \class{faceHomogene} permettent de tester respectivement l'égalité de 2 cubes et le bon positionnement d'une face, et seront utiles pour les algorithmes. On y trouvera également des fonctions comme\class{distance}, la fonction heuristique et \class{hashCoin} pour construire une table de hachage. 
 
-\begin{enumerate}[noitemsep] % [noitemsep] removes whitespace between the items for a compact look
-\item First item in a list
-\item Second item in a list
-\item Third item in a list
-\end{enumerate}
+\paragraph{\class{Cube.Plan}}
+Afin de visualiser plus clairement le cube que dans le console, on a utilisé les interfaces graphiques de Java pour dessiner notre cube sur un plan. Une fois que les coordonnées de chaque face sont calculées à la main, il ne reste plus qu’à appeler la méthode \class{paint}. Les couleurs sont rangés dans un tableau colors qui sera repris pour la construction du cube, chaque couleur étant appelée par son indice dans ce tableau, pour plus de facilité. On remarque que ces couleurs sont modifiables pour s’adapter à des cubes exotiques. 
 
-\subsection{Organisation du code}
+\paragraph{\class{Cube.Coin}}
+Cette classe modélise le coin du cube avec trois couleurs et leurs coordonnées (dans le tableau \class{color} du cube). Le champs \class{index} numérote le coin de 0 à 7 selon leurs couleurs (il vaut -1 si cette combinaison de couleurs n’existe pas) et \class{occupied} enregistre la position réelle de ce coin, si les deux valeurs diffèrent, le coin est mal mis. Plusieurs constructeurs sont proposés, le plus utile a pour paramètre un cube et le numéro du coin. Il permet de trouver facilement les couleurs du coin demandé avec un tableau statique \class{realPosition} qui stocke toutes les coordonnées des coins.
 
-\lipsum[6] % Dummy text
+\paragraph{\class{Cube.Edge}}
+Cette classe est similaire à \class{Coin}, elle modélise les 12 arêtes avec leur deux couleurs, les champs et méthodes sont presque identiques.
 
-\paragraph{Paragraph} \lipsum[7] % Dummy text
-\paragraph{Paragraph} \lipsum[8] % Dummy text
+\paragraph{\class{Chemin.Chemin}}
+Dans cette classe on trouve comme champ important \class{initial}, \class{final} et \class{chemin} qui stocke le cube à tester, le cube final qu’on veut (presque toujours le même) et une liste d’\class{Action} pour y arriver. Comme méthodes, on a utilisé une recherche \class{runFindDFS} pour une DFS limité et \class{runFindIDA} pour laquelle on a le choix entre plusieurs fonctions heuristiques possibles. Plusieurs autres recherches ont été implémentées pour la comparaison. On peut également trouver un champ \class{Time} qui limite le nombre de configurations qu’on visite de façon à interrompre la recherche (pour un nombre de 100 000, il faut préparer quelques secondes).
+
+\paragraph{\class{Chemin.Action}}
+Avec deux entiers \class{face} et \class{tour}, cette classe encapsule les rotations  du cube et aussi de défait une action pour revenir à la configuration initiale du cube avec deux méthodes \class{Run} et \class{Rollback}. Il existe une autre classe de même type \class{Disposition} qui implémente une liste d’\class{Action} et qui est beaucoup moins utilisée.
+
+\paragraph{\class{Chemin.ActionComparator}}
+Une simple classe implémentant une fonction de comparaison de deux actions afin de construire une queue de priorité dans certaines recherches. 
+
+\paragraph{\class{Config.Distance}}
+Dans la suite des algorithmes, nous aurons besoin de calculer les distances pour placer coins et arêtes. Cette classe ne possède que des membres statiques. Ses champs comme \class{distCoin} et \class{distEdge} sont accessibles au moment de la recherche pour calculer la fonction heuristique. Ses méthodes permettent de calculer ces distances ou de les lire dans un fichier.
+
+\paragraph{\class{Config.Pattern}}
+Cette classe est un autre calcul de la distance. On part d’un cube propre et en faisant un parcours en profondeur de 12 étapes maximaux (idéalement) pour essayer de parcourir toutes les sous-configurations possibles et d’enregistrer le chemin minimal dans un support. La méthode \class{calculatePattern} calcule ces valeurs et les enregistre d’abord dans un \class{HashMap} puis dans un fichier binaire, puis \class{readPattern} les reprend pour les tests dans le futur. Afin d’améliorer ce calcul et contourner la taille limite de \class{HashMap}, une autre méthode \class{calculatePatternSQL} a été implémentée faisant appel à MySQL, cependant le résultat est encore plus décevant dû à une lecture et écriture non optimisée qu’on verra plus tard. 
+
+\paragraph{\class{Test}}
+Cette dernière classe comporte tous les tests qu’on utilise pour soit tester le bon fonctionnement d’une module, soit résoudre proprement un Rubik’s Cube et comparer les différentes méthodes.
 
 \subsection{Algorithmes de recherche}
 
-\lipsum[9] % Dummy text
+~\\\indent
+L’idée principale de la recherche et de partir d’une configuration \class{initial}, de faire une suite d’\class{Action} en comparant à chaque étape si on arrive sur \class{final}. On considère dans ce cas-là chaque configuration du Rubik’s Cube comme un noeud et chaque noeud possède 15 noeuds voisins (on est dans un graphe orienté) ou 18 juste pour le premier noeud où on part. Cette modélisation nous suggère d’utiliser les algorithmes de recherche de plus court chemin dans un graphe.
 
-\begin{figure}[ht]\centering
-\includegraphics[width=\linewidth]{results}
-\caption{In-text Picture}
-\label{fig:results}
-\end{figure}
+\paragraph{BFS}
+L’idée naïve et naturelle est de faire un parcours en largeur. Cette méthode est impossible d’atteindre l’état final à notre jour puisqu’il faut parcourir dans le pire des cas $18*15^{19}$ noeuds pour trouver une solution. 
 
-Reference to Figure \ref{fig:results}.
+\paragraph{DFS limitée}
+Une recherche un profondeur peut aller très loin, mais elle ne donne pas forcément une solution optimale. Pour corriger ce défaut, on utilise une limite pour restreindre la profondeur de la recherche. Lorsqu’on ne trouve pas de solution avec la limite donnée, on l’incrémente et continue la recherche. Bien que cette méthode ne diffère pas beaucoup de BFS, elle propose une piste très intéressante, car avec une DFS, le coût de mémoire est proportionnel et non exponentiel à la profondeur, on n’a qu’un cube à faire tourner. 
+
+\paragraph{IDA*}
+Comment donc choisir la bonne limite dans l’algorithme précédent ? L’algorithme A* nous donne une autre piste. Avec une fonction heuristique donnant une bonne inférieure de la distance restante, on ne craint plus d’avoir une solution non optimale. Puis une estimation de la distance totale (coût + ce qui reste) permet d’éliminer certains cas, car ils sont trop loin du but. Il est à noter que A* ne donne en général pas une distance minimale puisqu’il s’enfonce sur une piste qu’il croit la meilleure, il est surtout utilisé pour une recherche rapide d’une solution quelconque. Pour que cet algorithme marche, il nous faut une bonne fonction heuristique et on verra tout à l’heure que ces fonctions sont soit inutilisables, soit très coûteuses. Une méthode à la fois facile à implémenter et efficace n’a pas encore été trouvées. Les fonctions heuristiques qu’on a utilisé se trouvent dans la liste suivante (la lettre sert pour choisir une fonction lors de l’éxécution de la recherche): 
+
+\begin{itemize}[noitemsep] % [noitemsep] removes whitespace between the items for a compact look
+\item t : nombre de coups pour placer une piece
+\item m : distance Manhattan
+\item c : remettre les 8 coins
+\item o : remettre les 6 premières arêtes
+\item e : remettre les 6 autres
+\item p : maximum de c, o et e
+\end{itemize}
 
 %------------------------------------------------
 
 \section{Résultats}
 
-\lipsum[10] % Dummy text
-
-\subsection{Tests}
-
-\lipsum[11] % Dummy text
-
 \subsection{Problèmes rencontrés}
 
-\lipsum[11] % Dummy text
-
-\begin{table}[hbt]
-\caption{Table of Grades}
-\centering
-\begin{tabular}{llr}
-\toprule
-\multicolumn{2}{c}{Name} \\
-\cmidrule(r){1-2}
-First name & Last Name & Grade \\
-\midrule
-John & Doe & $7.5$ \\
-Richard & Miles & $2$ \\
-\bottomrule
-\end{tabular}
-\label{tab:label}
-\end{table}
-
-\subsubsection{Estimateur de la distance}
-
-\lipsum[12] % Dummy text
+~\\\indent
+Le problème majeur se trouve dans le calcul de la fonction heuristique. L’idée la plus simple est d’associer à chaque sous-configuration sa distance minimale avec l’état final. Pour ce faire, nous avons utilisé la méthode \class{calculatePattern} pour parcourir en profondeur limitée toutes les configurations et enregistrer ces informations dans un \class{HashMap}.
 
 \subsubsection{HashCode}
 
-\lipsum[12] % Dummy text
+~\\\indent
+Trouver une identifiant de la configuration n’est pas donné, il faut tenir compte de la simplicité en terme de temps et aussi d’espace. Afin d'établir une injection de la configuration vers la clé, les méthodes \class{hashCoin}, \class{hashEdgeOne} et \class{hashEdgeTwo} sont implémentées.  L’algorithme qu’on utilise est simple, en parcourant les 7 premières positions du coin, on conctatène  le numéro du coin occupant la place et son orientation en les ajoutant à droit. Quant aux arêtes, on n’a qu’à concatener toutes les couleurs. A la fin, on renvoie un entier long. Comme le chiffre maximal reste à 7, on a utilisé le système octal pour une vitesse de calcul (déplacement des bits) et réduire la grandeur de la clé bien qu’elle reste un long. 
 
 \subsubsection{Opération du fichier}
 
-\lipsum[12] % Dummy text
+~\\\indent
+Une fois que les calculs faits après un long moment d’attente, il faut stocker les résultats dans un fichiers. La première méthode est d’écrire la clé et la valeur dans un fichier texte avec un espace entre eux. Cependant, cette méthode est un luxe pour les valeurs entiers puisque leur écriture ne chaîne de caractère n’est point optimal. Regardons un exemple : 107299480917919\textvisiblespace0.
 
-\begin{description}
-\item[Word] Definition
-\item[Concept] Explanation
-\item[Idea] Text
-\end{description}
+\begin{itemize}[noitemsep] % [noitemsep] removes whitespace between the items for a compact look
+\item String :  $17 * 8 = 136$ bits
+\item Entier : $64 + 8 = 72$ bits
+\end{itemize}
 
 \subsubsection{Pattern database}
 
-\lipsum[13] % Dummy text
+~\\\indent
+
 
 \subsubsection{Taille de HashMap}
 
-\lipsum[13] % Dummy text
+~\\\indent
 
-\begin{itemize}[noitemsep] % [noitemsep] removes whitespace between the items for a compact look
-\item First item in a list
-\item Second item in a list
-\item Third item in a list
-\end{itemize}
 
 \subsection{Comparaison et conclusion}
 
