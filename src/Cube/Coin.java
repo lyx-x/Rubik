@@ -150,7 +150,7 @@ public class Coin {
 		makeBlack(black);
 		Chemin ans = new Chemin(test, black);
 		try{
-			ans.runFindSimplePQ('t');
+			ans.runFindDFS(20, false);
 		}
 		catch (Exception e)
 		{
@@ -173,7 +173,7 @@ public class Coin {
 		Chemin ans = new Chemin(test, black);
 		int r = 9;
 		try{
-			r = ans.runFindSimple(3);
+			r = ans.runFindDFS(3, false);
 		}
 		catch (Exception e)
 		{
@@ -209,7 +209,7 @@ public class Coin {
 		}
 		Chemin ans = new Chemin(test, black);
 		try{
-			ans.runDFS('m', false);  
+			ans.runFindIDA('m', false);  
 		}
 		catch (TimeoutException e)
 		{

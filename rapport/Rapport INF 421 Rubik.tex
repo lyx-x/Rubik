@@ -173,41 +173,41 @@ Dans la section précédente, nous avons présenté les 3 algorithms testés. Po
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{cccc}
+\begin{tabular}{ccccc}
 \hline
-\rowcolor{blue!20} \rule{0pt}{12pt} \textbf{Profondeur} & \textbf{DFS\textsuperscript{1} (PQ)\textsuperscript{2}} & \textbf{DFS}\textsuperscript{1} & \textbf{IDA*}\\
+\rowcolor{blue!20} \rule{0pt}{12pt} \textbf{Profondeur} & \textbf{BFS} & \textbf{DFS}\textsuperscript{1} & \textbf{IDA*} &  \textbf{IDA* (PQ)\textsuperscript{2}}\\
 \hline
-1 & 0 & 0 & 0  \\
+1 & 0 & 0 & 0 & 0  \\
 %\hline
-2 & 0 & 0 & 0 \\
+2 & 0 & 0 & 0 & 0 \\
 %\hline
-3 & 0 & 1 & 0 \\
+3 & 0 & 5 & 0 & 0 \\
 %\hline
-4 & 17 & 7 & 0 \\
+4 & 5 & 187 & 0 & 0 \\
 %\hline
-5 & 387 & 246 & 0 \\
+5 & 687 & 466 & 0 & 0 \\
 %\hline
-6 & (48865)\textsuperscript{3} & (27989)\textsuperscript{3} & 0  \\
+6 & 7965 & 1142 & 0 & 0  \\
 %\hline
-7 & - & - & 0 \\
+7 & - & - & 0 & 0 \\
 %\hline
-8 & - & - & 2 \\
+8 & - & - & 1 & 1 \\
 %\hline
-9 & - & - & 7 \\
+9 & - & - & 12 & 12 \\
 %\hline
-10 & - & - & 87 \\
+10 & - & - & 102 & 87 \\
 %\hline
-11 & - & - & 1143 \\
+11 & - & - & 1143 & 1211 \\
 %\hline
-12 & - & - & 5270 \\
+12 & - & - & 5270 & 5190 \\
 %\hline
-13 & - & - & (31488)\textsuperscript{3} \\
+13 & - & - & (31488)\textsuperscript{3} & (34488)\textsuperscript{3} \\
 %\hline
-14 & - & - & - \\
+14 & - & - & - & - \\
 \hline
-\multicolumn{4}{l}{\small{1. DFS avec une profondeur limité}} \\
-\multicolumn{4}{l}{\small{2. Ce parcours utilise une queue de priorité}} \\
-\multicolumn{4}{l}{\small{3. Cette valeur est calculée avec moins de 5 essais}} \\
+\multicolumn{5}{l}{\small{1. DFS avec une profondeur limité}} \\
+\multicolumn{5}{l}{\small{2. Avec une queue de priorité pour trier les chemins}} \\
+\multicolumn{5}{l}{\small{3. Cette valeur est calculée avec moins de 5 essais}} \\
 \hline
 ~\\
 \end{tabular}

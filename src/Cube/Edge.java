@@ -168,7 +168,7 @@ public class Edge {
 		Chemin ans = new Chemin(test, black);
 		int r = 9;
 		try{
-			r = ans.runFindSimple(4);
+			r = ans.runFindDFS(4, false);
 		}
 		catch (Exception e)
 		{

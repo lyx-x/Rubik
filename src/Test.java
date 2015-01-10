@@ -7,22 +7,24 @@ import Chemin.*;
 public class Test {
 	
 	public static void main(String[] args){
-		init();
+		//init();
 		//testAffichage(8);
-		//testFindSimple(8);
+		//testFindDFS(8);
 		//debugDistanceCoinEdge(20);
-		//testAStar(10, 't');
+		//testFindPQ(10, 't');
 		//testInitDistance();
 		//testInitPattern();
+		//testLimite(6);
+		//testSQL(3);
 		//testDistance();
 		//debugCoinEdge();
 		//debugCoins(30);
 		//Pattern.print();
-		//testFindDFS(20, 'p');
+		//testFindIDA(20, 'm');
 		//testHash();
 		//testPattern(20);
 		//testCompareFind(20, 'p');
-		statCompareFind(14,10);
+		//statCompareFind(16,5);
 		//statCompareDistance(14,10);
 	}
 	
@@ -71,13 +73,12 @@ public class Test {
 			System.out.format("\n//======== Test %d =======\n", i + 1);
 			Cube test = new Cube(Cube.src);
 			melanger(test, i, true);
-			System.out.format("\nDistance minimale : %d\n",test.distance('s'));
-			Cube dest = new Cube(test);  //Sauvegarder la disposition pour l'affichage
-			dest.show2D();
+			//Cube dest = new Cube(test);  //Sauvegarder la disposition pour l'affichage
+			//dest.show2D();
 			long startTime = System.currentTimeMillis();
 			Chemin ans = new Chemin(test, Cube.src);
 			try{
-				ans.runFindSimple(i);  //Trouver le chemin
+				ans.runFindDFS(i, true);  //Trouver le chemin
 				ans.print();
 			}
 			catch (TimeoutException e)
@@ -133,19 +134,19 @@ public class Test {
 	 * La recherche avec la queue de priorité
 	 */
 	
-	static void testSimplePQ(int etape, char mode){
+	static void testFindPQ(int etape, char mode){
 		for (int i = 0 ; i <= etape ; i++)
 		{
 			System.out.format("\n//======== Test %d =======\n", i + 1);
 			Cube test = new Cube(Cube.src);
 			melanger(test, i, true);
 			System.out.format("\nDistance minimale : %d\n",test.distance(mode));
-			Cube dest = new Cube(test);  //Sauvegarder la disposition pour l'affichage
-			dest.show2D();
+			//Cube dest = new Cube(test);  //Sauvegarder la disposition pour l'affichage
+			//dest.show2D();
 			long startTime = System.currentTimeMillis();
 			Chemin ans = new Chemin(test, Cube.src);
 			try{
-				ans.runFindSimplePQ(mode);  //Trouver le chemin
+				ans.runFindPQ(mode);  //Trouver le chemin
 				ans.print();
 			}
 			catch (TimeoutException e)
@@ -176,6 +177,24 @@ public class Test {
 	{
 		Pattern.calculatePattern();
 		Pattern.printResume();
+	}
+	
+	static void testLimite(int limite)
+	{
+		long startTime = System.currentTimeMillis();
+		Pattern.patternLimite(new Cube(Cube.src), (byte)1, limite, -1);
+		long endTime = System.currentTimeMillis();
+		long duration = endTime - startTime;
+		System.out.printf("\nElapsed time: %d milliseconds\n", duration);
+	}
+	
+	static void testSQL(int limite)
+	{
+		long startTime = System.currentTimeMillis();
+		Pattern.calculatePatternSQL(limite);
+		long endTime = System.currentTimeMillis();
+		long duration = endTime - startTime;
+		System.out.printf("\nElapsed time: %d milliseconds\n", duration);
 	}
 	
 	/*
@@ -220,7 +239,7 @@ public class Test {
 	 * Test principal qu'on utilise pour résoudre le cube
 	 */
 	
-	static void testFindDFS(int etape, char mode){
+	static void testFindIDA(int etape, char mode){
 		for (int i = 0 ; i <= etape ; i++)
 		{
 			System.out.format("\n//======== Test %d =======\n", i + 1);
@@ -230,12 +249,12 @@ public class Test {
 			long startTime = System.currentTimeMillis();
 			Chemin ans = new Chemin(test, Cube.src);
 			try{
-				ans.runDFS(mode, true);  //Trouver le chemin
+				ans.runFindIDA(mode, true);  //Trouver le chemin
 				ans.print();
 			}
 			catch (TimeoutException e)
 			{
-				System.err.println(e.getMessage());
+				System.out.println(e.getMessage());
 			}	
 			long endTime = System.currentTimeMillis();
 			long duration = endTime - startTime;
@@ -301,7 +320,7 @@ public class Test {
 			long startTime = System.currentTimeMillis();
 			Chemin ans = new Chemin(compare, Cube.src);
 			try{
-				ans.runDFS(mode, true);  //Trouver le chemin
+				ans.runFindIDA(mode, true);  //Trouver le chemin
 				ans.print();
 			}
 			catch (TimeoutException e)
@@ -318,7 +337,7 @@ public class Test {
 			startTime = System.currentTimeMillis();
 			ans = new Chemin(compare, Cube.src);
 			try{
-				ans.runFindSimplePQ(mode);  //Trouver le chemin
+				ans.runFindPQ(mode);  //Trouver le chemin
 				ans.print();
 			}
 			catch (TimeoutException e)
@@ -335,7 +354,7 @@ public class Test {
 			startTime = System.currentTimeMillis();
 			ans = new Chemin(compare, Cube.src);
 			try{
-				ans.runFindSimple(10);  //Trouver le chemin
+				ans.runFindDFS(10, true);  //Trouver le chemin
 				ans.print();
 			}
 			catch (TimeoutException e)
@@ -350,10 +369,11 @@ public class Test {
 	
 	static void statCompareFind(int step, int seed)
 	{
-		long time[][] = new long[3][step];
-		int count[][] = new int[3][step];
-		int stat[][] = new int[3][step];
-		for (int i = 0 ; i < 3 ; i++)
+		int n = 5;
+		long time[][] = new long[n][step];
+		int count[][] = new int[n][step];
+		int stat[][] = new int[n][step];
+		for (int i = 0 ; i < n ; i++)
 		{
 			for (int j = 0 ; j < step ; j++)
 			{
@@ -373,37 +393,53 @@ public class Test {
 				long startTime = System.currentTimeMillis();
 				Chemin ans = new Chemin(compare, Cube.src);
 				try{
-					ans.runDFS('p', false);  //Trouver le chemin
+					ans.runFindIDA('p', false);  //Trouver le chemin
 					long endTime = System.currentTimeMillis();
-					time[2][ans.size()] += endTime - startTime;
+					time[4][ans.size()] += endTime - startTime;
+					count[4][ans.size()]++;
+				}
+				catch (TimeoutException e)
+				{
+					//System.out.println(e.getMessage());
+				}	
+				
+				compare = new Cube(test);
+				startTime = System.currentTimeMillis();
+				ans = new Chemin(compare, Cube.src);
+				try{
+					ans.runFindIDAPQ('p', false);  //Trouver le chemin
+					long endTime = System.currentTimeMillis();
+					time[3][ans.size()] += endTime - startTime;
+					count[3][ans.size()]++;
+				}
+				catch (TimeoutException e)
+				{
+					//System.out.println(e.getMessage());
+				}
+				
+				if (i > 7) continue;
+				
+				compare = new Cube(test);
+				startTime = System.currentTimeMillis();
+				ans = new Chemin(compare, Cube.src);
+				try{
+					ans.runFindDFS(i, false); //Trouver le chemin
+					long endTime = System.currentTimeMillis();
+					time[2][ans.size()] = endTime - startTime;
 					count[2][ans.size()]++;
 				}
 				catch (TimeoutException e)
 				{
 					//System.out.println(e.getMessage());
-				}	
-				
-				if (i >= 7) continue;
-				
-				compare = new Cube(test);
-				startTime = System.currentTimeMillis();
-				ans = new Chemin(compare, Cube.src);
-				try{
-					ans.runFindSimplePQ('p'); //Trouver le chemin
-					long endTime = System.currentTimeMillis();
-					time[0][ans.size()] = endTime - startTime;
-					count[0][ans.size()]++;
 				}
-				catch (TimeoutException e)
-				{
-					//System.out.println(e.getMessage());
-				}	
+				
+				if (i > 6) continue;
 				
 				compare = new Cube(test);
 				startTime = System.currentTimeMillis();
 				ans = new Chemin(compare, Cube.src);
 				try{
-					ans.runFindSimple(10);  //Trouver le chemin
+					ans.runFindBFS(i);  //Trouver le chemin
 					long endTime = System.currentTimeMillis();
 					time[1][ans.size()] = endTime - startTime;
 					count[1][ans.size()]++;
@@ -412,9 +448,26 @@ public class Test {
 				{
 					//System.out.println(e.getMessage());
 				}	
+				
+				if (i > 5) continue;
+				
+				compare = new Cube(test);
+				startTime = System.currentTimeMillis();
+				ans = new Chemin(compare, Cube.src);
+				try{
+					ans.runFindPQ('p');  //Trouver le chemin
+					long endTime = System.currentTimeMillis();
+					time[0][ans.size()] = endTime - startTime;
+					count[0][ans.size()]++;
+				}
+				catch (TimeoutException e)
+				{
+					//System.out.println(e.getMessage());
+				}
+				
 			}
 		}
-		for (int i = 0 ; i < 3 ; i++)
+		for (int i = 0 ; i < n ; i++)
 		{
 			for (int j = 0 ; j < step ; j++)
 			{
@@ -422,7 +475,7 @@ public class Test {
 					stat[i][j] = (int)time[i][j] / count[i][j];
 			}
 		}
-		for (int i = 0 ; i < 3 ; i++)
+		for (int i = 0 ; i < n ; i++)
 		{
 			System.out.printf("Méthode #%d :\t", i + 1);
 			for (int j = 0 ; j < step ; j++)
@@ -469,7 +522,7 @@ public class Test {
 					long startTime = System.currentTimeMillis();
 					Chemin ans = new Chemin(compare, Cube.src);
 					try{
-						ans.runDFS(mode[k], false);  //Trouver le chemin
+						ans.runFindIDA(mode[k], false);  //Trouver le chemin
 						long endTime = System.currentTimeMillis();
 						time[k][ans.size()] += endTime - startTime;
 						count[k][ans.size()]++;
@@ -502,4 +555,5 @@ public class Test {
 			System.out.println();
 		}
 	}
+	
 }
