@@ -59,7 +59,7 @@ public class Pattern {
 			// this will load the MySQL driver, each DB has its own driver
 			Class.forName("com.mysql.jdbc.Driver");
 			// setup the connection with the DB.
-			connect = DriverManager.getConnection("jdbc:mysql://localhost/rubik?user=lyx&password=Paul1012_lyx");
+			connect = DriverManager.getConnection("jdbc:mysql://localhost/rubik?user=lyx&password=******");
 
 			preparedStatement = connect.prepareStatement("insert into rubik.coin values (default, ?, ?)");
 			preparedStatement.setLong(1, Cube.src.hashCoin());
