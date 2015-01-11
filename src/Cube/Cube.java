@@ -26,7 +26,7 @@ public class Cube {
 	 */
 
 	int[][][] color = new int[6][3][3];
-	static int width = 60;  //Modifier la taille une fois pour toute en utilisant une variable statique
+	static int width = 40;  //Modifier la taille une fois pour toute en utilisant une variable statique
 	
 	public static Cube src = new Cube("Source.txt");  //Ce cube est l'état final
 	public static Cube black = new Cube("Black.txt");  //Ce cube est tout noir pour le test
@@ -57,12 +57,13 @@ public class Cube {
 	 */
 
 	public Cube(){
+		char[] f = {'U', 'L', 'F', 'R', 'B', 'D'};
 		Scanner read = new Scanner(System.in);
 		this.color = new int[6][3][3];
 		int tmp = 0;
 		for (int face = 0 ; face < 6 ; face++)
 		{
-			System.out.format("Face %d : ", face);
+			System.out.format("Face %c : \n", f[face]);
 			for (int rang = 0 ; rang < 3 ; rang++)
 			{
 				for (int colonne = 0 ; colonne < 3 ; colonne++)
@@ -633,9 +634,10 @@ public class Cube {
 	public int hashC()
 	{
 		int pw = 1;
-		int fact = 1;
+		int fact = 8 * 7 * 6 * 5 * 4 * 3 * 2;
 		int per = 0;
 		int ori = 0;
+		int[] pos = {0, 0, 0, 0, 0, 0, 0, 0};
 		for (int i = 0 ; i < 8 ; i++)
 		{
 			Coin c = new Coin(i, this);
@@ -650,8 +652,12 @@ public class Cube {
 					max = j;
 				}
 			}
+			for (int j = index + 1 ; j < 8 ; j++)
+				pos[j]++;
+			index -= pos[index];
+			fact /= 8 - i;
 			per += fact * index;
-			fact *= i + 1;
+			//fact /= 7 - i;
 			if (i < 7) 
 			{
 				ori += pw * max;
@@ -664,69 +670,53 @@ public class Cube {
 	public int hashO()
 	{
 		int pw = 1;
-		int fact = 1;
+		int fact = 11 * 10 * 9 * 8 * 7;
 		int per = 0;
 		int ori = 0;
-		boolean[] set = new boolean[12];
+		int[] pos = new int[12];
 		for (int i = 0 ; i < 12 ; i++)
 		{
-			set[i] = false;
+			pos[i] = 0;
 		}
 		for (int i = 0 ; i < 6 ; i++)
 		{
 			Edge e = new Edge(i, this);
-			set[e.index] = true;
-			per += fact * e.index;
-			fact *= i + 1;
+			int index = e.index;
+			for (int j = index + 1; j < 12 ; j++)
+				pos[j]++;
+			index -= pos[index];
+			per += fact * index;
+			fact /= 11 - i;
 			ori += pw * ((e.First > e.Second) ? 1 : 0);
 			pw *= 2;
 		}
-		int hash = per * pw + ori;
-		int comb = 0;
-		pw = 1;
-		for (int i = 0 ; i < 12 ; i++)
-		{
-			if (set[i])
-			{
-				comb += pw * i;
-				pw++;
-			}
-		}
-		return hash * pw + comb;
+		return per * pw + ori;
 	}
 	
 	public int hashT()
 	{
 		int pw = 1;
-		int fact = 1;
+		int fact = 11 * 10 * 9 * 8 * 7;
 		int per = 0;
 		int ori = 0;
-		boolean[] set = new boolean[12];
+		int[] pos = new int[12];
 		for (int i = 0 ; i < 12 ; i++)
 		{
-			set[i] = false;
+			pos[i] = 0;
 		}
-		for (int i = 7 ; i < 12 ; i++)
+		for (int i = 6 ; i < 12 ; i++)
 		{
 			Edge e = new Edge(i, this);
-			set[e.index] = true;
-			per += fact * e.index;
-			fact *= i + 1;
+			int index = e.index;
+			for (int j = index + 1; j < 12 ; j++)
+				pos[j]++;
+			index -= pos[index];
+			per += fact * index;
+			fact /= 17 - i;
 			ori += pw * ((e.First > e.Second) ? 1 : 0);
 			pw *= 2;
 		}
-		int hash = per * pw + ori;
-		int comb = 0;
-		pw = 1;
-		for (int i = 0 ; i < 12 ; i++)
-		{
-			if (set[i])
-			{
-				comb += pw * i;
-				pw++;
-			}
-		}
-		return hash * pw + comb;
+		return per * pw + ori;
 	}
 	
 }

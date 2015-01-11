@@ -7,7 +7,24 @@ import Chemin.*;
 public class Test {
 	
 	public static void main(String[] args){
-		init();
+		
+		//================== Préparation ===================//
+		
+		//preparation();  //Generer Pattern Database si vous n'en avez pas
+		
+		//================== Configuration ===================//
+		
+		//boolean manuel = false;  //Mettez-le en false si vous ne voulez pas entrer les couleurs à la main
+		//int complexite = 9;  //Choisir le nombre d'étapes de mélange
+		//int niveauRecherche = 100000;  //Limiter le nombre de noeuds parcourus
+		
+		//================== Recherche de la solution ===================//
+		
+		//TestGeneral(manuel, complexite, niveauRecherche);
+		
+		//================== Autre tests ===================//
+		
+		//init();
 		//testAffichage(8);
 		//testFindDFS(8);
 		//debugDistanceCoinEdge(20);
@@ -20,14 +37,64 @@ public class Test {
 		//debugCoinEdge();
 		//debugCoins(30);
 		//Pattern.print();
-		//testFindIDA(20, 'c');
+		//testFindIDA(20, 'p');
 		//testHash();
-		//testPattern(20);
+		//testPattern(5);
 		//testCompareFind(20, 'p');
 		//statCompareFind(20,20);
-		statCompareDistance(16,10);
+		//statCompareDistance(20,15);
 	}
 	
+	/*
+	 * Généner Pattern Database à un niveau de 6, cela va prendre quelque minutes
+	 */
+	
+	static void preparation() {
+		testInitPattern((byte)6);
+	}
+	
+	/*
+	 * Lancer une recherche avec IDA*
+	 */
+
+	static void TestGeneral(boolean manuel, int complexite,	int niveauRecherche) {
+		PatternArray.readBinaryPattern();
+		
+		System.out.print("\n//======== Test =======\n");
+		
+		Cube test;
+		if (manuel)
+		{
+			test = new Cube();  //Entrer les couleurs manuellement comme décrit dans l'annexe du rapport
+		}
+		else
+		{
+			test = new Cube(Cube.src);
+			melanger(test, complexite, true);  //Mélanger aléatoirement le cube
+		}
+		Cube backUp = new Cube(test);
+		backUp.show2D();  //Afficher le cube mélanger
+	
+		System.out.format("\nDistance minimale : %d\n",test.distance('p'));
+		
+		long startTime = System.currentTimeMillis();
+		Chemin ans = new Chemin(test, Cube.src);
+		ans.Time = niveauRecherche;
+		
+		try{
+			ans.runFindIDA('p', true);  //Trouver la solution
+			ans.print();
+		}
+		catch (TimeoutException e)  //Limiter la recherche
+		{
+			System.out.println(e.getMessage());
+		}
+		
+		long endTime = System.currentTimeMillis();
+		long duration = endTime - startTime;
+		System.out.printf("\nElapsed time: %d milliseconds\n", duration);
+	}
+
 	/*
 	 * Utiliser les valeurs aléatoires pour mélanger le cube, le nombre d'action est fixé pour le test
 	 */
@@ -41,6 +108,10 @@ public class Test {
 		}
 	}
 	
+	/*
+	 * Tester si la rotation et l'affichage du cube fonctionne
+	 */
+	
 	public static void testAffichage(int etape)
 	{
 		System.out.println("\n=========== Test d'affichage ===========\n");
@@ -50,7 +121,7 @@ public class Test {
 	}
 	
 	/*
-	 * Initialisation du programme
+	 * Initialisation du programme lors du développement
 	 */
 	
 	static void init(){
@@ -174,17 +245,21 @@ public class Test {
 	 * Tester la classe Pattern
 	 */
 	
-	static void testInitPattern()
+	static void testInitPattern(byte limite)
 	{
 		long startTime = System.currentTimeMillis();
 		//Pattern.calculatePattern();
 		//Pattern.printResume();
-		PatternArray.calculatePattern((byte)7);
+		PatternArray.calculatePattern(limite);
 		long endTime = System.currentTimeMillis();
 		long duration = endTime - startTime;
 		System.out.printf("\nElapsed time: %d milliseconds\n", duration);
 		
 	}
+	
+	/*
+	 * Tester la vitesse d'exécution de l'ordinateur, une limite de 8 peut prendre 1 heure
+	 */
 	
 	static void testLimite(int limite)
 	{
@@ -194,6 +269,10 @@ public class Test {
 		long duration = endTime - startTime;
 		System.out.printf("\nElapsed time: %d milliseconds\n", duration);
 	}
+	
+	/*
+	 * Un essai avec MySQL, inutile
+	 */
 	
 	static void testSQL(int limite)
 	{
@@ -273,9 +352,9 @@ public class Test {
 	 * Tester la fonction de hachage
 	 */
 	
-	static void testHash(){
+	static void testHash(int i){
 		Cube test = new Cube(Cube.src);
-		melanger(test, 1, true);
+		melanger(test, i, true);
 		test.show2D();
 		System.out.println(test.hashCoin());
 		System.out.println(test.hashEdgeOne());
@@ -290,8 +369,9 @@ public class Test {
 	static void testPattern(int steps){
 		long startTime = System.currentTimeMillis();
 		//Pattern.readPattern("Coin.txt", "EdgeOne.txt", "EdgeTwo.txt");
-		Pattern.readBinaryPattern("Coin.dat", "EdgeOne.dat", "EdgeTwo.dat");
-		Pattern.printResume();
+		//Pattern.readBinaryPattern("Coin.dat", "EdgeOne.dat", "EdgeTwo.dat");
+		//Pattern.printResume();
+		PatternArray.readBinaryPattern();
 		int i = 0;
 		while(i<20)
 		{
@@ -374,6 +454,11 @@ public class Test {
 		}	
 	}
 	
+	/*
+	 * Comparer la performance des différents algorithmes en faisant des statistiques
+	 * seed contrôle la taille de l'échantillon
+	 */
+	
 	static void statCompareFind(int step, int seed)
 	{
 		int n = 5;
@@ -423,7 +508,7 @@ public class Test {
 				{
 					//System.out.println(e.getMessage());
 				}
-				/*
+				
 				if (i > 7) continue;
 				
 				compare = new Cube(test);
@@ -471,7 +556,7 @@ public class Test {
 				{
 					//System.out.println(e.getMessage());
 				}
-				*/
+				
 			}
 		}
 		for (int i = 0 ; i < n ; i++)
@@ -496,6 +581,10 @@ public class Test {
 		}
 	}
 	
+	/*
+	 * Comparer les fonctions heuristiques
+	 */
+	
 	static void statCompareDistance(int step, int seed)
 	{
 		int n = 4;
@@ -511,8 +600,8 @@ public class Test {
 				time[i][j] = 0;
 			}
 		}
-		char mode[] = {'c', 'o', 't', 'p'};
-		int limit[] = {10, 11, 11, 14};
+		char mode[] = {'c', 'o', 'e', 'p'};  //on pourra ajouter d'autres fonctions heuristiques
+		int limit[] = {11, 14, 14, 20};  //éviter d'aller trop loin pour certaine fonction heuristique
 		for (int i = 0 ; i < step ; i++)
 		{
 			for (int j = 0 ; j <= seed ; j++)

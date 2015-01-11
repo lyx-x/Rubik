@@ -12,11 +12,15 @@ import Cube.Cube;
 
 public class PatternArray {
 	
+	/*
+	 * Cette classe permet de générer Pattern Database
+	 */
+	
 	public static byte[] coin;
 	public static byte[] edgeOne;
 	public static byte[] edgeTwo;
 	
-	static int lc = 100000000;
+	static int lc = 100000000;  //on pourra raffiner la longeur du tableau avec le nombre de cass calculé
 	static int le = 50000000;
 	
 	public static void calculatePattern(byte limite){
@@ -26,13 +30,13 @@ public class PatternArray {
 		edgeTwo = new byte[le];
 		for (int i = 0 ; i < le ; i++)
 		{
-			coin[i] = 11;
+			coin[i] = 11;  //la distance maximale pour remettre les 8 coins
 			coin[i + le] = 11;
 			edgeOne[i] = 10;
 			edgeTwo[i] = 10;
 		}
 		Cube src = new Cube(Cube.src);
-		coin[src.hashC()] = 0;
+		coin[src.hashC()] = 0;  //ajouter l'état résolu
 		edgeOne[src.hashO()] = 0;
 		edgeTwo[src.hashT()] = 0;
 		System.out.println("\n=========== Fin d'initialisation ===========\n");
@@ -41,6 +45,11 @@ public class PatternArray {
 		writeBinaryPattern();
 		System.out.println("\n=========== Fin d'écriture ===========\n");
 	}
+	
+	/*
+	 * Puisqu'on choisit le DFS, on aimerait réutiliser les cubes qu'on a, ce qui accélère le parcours
+	 * Environ 5 secondes pour 5 étapes et 60 pour 6 étapes, on a bien un facteur de 15
+	 */
 
 	static void patternDFS(Cube c, byte level, byte limite, int lastFace) {
 		for (int face = 0 ; face < 6 ; face++)
@@ -67,6 +76,10 @@ public class PatternArray {
 			}
 		}
 	}
+	
+	/*
+	 * Ecrire le tableau dans un fichier binaire
+	 */
 	
 	static void writeBinaryPattern() {
 		try{
@@ -103,6 +116,10 @@ public class PatternArray {
 			System.out.println(e.getMessage());
 		}
 	}
+	
+	/*
+	 * Lire Pattern Database
+	 */
 
 	public static void readBinaryPattern()
 	{
@@ -118,7 +135,7 @@ public class PatternArray {
 				int i = 0;
 				while (i < lc) 
 				{
-					byte value = inCoin.readByte();
+					byte value = inCoin.readByte();  //on évite de convertir String en int
 					coin[i] = value;
 					i++;
 				}

@@ -16,7 +16,7 @@ public class Chemin {
 	boolean found = false;  //Voir si une solution existe
 	int etape = 10;  //Limiter le nombre d'étapes
 	int size = -1;
-	int Time = 100000;
+	public int Time = 100000;
 	
 	public Chemin()
 	{

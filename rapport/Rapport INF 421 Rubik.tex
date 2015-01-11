@@ -96,7 +96,7 @@ Le projet est composé de deux parties, la programmation et les études sur l’
 Le programme est divisé en 4 paquets, \class{Cube} pour modéliser le Rubik’s Cube, \class{Chemin} pour l’algorithme de recherche, \class{Config} pour l’initialisation du programme, enfin \class{Default} pour le test.
 
 \paragraph{\class{Cube.Cube}}
-Cette classe modèlise le cube par un tableau d’entier (6 faces de 3 * 3) : \class{int[][][] color}. On utilise, pour une raison de simplicité, les entiers de 0 à 5 pour numéroter les différentes faces. Les constructeurs principaux permettent soit de créer le cube en rentrant les couleurs (sous-entendu leur indice) dans la console d'Eclipse, soit de le créer en lisant un fichier texte. \class{print} et \class{show2D} permettent d'afficher le cube respectivement dans la console sous forme schématique ou dans une fenêtre extérieure comme décrit dans \class{Plan}. Pour tourner le cube, \class{tournerFace} permet de ne tourner que la face de la rotation, tandis que la rotation des 4 faces environnantes se fait avec \class{set}, qui remplace une rangée (ligne ou colonne) par une autre et renvoie la rangée initiale, ce qui permet de faire la rotation pour les 4 faces. Puis on fait appel à \class{tourner} pour une rotation complète en faisant fait tourner une face entre 1 et 3 fois dans le sens trigonométrique, pour avoir sens trigonométrique, demi-tour et sens horaire. Deux comparateurs \class{same} et \class{faceHomogene} permettent de tester respectivement l'égalité de 2 cubes et le bon positionnement d'une face, et seront utiles pour les algorithmes. On y trouvera également des fonctions comme\class{distance}, la fonction heuristique et \class{hashC} pour donner une identifiant unique à chaque configuration. 
+Cette classe modèlise le cube par un tableau d’entiers (6 faces de 3 * 3) : \class{int[][][] color}. On utilise, pour la simplicité, les entiers de 0 à 5 pour numéroter les différentes faces. Les constructeurs principaux permettent soit de créer le cube en rentrant les couleurs (sous-entendu leur indice) dans la console d'Eclipse, soit de le créer en lisant un fichier texte. \class{print} et \class{show2D} permettent d'afficher le cube respectivement dans la console sous forme schématique ou dans une fenêtre extérieure comme décrit dans \class{Plan}. Pour tourner le cube, \class{tournerFace} permet de ne tourner que la face de la rotation, tandis que la rotation des 4 faces environnantes se fait avec \class{set}, qui remplace une rangée (ligne ou colonne) par une autre et renvoie la rangée initiale, ce qui permet de faire la rotation pour les 4 faces. Puis on fait appel à \class{tourner} pour une rotation complète en faisant fait tourner une face entre 1 et 3 fois dans le sens trigonométrique, pour avoir sens trigonométrique, demi-tour et sens horaire. On y trouve également des fonctions \class{same}, un comparateur, \class{distance}, la fonction heuristique et \class{hashC} pour donner une identifiant unique à chaque configuration. 
 
 \begin{figure}[h]
 \centering 
@@ -105,45 +105,45 @@ Cette classe modèlise le cube par un tableau d’entier (6 faces de 3 * 3) : \c
 \end{figure}
 
 \paragraph{\class{Cube.Plan}}
-Afin de visualiser plus clairement le cube que dans la console, on a utilisé les interfaces graphiques de Java pour dessiner notre cube sur un plan. Une fois que les coordonnées de chaque face sont calculées à la main, il ne reste plus qu’à appeler la méthode \class{paint}. Les couleurs sont rangés dans un tableau colors qui sera repris pour la construction du cube, chaque couleur étant appelée par son indice dans ce tableau, pour plus de facilité. On remarque que ces couleurs sont modifiables pour s’adapter à des cubes exotiques. 
+Afin de visualiser plus clairement le cube que dans la console, on a utilisé les interfaces graphiques de Java pour dessiner notre cube sur un plan. Les coordonnées de chaque face sont calculées à la main, il suffit d’appeler la méthode \class{paint} pour faire le dessin. Les couleurs sont rangés dans un tableau \class{colors} de sorte que leur indice corresponde à leur représentant numérique pour plus de facilité. On remarque que ces couleurs sont modifiables pour s’adapter à des cubes exotiques. 
 
 \paragraph{\class{Cube.Coin}}
-Cette classe modélise le coin du cube avec trois couleurs et leurs coordonnées (dans le tableau \class{color} du cube). Le champs \class{index} numérote le coin de 0 à 7 selon leurs couleurs (il vaut -1 si cette combinaison de couleurs n’existe pas) et \class{occupied} enregistre la position réelle de ce coin, si les deux valeurs diffèrent, le coin est mal mis. Plusieurs constructeurs sont proposés, le plus utile a pour paramètre un cube et le numéro du coin. Il permet de trouver facilement les couleurs du coin demandé avec un tableau statique \class{realPosition} qui stocke toutes les coordonnées des coins.
+Cette classe modélise le coin du cube avec trois couleurs et leurs coordonnées dans le tableau \class{color} du cube. Le champs \class{index} numérote le coin de 0 à 7 selon leurs couleurs (il vaut -1 si cette combinaison de couleurs n’existe pas) et \class{occupied} enregistre la position réelle de ce coin. Si les deux valeurs diffèrent, le coin est mal mis. Plusieurs constructeurs sont proposés, le plus utile a pour paramètre un cube et le numéro du coin. Il permet de trouver facilement les couleurs du coin demandé avec un tableau statique \class{realPosition} qui stocke toutes les coordonnées des coins.
 
 \paragraph{\class{Cube.Edge}}
 Cette classe est similaire à \class{Coin}, elle modélise les 12 arêtes avec leur deux couleurs, les champs et méthodes sont presque identiques.
 
 \paragraph{\class{Chemin.Chemin}}
-Dans cette classe on trouve comme champ important \class{initial}, \class{final} et \class{chemin} qui stocke le cube à tester, le cube final qu’on veut (presque toujours le même) et une liste d’\class{Action} pour y arriver. Comme méthodes, on a utilisé une recherche \class{runFindDFS} pour une DFS limité et \class{runFindIDA} pour laquelle on a le choix entre plusieurs fonctions heuristiques possibles. Plusieurs autres recherches ont été implémentées pour la comparaison. On peut également trouver un champ \class{Time} qui limite le nombre de configurations qu’on visite de façon à interrompre la recherche (pour un nombre de 100 000, il faut préparer quelques secondes).
+Dans cette classe on trouve comme champ important \class{initial}, \class{final} et \class{chemin} qui stocke respectivement le cube à tester, le cube final qu’on veut (le cube résolu pour la plupart) et une liste d’\class{Action} pour y arriver. Comme méthode, on a utilisé une fonction \class{runFindDFS} pour lancer une DFS limité et \class{runFindIDA} dans laquelle on a le choix entre quelques fonctions heuristiques qu’on a implémentées. Plusieurs autres recherches ont été implémentées pour mener une comparaison. On a utilisé en plus un champ \class{Time} qui limite le nombre de configurations qu’on visite de façon à interrompre la recherche au bout d’un certain temps (pour un nombre de 100 000, il faut s’attendre à quelques secondes).
 
 \paragraph{\class{Chemin.Action}}
-Avec deux entiers \class{face} et \class{tour}, cette classe encapsule les rotations  du cube et aussi de défait une action pour revenir à la configuration initiale du cube avec deux méthodes \class{Run} et \class{Rollback}. Il existe une autre classe de même type \class{Disposition} qui implémente une liste d’\class{Action} et qui est beaucoup moins utilisée.
+Avec deux entiers \class{face} et \class{tour}, cette classe encapsule les rotations  du cube et aussi son inverse pour revenir à la configuration initiale du cube avec deux méthodes \class{Run} et \class{Rollback}. Il existe une autre classe de même type \class{Disposition} qui implémente une liste d’\class{Action} et qui est beaucoup moins utilisée.
 
 \paragraph{\class{Chemin.ActionComparator}}
 Une simple classe implémentant une fonction de comparaison de deux actions afin de construire une queue de priorité dans certaines recherches. 
 
 \paragraph{\class{Config.Distance}}
-Dans la suite des algorithmes, nous aurons besoin de calculer les distances pour placer coins et arêtes. Cette classe ne possède que des membres statiques. Ses champs comme \class{distCoin} et \class{distEdge} sont accessibles au moment de la recherche pour calculer la fonction heuristique. Ses méthodes permettent de calculer ces distances ou de les lire dans un fichier.
+Dans la partie des algorithmes, nous avons besoin de estimer les distances pour bien placer les coins et les arêtes. Cette classe ne possède que des membres statiques. Ses champs comme \class{distCoin} et \class{distEdge} sont accessibles au moment de la recherche, ils jouent le rôle de la fonction heuristique. Ses méthodes permettent de calculer ces distances ou de les lire dans un fichier.
 
 \paragraph{\class{Config.PatternArray}}
-Cette classe est un autre calcul de la distance. On part d’un cube propre et en faisant un parcours en profondeur de 12 étapes maximaux (idéalement) pour essayer de parcourir toutes les sous-configurations possibles et d’enregistrer le chemin minimal dans un support. La méthode \class{calculatePattern} calcule ces valeurs et les enregistre d’abord dans un tableau \class{coin} par exemple, puis dans un fichier binaire, puis \class{readBinaryPattern} les reprend pour les tests dans le futur pour éviter de passer des heures à initialiser le programme.
+Cette classe implémente une autre distance. On part d’un cube résolu et en faisant un parcours en profondeur de 10 étapes maximaux (idéalement) de manière à parcourir toutes les sous-configurations possibles et d’enregistrer le chemin minimal dans un support. La méthode \class{calculatePattern} calcule ces valeurs et les enregistre d’abord dans un tableau, \class{coin} par exemple, puis dans un fichier binaire, puis \class{readBinaryPattern} les reprend pour le test dans le futur afin d’éviter de passer des heures à initialiser le programme (1 jour pour une profondeur de 9).
 
 \paragraph{\class{Test}}
-Cette dernière classe comporte tous les tests qu’on utilise pour soit tester le bon fonctionnement d’une module, soit résoudre proprement un Rubik’s Cube et comparer les différentes méthodes.
+Cette dernière classe contient tous les tests qu’on a utilisés pour soit tester le bon fonctionnement d’un module, soit résoudre proprement un Rubik’s Cube, soit comparer les différentes méthodes.
 
 \subsection{Algorithmes de recherche}
 
 ~\\\indent
-L’idée principale de la recherche et de partir d’une configuration \class{initial}, de faire une suite d’\class{Action} en comparant à chaque étape si on arrive sur \class{final}. On considère dans ce cas-là chaque configuration du Rubik’s Cube comme un noeud et chaque noeud possède 15 noeuds voisins (on est dans un graphe orienté) ou 18 juste pour le premier noeud où on part. Cette modélisation nous suggère d’utiliser les algorithmes de recherche de plus court chemin dans un graphe.
+L’idée principale de la recherche et de partir d’une configuration \class{initial}, puis de faire une suite d’\class{Action} en comparant à chaque étape avec \class{final}. On considère dans ce cas-là chaque configuration du Rubik’s Cube comme un noeud et chaque noeud possède 15 noeuds voisins (graphe orienté) ou 18 pour le noeud où on part. Cette modélisation nous suggère d’utiliser les algorithmes de recherche de plus court chemin dans un graphe.
 
 \paragraph{BFS}
-L’idée naïve et naturelle est de faire un parcours en largeur. Cette méthode est impossible d’atteindre l’état final à notre jour puisqu’il faut parcourir dans le pire des cas $18*15^{19}$ noeuds pour trouver une solution. 
+L’idée naïve et naturelle est de faire un parcours en largeur. Cette méthode est impossible pour atteindre l’état final à ce jour-là puisqu’il faut parcourir dans le pire des cas $18*15^{19}$ noeuds pour trouver une solution. 
 
 \paragraph{DFS limitée}
-Une recherche un profondeur peut aller très loin, mais elle ne donne pas forcément une solution optimale. Pour corriger ce défaut, on utilise une limite pour restreindre la profondeur de la recherche. Lorsqu’on ne trouve pas de solution avec la limite donnée, on l’incrémente et continue la recherche. Bien que cette méthode ne diffère pas beaucoup de BFS, elle propose une piste très intéressante, car avec une DFS, le coût de mémoire est proportionnel et non exponentiel à la profondeur, on n’a qu’un cube à faire tourner. 
+Une recherche un profondeur peut aller très loin, mais elle ne donne pas forcément une solution optimale. Pour corriger ce défaut, on utilise une limite pour restreindre la profondeur de la recherche. Lorsqu’on ne trouve pas de solution avec une limite donnée, on l’incrémente et continue la recherche. Bien que cette méthode ne diffère pas beaucoup de BFS, elle propose une piste très intéressante, car avec une DFS, le coût de mémoire est proportionnel et non exponentiel à la profondeur, on n’a qu’un cube à faire tourner. 
 
 \paragraph{IDA*}
-Comment donc choisir la bonne limite dans l’algorithme précédent ? L’algorithme A* nous donne une autre piste. Avec une fonction heuristique donnant une bonne inférieure de la distance restante, on ne craint plus d’avoir une solution non optimale. Puis une estimation de la distance totale (coût + ce qui reste) permet d’éliminer certains cas, car ils sont trop loin du but. Il est à noter que A* ne donne en général pas une distance minimale puisqu’il s’enfonce sur une piste qu’il croit la meilleure, il est surtout utilisé pour une recherche rapide d’une solution quelconque. Pour que cet algorithme marche, il nous faut une bonne fonction heuristique et on verra tout à l’heure que ces fonctions sont soit inutilisables, soit très coûteuses. Une méthode à la fois facile à implémenter et efficace n’a pas encore été trouvées. Les fonctions heuristiques qu’on a utilisé se trouvent dans la liste suivante: 
+Comment donc augmenter la limite dans l’algorithme précédent ? L’algorithme A* nous fournit une autre idée. Avec une fonction heuristique donnant une borne inférieure de la distance restante, on ne craint plus d’avoir une solution non optimale. Puis cette estimation de la distance totale (coût + ce qui reste) permet d’éliminer certains cas, car ils sont trop loin du but. Il est à noter que A* lui-même ne donne en général pas une distance minimale puisqu’il s’enfonce sur une piste qu’il croit la meilleure, il est surtout utilisé pour une recherche rapide d’une solution quelconque. Pour que notre algorithme marche, il nous faut une bonne fonction heuristique et on verra tout à l’heure que ces fonctions sont soit inutilisables, soit très coûteuses. Une méthode à la fois facile à implémenter et efficace n’a pas encore été trouvée. Les fonctions heuristiques qu’on a utilisées se trouvent dans la liste suivante: 
 
 \begin{itemize}[noitemsep] % [noitemsep] removes whitespace between the items for a compact look
 \item Simple : nombre de coups pour placer une piece
@@ -159,12 +159,12 @@ Comment donc choisir la bonne limite dans l’algorithme précédent ? L’algor
 \section{Analyses}
 
 ~\\\indent
-Dans cette partie, on retourne vers notre programme lui-même. On expliquera plus en détail les méthodes qu’on a utilisé et les choix qu’on a fait. On présentera également le résultat des différents tests pour faire une comparaison horizontale entre les algorithmes et les fonctions heuristiques et on essayera de comprendre comment ces fonctions permmetten d’avoir un effet si important sur notre recherche.
+Dans cette partie, on revient sur notre programme lui-même. On expliquera plus en détail les méthodes qu’on a utilisées et les choix qu’on a faits. On présentera également le résultat des différents tests pour faire une comparaison horizontale entre les algorithmes et les fonctions heuristiques et on essayera de comprendre comment ces fonctions ont un impact si important sur notre recherche.
 
 \subsection{Fonction heuristique}
 
 ~\\\indent
-Pour utiliser l’algorithme IDA*, il nous faut une fonction heuristique ou un estimateur de distance. Les conditions nécessaires et suffisantes d’utilisation d’une telle fonction sont prouvées dans la section précédente. Ici, on va comparer de diverses fonctions et essayer de comprendre en quoi elles sont différentes.
+Pour utiliser l’algorithme IDA*, il nous faut une fonction heuristique ou un estimateur de distance. Les conditions nécessaires d’utilisation d’une telle fonction sont prouvées dans la section précédente. Ici, on va comparer de diverses fonctions et essayer de comprendre en quoi elles sont différentes.
 
 \begin{table}[htbp]
 \centering
@@ -178,10 +178,11 @@ Pour utiliser l’algorithme IDA*, il nous faut une fonction heuristique ou un e
 6 & 223 & 135 & 0  \\
 7 & 1380 & 215 & 0 \\
 8 & - & 1118 & 1 \\
-9 & - & - & 13 \\
-10 & - & - & 79 \\
-11 & - & - & 1161 \\
-12 & - & - & 7309 \\
+9 & - & - & 6 \\
+10 & - & - & 16 \\
+11 & - & - & 151 \\
+12 & - & - & 275 \\
+13 & - & - & 1125 \\
 \hline
 \multicolumn{4}{l}{\small{1. La signification se trouve dans la section précédente}} \\
 \hline
@@ -196,14 +197,13 @@ Pour utiliser l’algorithme IDA*, il nous faut une fonction heuristique ou un e
 \hline
 \rowcolor{blue!20} \rule{0pt}{12pt} \textbf{Profondeur} & \textbf{Coins\textsuperscript{1} } & \textbf{Arêtes 1}\textsuperscript{1} & \textbf{Arêtes 2\textsuperscript{1}}\\
 \hline
-4 & 0 & 0 & 2 \\
-5 & 2 & 0 & 90 \\
-6 & 8 & 0 & 220  \\
-7 & 38 & 1 & 1256 \\
-8 & 123 & 13 & - \\
-9 & 220 & 144 & - \\
-10 & 1855 & 339 & - \\
-11 & - & 1108 & - \\
+6 & 4 & 3 & 2 \\
+7 & 21 & 1 & 2 \\
+8 & 228 & 31 & 20  \\
+9 & 440 & 59 & 96 \\
+10 & - & 216 & 200 \\
+11 & - & 892 & 1229 \\
+12 & - & 1229 & 712 \\
 \hline
 \multicolumn{4}{l}{\small{1. La signification se trouve dans la section précédente}} \\
 \hline
@@ -213,21 +213,21 @@ Pour utiliser l’algorithme IDA*, il nous faut une fonction heuristique ou un e
 \end{table}
 
 \indent
-On constate que plus la fonction heuristique donne une grande valeur (Distance simple : 3 ; Manhattan : 6 ; Pattern : 9), plus on va loin dans la recherche. Ce qui est dû à notre algorithme de recherche qui recalcule la limite de profondeur à partir de la distance minimale qu’on estime. Cependant, la différence entre Arête 1 et 2 semble inexpliquable puisqu’elle sont symétrique a priori.
+On constate que plus la fonction heuristique donne une grande valeur (Distance simple : 3 ; Manhattan : 6 ; Pattern : 9), plus on va loin dans la recherche. Ce qui est dû à notre algorithme de recherche qui la limite de profondeur dépend de la distance minimale qu’on estime. (Si toutes les pièces a une distance 3, il est inutile de chercher un chemin de 2 étapes)
 
 \subsection{Pattern Database}
 
 ~\\\indent
-Comment enregistrer les résultats une fois qu’on les a calculés ? Un tableau a l’air d’être plus adaptée à ce genre de situation, car les clés sont des entiers consécutifs et elles ne dépassent pas la taille limite des entiers ($2^{32}$). Il suffit de créer un tableau de taille suffisamment grande.
+Comment enregistrer les résultats une fois qu’on les a calculés ? Un tableau a l’air d’être plus adapté à notre demande, car les clés sont des entiers consécutifs et elles ne dépassent pas la taille limite des entiers ($2^{32}$).
 
 \begin{itemize}[noitemsep] % [noitemsep] removes whitespace between the items for a compact look
 \item Coins :  $8! * 3^7 = 88179840$ cas
 \item Arêtes : $\frac{12!}{6!}*2^6$ cas (idem pour l’autre partie d’arêtes)
 \end{itemize}
 
-On constate bien que le nombre de cas ne dépasse pas la capacité de JVM et l’utilisation d’un tableau permet à la fois d’économiser le coût en mémoire et en temps aussi puisque l’accès aux valeurs ne coût que quelques opérations élémentaires. 
+On constate bien que le nombre de cas ne dépasse pas la capacité de JVM et l’utilisation d’un tableau permet à la fois d’économiser le coût en mémoire et en temps aussi puisque l’accès aux valeurs ne coûte que quelques opérations élémentaires. 
 
-Malgré le nombre de cas limité, il nous faut toujours trouver un moyen de stocker les résultats. En comparant les différentes méthodes, nous avons adopté une méthode non optimale, mais largement acceptable dans notre cas. Voyons une breve comparaison :
+Malgré le nombre de cas limité, les façons de stocker les résultats peuvent impacter l’exécution. En comparant les différentes méthodes, nous avons adopté une méthode non optimale, mais largement acceptable dans notre cas. Voyons une brève comparaison :
 
 \begin{itemize}[noitemsep] % [noitemsep] removes whitespace between the items for a compact look
 \item Texte :  $(88179840 + 42577920 * 2) * 8 = 173$ Mb
@@ -237,7 +237,7 @@ Malgré le nombre de cas limité, il nous faut toujours trouver un moyen de stoc
 
 Nous avons choisi finalement le fichier binaire en utilisant la classe \class{DataOutputStream} pour stocker notre valeur, parce que l’enregistrement bit par bit est difficile à réaliser et peut ralentir le programme si c’est mal implémenté, et par rapport au fichier texte, on n’a plus besoin de faire une conversion de \class{String} vers \class{Byte}, ce qui fait gagner du temps. 
 
-Cependant, pour générer tous les cas possibles, il faut faire un parcours en largeur d’une profondeur de 10 (car le nombre de coups maximal pour remettre ces 3 sous-parties est de 11). La durée est d’autant plus longue qu’on augmente la profondeur. Sur notre ordinateur de test, on a passé 540 secondes pour faire un parcours de profondeur 7. Il faudra donc une semaine pour avoir une base de données complètes.
+Cependant, pour générer tous les cas possibles, il faut faire un parcours en largeur d’une profondeur de 10 (car le nombre de coups maximal pour remettre ces 3 sous-parties est de 11). La durée est d’autant plus longue qu’on augmente la profondeur. Sur notre ordinateur de test, on a passé 10 minutes pour faire un parcours de profondeur 7. Il faudra donc des jours pour avoir une base de données complètes.
 
 \subsection{Algorithmes de recherche}
 
@@ -251,32 +251,19 @@ Dans la section précédente, nous avons présenté les 3 algorithms testés. Po
 \rowcolor{blue!20} \rule{0pt}{12pt} \textbf{Profondeur} & \textbf{BFS} & \textbf{DFS}\textsuperscript{1} & \textbf{IDA*} &  \textbf{IDA* (PQ)\textsuperscript{2}}\\
 \hline
 1 & 0 & 0 & 0 & 0  \\
-%\hline
 2 & 0 & 0 & 0 & 0 \\
-%\hline
 3 & 0 & 5 & 0 & 0 \\
-%\hline
 4 & 5 & 187 & 0 & 0 \\
-%\hline
 5 & 687 & 466 & 0 & 0 \\
-%\hline
 6 & 7965 & 1142 & 0 & 0  \\
-%\hline
 7 & - & - & 0 & 0 \\
-%\hline
-8 & - & - & 5 & 8 \\
-%\hline
-9 & - & - & 14 & 19 \\
-%\hline
-10 & - & - & 81 & 111 \\
-%\hline
-11 & - & - & 956 & 868 \\
-%\hline
-12 & - & - & 5621 & 5363 \\
-%\hline
-13 & - & - & 13513 & 8879 \\
-%\hline
-14 & - & - & (31488)\textsuperscript{3} & (34488)\textsuperscript{3} \\
+8 & - & - & 1 & 1 \\
+9 & - & - & 6 & 12 \\
+10 & - & - & 17 & 205 \\
+11 & - & - & 76 & 453 \\
+12 & - & - & 62 & 490 \\
+13 & - & - & 2290 & 2643 \\
+14 & - & - & (4742)\textsuperscript{3} & (5281)\textsuperscript{3} \\
 \hline
 \multicolumn{5}{l}{\small{1. DFS avec une profondeur limité}} \\
 \multicolumn{5}{l}{\small{2. Avec une queue de priorité pour trier les chemins}} \\
@@ -288,12 +275,12 @@ Dans la section précédente, nous avons présenté les 3 algorithms testés. Po
 \end{table}
 
 \indent
-On constate que l’utilisation de la queue de priorité n’a pas amélioré la vitesse de recherche de IDA*, ce qui est dû principalement à la maintenance de la queue. Quant à sa performance générale, ce résultat n’est point surprenant. Pour une solution de moins de 8 étapes (ce qui correspond au niveau de notre Pattern Database, c’est-à-dire qu’il possède toutes les configurations d’une distance inférieure ou égale à 8), à chaque appel récursif, on est sûr de s’approcher plus de l’état final, ceci dit qu’on a toujours au moins un chemin pour faire diminuer la distance. Et comme la distance initiale est inférieure ou égale à 8, la solution sera trouvé très vite. Au-delà de 8 étapes, on constate qu’il y a une augmentation de temps comme dans les autres cas, cela vient du fait qu’on ne plus pas distinguer par exemple deux distances 9, car dans ces cas-là la distance n’est qu’une borne inférieure (la solution peut aller jusqu’à 20 étapes, mais on ne peut pas savoir), cela brouille la piste de recherche et on est obligé d’étudier beaucoup de cas comme s’ils étaient un bon chemin. On pourrait comprendre cet algorithme comme une translation (sur l’axe de profondeur) d’une distance imposée par le niveau de Pattern Database.
+On constate que l’utilisation de la queue de priorité n’a pas amélioré la vitesse de recherche de IDA*, ce qui est dû principalement à la maintenance de la queue. Quant à sa performance par rapport aux autres algorithmes, ce résultat n’est point surprenant. Pour une solution de moins de 7 étapes (ce qui correspond au niveau de notre Pattern Database, c’est-à-dire qu’il possède toutes les configurations d’une distance inférieure ou égale à 7), à chaque appel récursif, on est sûr de s’approcher plus de l’état final, ceci dit qu’on a toujours au moins un chemin pour faire diminuer la distance. Et comme la distance initiale est inférieure ou égale à 8, la solution sera trouvé très vite. Au-delà de 7 étapes, on constate qu’il y a une augmentation de temps comme dans les autres cas, cela vient du fait que la distance n’est qu’une borne inférieure, plus on s’éloigne de la capacité de Pattern Database, moins l’estimation est précise, cela brouille la piste de recherche et on est obligé d’étudier beaucoup de cas comme s’ils étaient un bon chemin. On pourrait comprendre cet algorithme comme une translation (sur l’axe de profondeur) d’une distance imposée par le niveau de Pattern Database.
 
 \subsection{Conclusion}
 
 ~\\\indent
-Bien que le résultat précédent n’est pas suffisant pour résoudre un cube quelconque, il nous donne une piste de l’amélioration : agrandir Pattern Database et améliorer la classe \class{Cube} pour accélérer le parcours. Plus la base de données est complète, plus on choisit la bonne direction. On constate néanmoins que ce qu’on fait c’est de gagner du temps en sacrifiant de l’espace. La complexité du problème reste toujours la même. Rien n’interdit aujourd’hui de résoudre complètement le Rubik’s Cube, mais cela demandera une optimisation encore plus poussée que celle présenté dans ce rapport et surtout un ordinateur plus puissant.
+Bien que notre programme n’est pas suffisant pour résoudre un cube quelconque, il nous donne une piste de l’amélioration : compléter Pattern Database et améliorer la classe \class{Cube} pour accélérer le parcours. Plus la base de données est complète, plus on choisit la bonne direction. On constate néanmoins que ce qu’on fait c’est de gagner du temps en sacrifiant l’espace. La complexité du problème reste toujours la même. Avec l’alrothime IDA*, rien n’interdit aujourd’hui de résoudre complètement le Rubik’s Cube, mais cela demandera une meilleure optimisation que celle présentée dans ce rapport et surtout un ordinateur plus puissant.
 
 %------------------------------------------------
 \phantomsection
@@ -304,12 +291,77 @@ Bien que le résultat précédent n’est pas suffisant pour résoudre un cube q
 ~\\\indent
 Dans cet annexe, vous trouvez une explication en détail de la mise en route de notre programme.
 
-\paragraph{Initialisation}
+\paragraph{Préparation}
+~\\\indent
+Nous avons besoin dans notre programme d’une série de fichiers. Les fichiers inclus dans l’archieve sont :
 
-\paragraph{Entrée des données}
+\begin{itemize}[noitemsep] % [noitemsep] removes whitespace between the items for a compact look
+\item DistanceSimple.txt
+\item DistanceManhattan.txt
+\item Source.txt
+\item Black.txt
+\end{itemize}
+
+Puis il faut générer les fichiers suivants avec \class{Preparation} dans test : 
+\begin{itemize}[noitemsep] % [noitemsep] removes whitespace between the items for a compact look
+\item C.dat
+\item EO.dat
+\item ET.dat
+\end{itemize}
+
+\paragraph{Configuration}
+~\\\indent
+On pourra entrer l’état d’un cube à la main en appelant le constructeur \class{Cube()}, pour cela modifiez la variable de contrôle \class{bool manuel = true}. Si vous avez confiance à notre générateur de cube (en tournant le cube résolu de façon aléatoire), mettez \class{bool manuel = false} et ensuite \class{int complexite = 9}, où 9 est le nombre de rotations sur le cube qu’on choisit.
+
+Modifiez  \class{int niveauRecherche} pour contrôler le nombre maximal de configurations qu’on va visiter. Une valeur de 100000 limite la recherche vers 10 secondes.
+
+Pour une entrée manuelle de la configuration : 
+
+\begin{figure}[h]
+\centering 
+\includegraphics[scale = 0.7]{Face.jpg}
+\caption{Les 6 faces du Rubik’s Cube}
+\end{figure}
+
+\begin{itemize}[noitemsep] % [noitemsep] removes whitespace between the items for a compact look
+\item Numéro de la face : 
+U : 0, L : 1, F : 2, R : 3, B : 4, D : 5
+\item Numéro de la couleur : la couleur du centre de chaque face possède le numéro de cette face, si vous avez black sur la face avant (U), toutes les cases blanches sont 0
+\item Coordonnées : déployer le cube comme dans le schéma de façon à ce que U se trouve en haut. Les coordonnées sont numéroté de haut en bas et de gauche à droit 
+\item Entrée des valeurs : en suivant le consignes, tapez les couleurs de la face correspondante rang par rang (Vérifiez bien que la valeur au centre de chaque face corresponde au numéro de la face)
+\begin{figure}[h]
+\centering 
+\includegraphics[scale = 0.4]{Coord.jpg}
+\caption{Les coordonnées sur la face}
+\end{figure}
+\begin{figure}[h]
+\centering 
+\includegraphics[scale = 0.4]{Entree.jpg}
+\newline 
+\caption{Entrée des couleurs à la main}
+\end{figure}
+\end{itemize}
 
 \paragraph{Recherche de la solution}
+~\\\indent
+Afin de lancer une recherche, utilisez \class{TestGeneral}, cette méthode s’occupera de la lecture du fichier. N’oubliez pas de commenter \class{Preparation}.
+
+Le résultat sera présenté de la façon suivante : 
+
+\begin{itemize}[noitemsep] % [noitemsep] removes whitespace between the items for a compact look
+\item Les actions de mélange
+\item Distance estimée au départ
+\item Représentation graphique du cube mélangé
+\item Résultat de la recherche
+\begin{itemize}[noitemsep] % [noitemsep] removes whitespace between the items for a compact look
+\item Nombre de configurations visitées
+\item Solution si elle est trouvée
+\item Temps utilisé
+\end{itemize}
+\end{itemize}
 
 \paragraph{Autres test}
+~\\\indent
+Plusieurs tests dans la classe \class{Test} ont été utilisés au fur et à mesure de l’implémentation du programme, vous trouverez leur utilité dans leur commentaire.
 
 \end{document}
