@@ -93,7 +93,7 @@ public class Pattern {
 		Connection connect = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			connect = DriverManager.getConnection("jdbc:mysql://localhost/rubik?user=lyx&password=Paul1012_lyx");
+			connect = DriverManager.getConnection("jdbc:mysql://localhost/rubik?user=lyx&password=******");
 			patternSQL(new Cube(Cube.src), (byte) 1, limite, -1, connect);
 		} catch (Exception e) {
 			System.out.println(e);
