@@ -10,17 +10,17 @@ public class Test {
 		
 		//================== Préparation ===================//
 		
-		//preparation();  //Generer Pattern Database si vous n'en avez pas
+		//preparation();  //Generer Pattern Database si vous n'en avez pas C.dat, EO.dat, ET.dat
 		
 		//================== Configuration ===================//
 		
-		//boolean manuel = false;  //Mettez-le en false si vous ne voulez pas entrer les couleurs à la main
-		//int complexite = 9;  //Choisir le nombre d'étapes de mélange
-		//int niveauRecherche = 100000;  //Limiter le nombre de noeuds parcourus
+		boolean manuel = false;  //Mettez-le en false si vous ne voulez pas entrer les couleurs à la main
+		int complexite = 13;  //Choisir le nombre d'étapes de mélange
+		int niveauRecherche = 100000;  //Limiter le nombre de noeuds parcourus
 		
 		//================== Recherche de la solution ===================//
 		
-		//TestGeneral(manuel, complexite, niveauRecherche);
+		TestGeneral(manuel, complexite, niveauRecherche);
 		
 		//================== Autre tests ===================//
 		
@@ -30,7 +30,7 @@ public class Test {
 		//debugDistanceCoinEdge(20);
 		//testFindPQ(10, 't');
 		//testInitDistance();
-		//testInitPattern();
+		//testInitPattern((byte)2);
 		//testLimite(6);
 		//testSQL(12);
 		//testDistance();
@@ -39,10 +39,10 @@ public class Test {
 		//Pattern.print();
 		//testFindIDA(20, 'p');
 		//testHash();
-		//testPattern(5);
+		//testPattern(2);
 		//testCompareFind(20, 'p');
 		//statCompareFind(20,20);
-		//statCompareDistance(20,15);
+		//statCompareDistance(20,20);
 	}
 	
 	/*
@@ -250,6 +250,7 @@ public class Test {
 		long startTime = System.currentTimeMillis();
 		//Pattern.calculatePattern();
 		//Pattern.printResume();
+		//PatternImproved.calculatePattern(limite);
 		PatternArray.calculatePattern(limite);
 		long endTime = System.currentTimeMillis();
 		long duration = endTime - startTime;
@@ -450,7 +451,7 @@ public class Test {
 			}	
 			endTime = System.currentTimeMillis();
 			duration = endTime - startTime;
-			System.out.printf("\nElapsed time: %d milliseconds pour BFS\n", duration);
+			System.out.printf("\nElapsed time: %d milliseconds pour DFS\n", duration);
 		}	
 	}
 	

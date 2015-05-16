@@ -11,6 +11,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/*
+ * !!! Cette classe est remplacée totalement par PatternArray !!!
+ */
+
 public class Pattern {
 	
 	public static HashMap<Long, Byte> coin = new HashMap<Long, Byte>();
